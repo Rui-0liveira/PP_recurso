@@ -22,6 +22,10 @@ public class Tarefas implements Task{
     private String description;
     private int numSubmissions;
     private Submissao[] submissions;
+     /**
+     * Booleano que indica se a tarefa está completa
+     */
+    private boolean completed;
 
     public Tarefas(LocalDate start, LocalDate end, int duration, String title, String description, int numSubmissions, Submissao[] submissions) {
         this.start = start;
@@ -151,6 +155,21 @@ public class Tarefas implements Task{
         return string;
     }
     
+    /**
+     * Metodo que retorna se a tarefa está completa
+     * @return Hashcode da tarefa
+     */
+    public Boolean isCompleted(){
+        return completed;
+    }
+
+    /**
+     * Metodo que define se a tarefa está completa
+     * @param completed Booleano que indica se a tarefa está completa
+     */
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
     
 }
 

@@ -30,6 +30,7 @@ public class Projeto implements Project{
     private int numPartners;
     private int numFacilitators;
     private int numTasks;
+    private int totalTasksCompleted;
     private Tarefas[] tasks;
     private int maxTasks;
     private long maxParticipants;
@@ -39,24 +40,6 @@ public class Projeto implements Project{
     private String[] tags;
     private boolean completed;
 
-    public Projeto(String name, String description, int numParticipants, Participante[] participants, int numStudents, int numPartners, int numFacilitators, int numTasks, Tarefas[] tasks, int maxTasks, long maxParticipants, int maxPartners, int maxStudents, int maxFacilitators, String[] tags, boolean completed) {
-        this.name = name;
-        this.description = description;
-        this.numParticipants = numParticipants;
-        this.participants = participants;
-        this.numStudents = numStudents;
-        this.numPartners = numPartners;
-        this.numFacilitators = numFacilitators;
-        this.numTasks = numTasks;
-        this.tasks = tasks;
-        this.maxTasks = maxTasks;
-        this.maxParticipants = maxParticipants;
-        this.maxPartners = maxPartners;
-        this.maxStudents = maxStudents;
-        this.maxFacilitators = maxFacilitators;
-        this.tags = tags;
-        this.completed = completed;
-    }
     
     public Projeto(String name, String description, String[] tags, int maxStudents, int maxPartners, int maxFacilitators){
         this.name = name;
@@ -71,6 +54,7 @@ public class Projeto implements Project{
         numPartners = 0;
         numFacilitators = 0;
         numTasks = 0;
+        totalTasksCompleted = 0;
         participants = new Participante [5];
         maxTasks = 30;
         tasks = new Tarefas[maxTasks];
@@ -314,7 +298,41 @@ public class Projeto implements Project{
                 
     }
     
-    
+    /**
+     * Metodo que retorna o numero de submissões do das tasks do projeto
+     * @return Número de submissões do das tasks do projeto
+     */
+    public int getNumSubmissionTask() {
+        int numTasks = 0;
+        for(int i = 0; i < numTasks; i++){
+            if(tasks[i].getNumberOfSubmissions() > 0){
+                numTasks = numTasks + tasks[i].getNumberOfSubmissions();
+            }
+        }
+        return numTasks;
+    }
+   
+    /**
+     * Metodo que retorna a media de task concluidas do projeto
+     * @return Média de task concluidas do projeto
+     */
+   public double getProjectProgress(){
+    //verificar se a task está completa baseado pelo tempo
+       for(int i = 0; i < maxTasks; i++){
+           if(this.getTasks()[i].getEnd().isBefore(java.time.LocalDate.now())){
+             if(this.getTasks()[i] instanceof Tarefas){
+                 Tarefas task = (Tarefas) this.getTasks()[i];
+                 task.setCompleted(true);
+                 totalTasksCompleted++;
+             }
+           }
+       }
+       double progress;
+       
+       progress = maxTasks / totalTasksCompleted * 100;       
+       
+       return progress ;
+   } 
     
 }
 
