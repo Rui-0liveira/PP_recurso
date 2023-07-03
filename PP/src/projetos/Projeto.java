@@ -1,0 +1,320 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package projetos;
+
+import ma02_resources.participants.Facilitator;
+import ma02_resources.participants.Participant;
+import ma02_resources.participants.Partner;
+import ma02_resources.participants.Student;
+import ma02_resources.project.Project;
+import ma02_resources.project.Task;
+import ma02_resources.project.exceptions.IllegalNumberOfParticipantType;
+import ma02_resources.project.exceptions.IllegalNumberOfTasks;
+import ma02_resources.project.exceptions.ParticipantAlreadyInProject;
+import ma02_resources.project.exceptions.TaskAlreadyInProject;
+import participantes.*;
+
+/**
+ *
+ * @author Rui
+ */
+public class Projeto implements Project{
+
+    private String name;
+    private String description;
+    private int numParticipants;
+    private Participante[] participants;
+    private int numStudents;
+    private int numPartners;
+    private int numFacilitators;
+    private int numTasks;
+    private Tarefas[] tasks;
+    private int maxTasks;
+    private long maxParticipants;
+    private int maxPartners;
+    private int maxStudents;
+    private int maxFacilitators;
+    private String[] tags;
+    private boolean completed;
+
+    public Projeto(String name, String description, int numParticipants, Participante[] participants, int numStudents, int numPartners, int numFacilitators, int numTasks, Tarefas[] tasks, int maxTasks, long maxParticipants, int maxPartners, int maxStudents, int maxFacilitators, String[] tags, boolean completed) {
+        this.name = name;
+        this.description = description;
+        this.numParticipants = numParticipants;
+        this.participants = participants;
+        this.numStudents = numStudents;
+        this.numPartners = numPartners;
+        this.numFacilitators = numFacilitators;
+        this.numTasks = numTasks;
+        this.tasks = tasks;
+        this.maxTasks = maxTasks;
+        this.maxParticipants = maxParticipants;
+        this.maxPartners = maxPartners;
+        this.maxStudents = maxStudents;
+        this.maxFacilitators = maxFacilitators;
+        this.tags = tags;
+        this.completed = completed;
+    }
+    
+    public Projeto(String name, String description, String[] tags, int maxStudents, int maxPartners, int maxFacilitators){
+        this.name = name;
+        this.description = description;
+        this.tags = tags;
+        this.maxStudents = maxStudents;
+        this.maxPartners = maxPartners;
+        this.maxFacilitators = maxFacilitators;
+        maxParticipants = maxFacilitators + maxStudents + maxPartners;
+        numParticipants = 0;
+        numStudents = 0;
+        numPartners = 0;
+        numFacilitators = 0;
+        numTasks = 0;
+        participants = new Participante [5];
+        maxTasks = 30;
+        tasks = new Tarefas[maxTasks];
+    }
+
+    
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public int getNumberOfParticipants() {
+        return numParticipants;
+    }
+
+    @Override
+    public int getNumberOfStudents() {
+        return numStudents;
+    }
+
+    @Override
+    public int getNumberOfPartners() {
+        return numPartners;
+    }
+
+    @Override
+    public int getNumberOfFacilitators() {
+        return numFacilitators;
+    }
+
+    @Override
+    public int getNumberOfTasks() {
+        return numTasks;
+    }
+
+    @Override
+    public int getMaximumNumberOfTasks() {
+        return maxTasks;
+    }
+
+    @Override
+    public long getMaximumNumberOfParticipants() {
+        return maxParticipants;
+    }
+
+    @Override
+    public int getMaximumNumberOfStudents() {
+        return maxStudents;
+    }
+
+    @Override
+    public int getMaximumNumberOfPartners() {
+       return maxPartners;
+    }
+
+    @Override
+    public int getMaximumNumberOfFacilitators() {
+        return maxFacilitators;
+    }
+
+    @Override
+    public void addParticipant(Participant p) throws IllegalNumberOfParticipantType, ParticipantAlreadyInProject {
+        if(numParticipants == maxParticipants){
+            throw new IllegalNumberOfParticipantType("Limite de participantes já atingido");
+        }
+        if(p instanceof Partner){
+            if(maxPartners == numPartners){
+                throw new IllegalNumberOfParticipantType("Limite de partners já atingido");
+            }
+            numPartners++;
+        }  
+        if(p instanceof Student){
+            if(maxStudents == numStudents){
+                throw new IllegalNumberOfParticipantType("Limite de students já atingido");
+            }
+            numStudents++;
+        }
+        if(p instanceof Facilitator){
+            if( maxFacilitators == numFacilitators){
+                throw new IllegalNumberOfParticipantType("Limite de facilitators já atingido");
+            }
+            numFacilitators++;
+        }
+        for(int i = 0; i < numParticipants; i++){
+            if(!(participants[i].equals(p))){
+                throw new ParticipantAlreadyInProject("Participante já se encontra neste projeto");
+            }
+        }
+        
+        participants[numParticipants] = (Participante) p;
+        numParticipants++;
+    }
+
+    @Override
+    public Participant removeParticipant(String string) {
+        Participant temp;
+        for(int i = 0; i < numParticipants; i++){
+            if(participants[i].getEmail().equals(string)){
+                temp = participants[i];
+                organizar_array(i);
+                participants[numParticipants] = null;
+                numParticipants--;
+                if(temp instanceof Partner){
+                    numPartners--;
+                }else if(temp instanceof Student){
+                    numStudents--;
+                }else if(temp instanceof Facilitator){
+                    numFacilitators--;
+                }
+
+                return temp;
+            }
+        }
+        throw new IllegalArgumentException("Participante não existe");
+    }
+
+    private void organizar_array(int pos){
+        
+        if(pos > maxParticipants){
+            throw new IllegalArgumentException("Posição do array inválida");
+        }
+        for(int i = pos; i < numParticipants; i++){
+            participants[i] = participants[i+1];
+        }
+    }
+    
+    @Override
+    public Participant getParticipant(String string) {
+        for(int i = 0; i < numParticipants; i++){
+            if(participants[i].getEmail().equals(string)){
+                return participants[i];
+            }
+        }
+        throw new IllegalArgumentException("Participante não existe");
+    }
+
+    @Override
+    public String[] getTags() {
+        return tags;
+    }
+
+    @Override
+    public boolean hasTag(String string) {
+        for (String tag : tags) {
+            if (tag.equals(string)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void addTask(Task task) throws IllegalNumberOfTasks, TaskAlreadyInProject {
+        if(numTasks == maxTasks){
+            throw new IllegalNumberOfTasks("Limite de tasks já atingido");
+        }
+        for(int i = 0; i < numTasks; i++){
+            if(tasks[i].equals(task)){
+                throw new TaskAlreadyInProject("Task já se encontra neste projeto");
+            }
+        }
+        tasks[numTasks] = (Tarefas)task;
+        numTasks++;
+    }
+
+    @Override
+    public Task getTask(String string) {
+        for(int i = 0; i < numTasks; i++){
+            if(tasks[i].getTitle().equals(string)){
+                return tasks[i];
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Task[] getTasks() {
+        return tasks;
+    }
+
+    @Override
+    public boolean isCompleted() {
+        for(int i = 0; i < numTasks; i++){
+            if(tasks[i].getNumberOfSubmissions() > 0){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean hasParticipant(String email){
+        for(int i = 0; i < numParticipants; i++){
+            if(participants[i].getEmail().equals(email)){
+                return true;
+            }              
+        }
+        return false;
+    }
+    
+    @Override
+    public String toString() {
+        String string;
+        string = " name = " + name +  
+                "\n description = " + description +
+                "\n tags = [ ";
+        for (String tag : tags) {
+            string += tag + " ";
+        }
+        string += "]\n numberOfParticipants = " + numParticipants +
+                "\n numberOfStudents = " + numStudents +
+                "\n numberOfPartners = " + numPartners +
+                "\n numberOfFacilitators = " + numFacilitators +
+                "\n maxParticipants = " + maxParticipants +
+                "\n maxStudents = " + maxStudents +
+                "\n maxPartners = " + maxPartners +
+                "\n maxFacilitators = " + maxFacilitators +
+                "\n participants: ";
+        if(numParticipants == 0){
+            string += "null";
+        }
+        for(int i = 0; i < numParticipants; i++){
+            string += "\n{\n"  + participants[i].toString()+ "\n}";
+        }
+        
+        string +="\n maxTasks = " + maxTasks + 
+                "\n numberOfTasks = " + numTasks +
+                "\n tasks: " ;
+        if(numTasks == 0){
+            string += "null";
+        }
+        for(int i = 0; i < numTasks; i++){
+            string += "\n{\n"  + tasks[i].toString()+ "\n}";
+        }
+        return  string;
+                
+    }
+    
+    
+    
+}
+
