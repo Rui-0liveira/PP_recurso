@@ -9,7 +9,6 @@ package menus;
  * @author Rui
  */
 public class Main {
-
     /**
      * @param args the command line arguments
      */
