@@ -4,16 +4,20 @@
  */
 package menus;
 
+import java.io.IOException;
+
 /**
  *
  * @author Rui
  */
-public class Main {
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic herewedf
+public class main {
+
+    
+    
+    public static void main(String[] args) throws IOException {
+        Menus menu = new Menus();
+        menu.menu();
     }
+    
     
 }
