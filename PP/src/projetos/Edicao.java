@@ -216,6 +216,19 @@ public class Edicao implements Edition{
         
         return string;
     }
-    
+ 
+     /**
+     * Metodo que verifica se um projeto existe na edição
+     * @param project nome do projeto a verificar
+     * @return true se o projeto existir, false se não existir
+     */
+    public boolean projectExists(String project){
+        for(Projeto p: projects){
+            if(p.getName().equals(project)){
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
