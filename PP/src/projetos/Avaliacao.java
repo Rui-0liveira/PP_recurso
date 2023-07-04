@@ -47,4 +47,12 @@ public class Avaliacao {
         this.heteroAvaliacao = heteroAvaliacao;
     }
     
+    public Projeto getProjectAv(){
+        return project;
+    }
+    
+    public Estudante getStudent(){
+        return student;
+    }
+    
 }
