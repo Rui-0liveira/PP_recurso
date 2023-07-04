@@ -5,6 +5,8 @@
 package menus;
 
 import java.io.IOException;
+import java.text.ParseException;
+import projetos.CBL;
 
 /**
  *
@@ -14,9 +16,10 @@ public class main {
 
     
     
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ParseException {
         Menus menu = new Menus();
-        menu.menu();
+        CBL cbl = new CBL();
+        menu.menu(cbl);
     }
     
     

@@ -26,11 +26,25 @@ public class Edicao implements Edition{
 
     private String name;
     private LocalDate start;
-    private LocalDate end;
     private String template;
     private Status status;
     private int numProjects;
     private Projeto[] projects;
+
+    public Edicao(String name, LocalDate start, String template) {
+        if(start.isBefore(LocalDate.now())){
+            throw new IllegalArgumentException("Data inválida");
+        }
+        else if(name == null || name.equals("")){
+            throw new IllegalArgumentException("Nome inválido");
+        }
+        this.name = name;
+        this.start = start;
+        this.template = template;
+        this.status = Status.INACTIVE;
+        this.numProjects = 0;
+        this.projects = new Projeto[numProjects];
+    }
     
     @Override
     public String getName() {
