@@ -16,6 +16,7 @@ public class Avaliacao {
     private Projeto project;
     private int autoAvaliacao;
     private int heteroAvaliacao;
+    private Classificacao classificacao;
 
     public Avaliacao(Estudante student, Projeto project, int autoAvaliacao, int heteroAvaliacao) {
         this.student = student;
@@ -45,6 +46,28 @@ public class Avaliacao {
 
     public void setHeteroAvaliacao(int heteroAvaliacao) {
         this.heteroAvaliacao = heteroAvaliacao;
+        setClassificacao(heteroAvaliacao);
+    }
+
+    public Classificacao getClassificacao() {
+        return classificacao;
+    }
+
+    public void setClassificacao(int nota) {
+         if(nota <= 19 && nota >= 0){
+            this.classificacao = Classificacao.FRACO;
+        }else if(nota <=49 && nota >= 20){
+            this.classificacao = Classificacao.INSUFICIENTE;
+        }else if(nota <= 69 && nota >= 50){
+            this.classificacao = Classificacao.SUFICIENTE;
+        }else if(nota <= 89 && nota >= 70){
+            this.classificacao = Classificacao.BOM;
+        }else if(nota <= 100 && nota >= 90){
+            this.classificacao = Classificacao.EXCELENTE;
+        }else{
+            throw new IllegalArgumentException("Nota fora da escala......Impossivel atribuir Rank");
+        }
     }
     
+
 }
