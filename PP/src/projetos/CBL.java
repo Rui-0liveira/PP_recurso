@@ -229,7 +229,7 @@ public class CBL {
     public void addSubmissao(String project, String task, String studentEmail, String text) {
         //verificar se o student é participante no project
         Student student;
-        for (Edicao e : editions) {
+        for(Edicao e : editions) {
             if (e.projectExists(project)) {
                 if (e.getProject(project).getParticipant(studentEmail) != null) {
                     student = (Student) e.getProject(project).getParticipant(studentEmail);

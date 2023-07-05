@@ -18,7 +18,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import participantes.Estudante;
-import participantes.Participante;
 
 /**
  *
@@ -131,6 +130,9 @@ public class Edicao implements Edition{
 
     @Override
     public void removeProject(String string) {
+        if(!projectExists(string)){
+            throw new IllegalArgumentException("Projeto não existe");
+        }
         for(int i = 0; i < numProjects; i++){
             if(projects[i].getName().equals(string)){
                 for(int j = i; j < numProjects; j++){
@@ -141,7 +143,7 @@ public class Edicao implements Edition{
                 }
             }
         }
-        throw new IllegalArgumentException("Projeto não existe");
+        numProjects--;
     }
 
     @Override
@@ -225,7 +227,9 @@ public class Edicao implements Edition{
         }
         else{
             for(int i = 0; i < numProjects; i++){
-                string+= "\n{\n" + projects[i].toString() + "\n}";
+                if(projects[i]!=null){
+                    string+= "\n{\n" + projects[i].toString() + "\n}";
+                }
             }
         }
         

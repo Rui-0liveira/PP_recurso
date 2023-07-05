@@ -4,6 +4,7 @@
  */
 package participantes;
 
+import java.util.Objects;
 import ma02_resources.participants.*;
 
 /**
@@ -28,4 +29,60 @@ public abstract class Participante implements Participant{
         this.name = name;
         this.email = email;
     }
+    
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String getEmail() {
+        return email;
+    }
+    
+    @Override
+    public Contact getContact() {
+        return contact;
+    }
+    
+    @Override
+    public Instituition getInstituition() {
+        return instituition;
+    }
+    
+    @Override
+    public void setInstituition(Instituition instn) {
+        this.instituition = instn;
+    }
+
+    @Override
+    public void setContact(Contact cntct) {
+        this.contact = cntct;
+    }
+    
+    @Override
+    public String toString() {
+        return "name=" + name + ", email=" + email + ", contact=" + contact.getPhone() + ", instituition=" + instituition.getName() ;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Participante other = (Participante) obj;
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
+    
 }
