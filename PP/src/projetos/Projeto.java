@@ -332,7 +332,7 @@ public class Projeto implements Project{
        progress = maxTasks / totalTasksCompleted * 100;       
        
        return progress ;
-   } 
+   }
     
 }
 
