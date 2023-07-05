@@ -13,21 +13,21 @@ import participantes.Estudante;
 public class Avaliacao {
     
     private Estudante student;
-    private Projeto project;
+    private Submissao submission;
     private int autoAvaliacao;
     private int heteroAvaliacao;
     private Classificacao classificacao;
 
-    public Avaliacao(Estudante student, Projeto project, int autoAvaliacao, int heteroAvaliacao) {
+    public Avaliacao(Estudante student, Submissao submission, int autoAvaliacao, int heteroAvaliacao) {
+        this.submission = submission;
         this.student = student;
-        this.project = project;
         this.autoAvaliacao = autoAvaliacao;
         this.heteroAvaliacao = heteroAvaliacao;
     }
 
-    public Avaliacao(Estudante student, Projeto project) {
+    public Avaliacao(Estudante student, Submissao submission) {
+        this.submission = submission;
         this.student = student;
-        this.project = project;
         this.autoAvaliacao = 0;
         this.heteroAvaliacao = 0;
     }
@@ -69,14 +69,13 @@ public class Avaliacao {
         }
     }
     
-
-    public Projeto getProjectAv(){
-        return project;
-    }
-    
     public Estudante getStudent(){
         return student;
     }
     
-
+    public Submissao getSubmission(){
+        return submission;
+    }
+    
+    
 }
