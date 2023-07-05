@@ -23,7 +23,7 @@ public class CBL {
 
     public CBL() {
         numEditions = 0;
-        editions = new Edicao[5];
+        editions = new Edicao[1];
     }
     
      /**
@@ -39,6 +39,9 @@ public class CBL {
      * @param edition Edição a adicionar
      */
     public void addEdition(Edicao edition) {
+        if(getnumEdition() == editions.length){
+            aumentarEdicoes();
+        }
         editions[numEditions] = edition;
         numEditions++;
     }
@@ -296,6 +299,12 @@ public class CBL {
         return string;
     }
     
-    
+    public void aumentarEdicoes() {
+        Edicao[] temp = new Edicao[getnumEdition() + 5];
+        for (int i = 0; i < editions.length; i++) {
+            temp[i] = editions[i];
+        }
+        editions = temp;
+    }
     
 }
