@@ -336,7 +336,9 @@ public class Projeto implements Project{
        progress = maxTasks / totalTasksCompleted * 100;       
        
        return progress ;
-    } 
+
+   }
+
     
     public void aumentarParticipantes() {
         Participante[] temp = new Participante[getNumberOfParticipants() + 5];

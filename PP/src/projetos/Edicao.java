@@ -18,6 +18,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import participantes.Estudante;
+import participantes.Participante;
 
 /**
  *
@@ -270,6 +271,7 @@ public class Edicao implements Edition{
                 Estudante estudante = (Estudante) projeto.getParticipant(av.getStudent().getEmail()); 
                 if (estudante != null) {
                     av.setHeteroAvaliacao(nota);
+                    estudante.addNota(nota);
                 }else{
                     throw new IllegalArgumentException("Estudante não se encontra no Projeto....");
                 }

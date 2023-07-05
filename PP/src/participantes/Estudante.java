@@ -19,15 +19,24 @@ public class Estudante extends Participante implements Student{
     private String email;
     private Contact contact;
     private Instituition instituition;
+    private int numNotas;
+    private int[] notas;
+    private float media;
     
     public Estudante(String name, String email, Instituition instituition, Contact contact, int number) {
         super(name, email, instituition, contact);
         this.number = number;
+        this.numNotas = 0;
+        this.notas = new int[10];
+        this.media = 0;
     }
 
     public Estudante(String name, String email, int number) {
         super(name, email);
         this.number = number;
+        this.numNotas = 0;
+        this.notas = new int[10];
+        this.media = 0;
     }
     
     @Override
@@ -65,8 +74,31 @@ public class Estudante extends Participante implements Student{
         this.contact = cntct;
     }
     
+    public void setMedia(float media){
+        this.media = media;
+    }
+    
+    public float getMedia(){
+        return media;
+    }
+    
     @Override
     public String toString() {
         return "StudentClass{" + "name=" + name + ", email=" + email + ", instituition=" + instituition + ", contact=" + contact + ", number=" + number + '}';
+    }
+    
+    public void addNota(int nota){
+        notas[numNotas] = nota;
+        numNotas++;
+    }
+    
+    public void mediaDasNotas(){
+        int soma = 0;
+        if(this.numNotas != 0){
+            for(int nota : notas){
+                soma += nota;
+            }
+            this.setMedia(soma/this.numNotas);
+        }
     }
 }
