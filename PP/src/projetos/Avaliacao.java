@@ -70,4 +70,13 @@ public class Avaliacao {
     }
     
 
+    public Projeto getProjectAv(){
+        return project;
+    }
+    
+    public Estudante getStudent(){
+        return student;
+    }
+    
+
 }

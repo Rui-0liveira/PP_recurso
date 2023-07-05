@@ -17,6 +17,7 @@ import ma02_resources.project.exceptions.TaskAlreadyInProject;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import participantes.Estudante;
 
 /**
  *
@@ -244,5 +245,42 @@ public class Edicao implements Edition{
         }
         return false;
     }
+    
+    public void autoAvaliacao(Avaliacao av, int nota){
+        if(this.getStatus() == Status.ACTIVE){
+            Projeto projeto = (Projeto) this.getProject(av.getProjectAv().getName());
+            if (projeto != null) {
+                Estudante estudante = (Estudante) projeto.getParticipant(av.getStudent().getEmail()); 
+                if (estudante != null) {
+                    av.setAutoAvaliacao(nota);
+                }else{
+                    throw new IllegalArgumentException("Estudante não se encontra no Projeto....");
+                }
+            }else{
+                throw new IllegalArgumentException("Projeto não se enconta na Edição....");
+            }
+        }else{
+            throw new IllegalArgumentException("Ediçaõ não está ativa....");
+        }
+    }
+    
+    public void heteroAvaliacao(Avaliacao av, int nota){
+        if(this.getStatus().equals(Status.ACTIVE)){
+            Projeto projeto = (Projeto) this.getProject(av.getProjectAv().getName());
+            if (projeto != null) {
+                Estudante estudante = (Estudante) projeto.getParticipant(av.getStudent().getEmail()); 
+                if (estudante != null) {
+                    av.setHeteroAvaliacao(nota);
+                }else{
+                    throw new IllegalArgumentException("Estudante não se encontra no Projeto....");
+                }
+            }else{
+                throw new IllegalArgumentException("Projeto não se enconta na Edição....");
+            }
+        }else{
+            throw new IllegalArgumentException("Ediçaõ não está ativa....");
+        }
+    }
+    
 }
 
