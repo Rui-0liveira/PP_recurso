@@ -37,7 +37,7 @@ public class Projeto implements Project{
     private int maxPartners;
     private int maxStudents;
     private int maxFacilitators;
-    private String[] tags;
+    private String[] tags = new String[1];
     private boolean completed;
 
     
@@ -149,7 +149,9 @@ public class Projeto implements Project{
                 throw new ParticipantAlreadyInProject("Participante já se encontra neste projeto");
             }
         }
-        
+        if(numParticipants == participants.length){
+            aumentarParticipantes();
+        }
         participants[numParticipants] = (Participante) p;
         numParticipants++;
     }
@@ -334,5 +336,12 @@ public class Projeto implements Project{
        return progress ;
    } 
     
+   public void aumentarParticipantes() {
+        Participante[] temp = new Participante[getNumberOfParticipants() + 5];
+        for (int i = 0; i < participants.length; i++) {
+            temp[i] = participants[i];
+        }
+        participants = temp;
+    }
 }
 

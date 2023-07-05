@@ -20,7 +20,11 @@ import projetos.*;
  */
 /*
     NOTAS
-    -erro ao criar projeto
+    -ao adicionar algo a um array aumentar o array de tamanho
+    -ver como funciona a ativa (só pode ser feito submissoes á ativa)
+    -ao criar projeto o array das tags tem 10 posições !!! nao pode!!!
+    -project by tag nao dá
+    -ver como funciona o maxtasks de um projeto
 */
 public class Menus {
     
@@ -268,19 +272,19 @@ public class Menus {
         if(edition.getNumberOfProjects()>0){
             System.out.println("\n----Lista de Projetos-----");
             for(int i = 0; i < edition.getNumberOfProjects(); i++){
-                System.out.println("\n" + i+1 + "-" + edition.getProjects()[i].getName());
+                System.out.println("\n" + i + "-" + edition.getProjects()[i].getName());
             }
             System.out.print("Insira o projeto que pertende eliminar ");
             try{
                 op = Integer.parseInt(ler());
+                if(op > edition.getNumberOfProjects() || op < 0){
+                    System.out.println("\nOpção inválida");
+                }
+                else{
+                    edition.removeProject(edition.getProjects()[op].getName());
+                }
             }catch(NumberFormatException e){
                 System.out.println(e);
-            }
-            if(op > edition.getNumberOfProjects() || op < 0){
-                System.out.println("\nOpção inválida");
-            }
-            else{
-                edition.removeProject(edition.getProjects()[op-1].getName());
             }
         }
         else{
