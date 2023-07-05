@@ -207,8 +207,10 @@ public class Projeto implements Project{
     @Override
     public boolean hasTag(String string) {
         for (String tag : tags) {
-            if (tag.equals(string)) {
-                return true;
+            if(tag != null){
+                if (tag.equals(string)) {
+                    return true;
+                }
             }
         }
         return false;
@@ -318,7 +320,7 @@ public class Projeto implements Project{
      * Metodo que retorna a media de task concluidas do projeto
      * @return Média de task concluidas do projeto
      */
-   public double getProjectProgress(){
+    public double getProjectProgress(){
     //verificar se a task está completa baseado pelo tempo
        for(int i = 0; i < maxTasks; i++){
            if(this.getTasks()[i].getEnd().isBefore(java.time.LocalDate.now())){
@@ -334,9 +336,9 @@ public class Projeto implements Project{
        progress = maxTasks / totalTasksCompleted * 100;       
        
        return progress ;
-   } 
+    } 
     
-   public void aumentarParticipantes() {
+    public void aumentarParticipantes() {
         Participante[] temp = new Participante[getNumberOfParticipants() + 5];
         for (int i = 0; i < participants.length; i++) {
             temp[i] = participants[i];
