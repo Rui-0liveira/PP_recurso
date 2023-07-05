@@ -44,7 +44,7 @@ public class Edicao implements Edition{
         this.template = template;
         this.status = Status.INACTIVE;
         this.numProjects = 0;
-        this.projects = new Projeto[numProjects];
+        this.projects = new Projeto[0];
     }
     
     @Override
@@ -105,10 +105,13 @@ public class Edicao implements Edition{
                     LocalDate start = this.getStart().plusDays((long)task.get("start_at"));
                     Task novaTask = new Tarefas(start, duration, title, description);
                     novoProjeto.addTask(novaTask);
-                }
-                
+                }    
             }
-
+            
+            if(projects.length == numProjects){
+                aumentarProjetos();
+            }
+            
             this.projects[numProjects] = novoProjeto;
             numProjects++;
 
@@ -122,13 +125,6 @@ public class Edicao implements Edition{
             Logger.getLogger(Edicao.class.getName()).log(Level.SEVERE, null, ex);
         } catch (TaskAlreadyInProject ex) {
             Logger.getLogger(Edicao.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        if(numProjects == projects.length){
-            Projeto[] temp = new Projeto [numProjects+5]; 
-            for(int i = 0; i < numProjects; i++){
-                temp[i] = projects[i];
-            }
-            projects = temp;
         }
     }
 
@@ -282,5 +278,12 @@ public class Edicao implements Edition{
         }
     }
     
+    public void aumentarProjetos() {
+        Projeto[] temp = new Projeto[getNumberOfProjects() + 5];
+        for (int i = 0; i < projects.length; i++) {
+            temp[i] = projects[i];
+        }
+        projects = temp;
+    }
 }
 
