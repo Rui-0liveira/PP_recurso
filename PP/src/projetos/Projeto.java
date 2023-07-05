@@ -105,6 +105,10 @@ public class Projeto implements Project{
     public long getMaximumNumberOfParticipants() {
         return maxParticipants;
     }
+    
+    public Participant[] getParticipants(){
+        return participants;
+    }
 
     @Override
     public int getMaximumNumberOfStudents() {
@@ -343,13 +347,25 @@ public class Projeto implements Project{
 
    }
 
-    
     public void aumentarParticipantes() {
         Participante[] temp = new Participante[getNumberOfParticipants() + 5];
         for (int i = 0; i < participants.length; i++) {
             temp[i] = participants[i];
         }
         participants = temp;
+    }
+    
+    /**
+     * Metodo que imprime a media de tempo de conclusão das tasks de um projeto
+     */
+    public void mediaTempoTasks(){
+        float media = 0;
+        float soma = 0;
+        for(int i = 0; i < this.numTasks; i++){
+            soma += this.tasks[i].getDuration();
+        }
+        media = soma / this.numTasks;
+        System.out.println("A media de tempo das tasks é: " + media);
     }
 }
 

@@ -23,20 +23,19 @@ import participantes.Estudante;
  *
  * @author Rui
  */
-public class Edicao implements Edition{
-
+public class Edicao implements Edition {
+    
     private String name;
     private LocalDate start;
     private String template;
     private Status status;
     private int numProjects;
     private Projeto[] projects;
-
+    
     public Edicao(String name, LocalDate start, String template) {
-        if(start.isBefore(LocalDate.now())){
+        if (start.isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("Data inválida");
-        }
-        else if(name == null || name.equals("")){
+        } else if (name == null || name.equals("")) {
             throw new IllegalArgumentException("Nome inválido");
         }
         this.name = name;
@@ -51,73 +50,73 @@ public class Edicao implements Edition{
     public String getName() {
         return name;
     }
-
+    
     @Override
     public LocalDate getStart() {
         return start;
     }
-
+    
     @Override
     public String getProjectTemplate() {
         return template;
     }
-
+    
     @Override
     public Status getStatus() {
         return status;
     }
-
+    
     @Override
     public void setStatus(Status status) {
         this.status = status;
     }
-
+    
     @Override
     public void addProject(String string, String string1, String[] strings) throws IOException, ParseException {
         int nStudents;
         int nPartners;
         int nFacilitators;
         
-        try{
+        try {
             String jsonFilePath = template;
             BufferedReader reader = new BufferedReader(new FileReader(jsonFilePath));
             
             JSONParser parser = new JSONParser();
             JSONObject obj = (JSONObject) parser.parse(reader);
             
-            Number n =(Number)obj.get("number_of_facilitors");
+            Number n = (Number) obj.get("number_of_facilitors");
             nFacilitators = n.intValue();
-            n =(Number)obj.get("number_of_students");
+            n = (Number) obj.get("number_of_students");
             nStudents = n.intValue();
-            n =(Number)obj.get("number_of_partners");
+            n = (Number) obj.get("number_of_partners");
             nPartners = n.intValue();
-
+            
             Projeto novoProjeto = new Projeto(string, string1, strings, nStudents, nPartners, nFacilitators);
-
+            
             JSONArray tasks = (JSONArray) obj.get("tasks");
-            for(Object o : tasks){
-                if(o instanceof JSONObject){
-                    JSONObject task = (JSONObject)o;
-                    String title = (String)task.get("title");
-                    String description = (String)task.get("description");
-                    n =(Number)task.get("duration");
+            for (Object o : tasks) {
+                if (o instanceof JSONObject) {
+                    JSONObject task = (JSONObject) o;
+                    String title = (String) task.get("title");
+                    String description = (String) task.get("description");
+                    n = (Number) task.get("duration");
                     int duration = n.intValue();
-                    LocalDate start = this.getStart().plusDays((long)task.get("start_at"));
+                    LocalDate start = this.getStart().plusDays((long) task.get("start_at"));
                     Task novaTask = new Tarefas(start, duration, title, description);
                     novoProjeto.addTask(novaTask);
-                }    
+                }                
             }
             
-            if(projects.length == numProjects){
+            if (projects.length == numProjects) {
                 aumentarProjetos();
             }
             
             this.projects[numProjects] = novoProjeto;
             numProjects++;
-
+            
             reader.close();
             
-        }catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         } catch (org.json.simple.parser.ParseException ex) {
             Logger.getLogger(Edicao.class.getName()).log(Level.SEVERE, null, ex);
@@ -127,17 +126,19 @@ public class Edicao implements Edition{
             Logger.getLogger(Edicao.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     @Override
     public void removeProject(String string) {
+
         if(!projectExists(string)){
             throw new IllegalArgumentException("Projeto não existe");
         }
         for(int i = 0; i < numProjects; i++){
             if(projects[i].getName().equals(string)){
                 for(int j = i; j < numProjects; j++){
+
                     projects[j] = projects[j + 1];
-                    if(j == numProjects - 1){
+                    if (j == numProjects - 1) {
                         projects[numProjects] = null;
                     }
                 }
@@ -145,11 +146,11 @@ public class Edicao implements Edition{
         }
         numProjects--;
     }
-
+    
     @Override
     public Project getProject(String string) {
-        if(string == null){
-            throw new IllegalArgumentException("Nome de projeto invalido");  
+        if (string == null) {
+            throw new IllegalArgumentException("Nome de projeto invalido");            
         }
         for (int i = 0; i < numProjects; i++) {
             if (projects[i].getName().equals(string)) {
@@ -158,53 +159,52 @@ public class Edicao implements Edition{
         }
         throw new IllegalArgumentException("Projeto não encontrado na edição");
     }
-
+    
     @Override
     public Project[] getProjects() {
         return projects;
     }
-
+    
     @Override
     public Project[] getProjectsByTag(String string) {
-        Project[] projectsByTag = new Project [numProjects];
+        Project[] projectsByTag = new Project[numProjects];
         int count = 0;
-        for(int i = 0; i < numProjects; i++){
-            if(projects[i].hasTag(string)){
+        for (int i = 0; i < numProjects; i++) {
+            if (projects[i].hasTag(string)) {
                 projectsByTag[count] = projects[i];
                 count++;
-            }
-            else{
+            } else {
                 throw new IllegalArgumentException("Não existe nenhum projeto com esta tag");
             }
         }
         return projectsByTag;
     }
-
+    
     @Override
     public Project[] getProjectsOf(String string) {
         Projeto[] temp = null;
-        int size = 0; 
-        for(int i = 0; i < numProjects; i++){
-            if(projects[i].hasParticipant(string)){
+        int size = 0;        
+        for (int i = 0; i < numProjects; i++) {
+            if (projects[i].hasParticipant(string)) {
                 temp[size] = projects[i];
                 size++;
             }
         }
         return temp;
     }
-
+    
     @Override
     public int getNumberOfProjects() {
         return numProjects;
     }
-
+    
     @Override
     public LocalDate getEnd() {
-        LocalDate  temp = LocalDate.of(1, 1, 1);
-        for(Projeto p: projects){
-            if(p!= null){
-                for(Task t: p.getTasks()){
-                    if(t!=null && t.getEnd().isAfter(temp)){
+        LocalDate temp = LocalDate.of(1, 1, 1);
+        for (Projeto p : projects) {
+            if (p != null) {
+                for (Task t : p.getTasks()) {
+                    if (t != null && t.getEnd().isAfter(temp)) {
                         temp = t.getEnd();
                     }
                 }
@@ -216,73 +216,88 @@ public class Edicao implements Edition{
     @Override
     public String toString() {
         String string;
-        string = " name = " + name + 
-                "\n start = " + start +
-                "\n template = " + template  +
-                "\n status = " + status +
-                "\n numOfProjects = " + numProjects +
-                "\n projects: "; 
-        if(numProjects == 0){
+        string = " name = " + name
+                + "\n start = " + start
+                + "\n template = " + template
+                + "\n status = " + status
+                + "\n numOfProjects = " + numProjects
+                + "\n projects: ";        
+        if (numProjects == 0) {
             string += "null";
+
         }
         else{
             for(int i = 0; i < numProjects; i++){
                 if(projects[i]!=null){
                     string+= "\n{\n" + projects[i].toString() + "\n}";
                 }
+
             }
         }
         
         return string;
     }
- 
-     /**
+
+    /**
      * Metodo que verifica se um projeto existe na edição
+     *
      * @param project nome do projeto a verificar
      * @return true se o projeto existir, false se não existir
      */
-    public boolean projectExists(String project){
-        for(Projeto p: projects){
-            if(p.getName().equals(project)){
+    public boolean projectExists(String project) {
+        for (Projeto p : projects) {
+            if (p.getName().equals(project)) {
                 return true;
             }
         }
         return false;
     }
     
-    public void autoAvaliacao(Avaliacao av, int nota){
-        if(this.getStatus() == Status.ACTIVE){
-            Projeto projeto = (Projeto) this.getProject(av.getProjectAv().getName());
-            if (projeto != null) {
-                Estudante estudante = (Estudante) projeto.getParticipant(av.getStudent().getEmail()); 
-                if (estudante != null) {
-                    av.setAutoAvaliacao(nota);
-                }else{
-                    throw new IllegalArgumentException("Estudante não se encontra no Projeto....");
+    public void autoAvaliacao(Avaliacao av, int nota) {
+        if (this.getStatus() == Status.ACTIVE) {
+            for (int i = 0; i < this.numProjects; i++) {
+                Projeto project = (Projeto) this.getProjects()[i];
+                for (int j = 0; j < project.getNumberOfTasks(); j++) {
+                    Tarefas task = (Tarefas) project.getTasks()[j];
+                    for (int k = 0; k < task.getNumberOfSubmissions(); k++) {
+                        if (task.getSubmissions()[k].equals(av.getSubmission())) {
+                            if (task.getSubmissions()[k].getStudent().equals(av.getStudent())) {
+                                av.setAutoAvaliacao(nota);
+                            } else {
+                                throw new IllegalArgumentException("Estudante não fez essa submissão....");
+                            }
+                        } else {
+                            throw new IllegalArgumentException("Submissão não encontrada nesta ediçaõ de CBL....");                            
+                        }
+                    }
                 }
-            }else{
-                throw new IllegalArgumentException("Projeto não se enconta na Edição....");
             }
-        }else{
+        } else {
             throw new IllegalArgumentException("Ediçaõ não está ativa....");
         }
     }
     
-    public void heteroAvaliacao(Avaliacao av, int nota){
-        if(this.getStatus().equals(Status.ACTIVE)){
-            Projeto projeto = (Projeto) this.getProject(av.getProjectAv().getName());
-            if (projeto != null) {
-                Estudante estudante = (Estudante) projeto.getParticipant(av.getStudent().getEmail()); 
-                if (estudante != null) {
-                    av.setHeteroAvaliacao(nota);
-                    estudante.addNota(nota);
-                }else{
-                    throw new IllegalArgumentException("Estudante não se encontra no Projeto....");
+    public void heteroAvaliacao(Avaliacao av, int nota) {
+        if (this.getStatus() == Status.ACTIVE) {
+            for (int i = 0; i < this.numProjects; i++) {
+                Projeto project = (Projeto) this.getProjects()[i];
+                for (int j = 0; j < project.getNumberOfTasks(); j++) {
+                    Tarefas task = (Tarefas) project.getTasks()[j];
+                    for (int k = 0; k < task.getNumberOfSubmissions(); k++) {
+                        if (task.getSubmissions()[k].equals(av.getSubmission())) {
+                            if (task.getSubmissions()[k].getStudent().equals(av.getStudent())) {
+                                av.setAutoAvaliacao(nota);
+                                av.getStudent().addNota(nota);
+                            } else {
+                                throw new IllegalArgumentException("Estudante não fez essa submissão....");
+                            }
+                        } else {
+                            throw new IllegalArgumentException("Submissão não encontrada nesta ediçaõ de CBL....");                            
+                        }
+                    }
                 }
-            }else{
-                throw new IllegalArgumentException("Projeto não se enconta na Edição....");
             }
-        }else{
+        } else {
             throw new IllegalArgumentException("Ediçaõ não está ativa....");
         }
     }
@@ -294,5 +309,14 @@ public class Edicao implements Edition{
         }
         projects = temp;
     }
+    
+    public void listarMediaDurationTask(){
+        for(int i = 0; i < this.getNumberOfProjects(); i++){
+            if(this.getProjects()[i] instanceof Projeto){
+                Projeto project = (Projeto) this.getProjects()[i];
+                project.mediaTempoTasks();
+            }
+        }
+    }
+    
 }
-
