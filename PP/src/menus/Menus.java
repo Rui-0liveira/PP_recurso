@@ -12,6 +12,7 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import ma02_resources.project.Project;
 import projetos.*;
 
 /**
@@ -20,10 +21,9 @@ import projetos.*;
  */
 /*
     NOTAS
-    -ao adicionar algo a um array aumentar o array de tamanho
+    -ao adicionar posição a um array sempre que acabar(falta as tasks e tags)
     -ver como funciona a ativa (só pode ser feito submissoes á ativa)
     -ao criar projeto o array das tags tem 10 posições !!! nao pode!!!
-    -project by tag nao dá
     -ver como funciona o maxtasks de um projeto
 */
 public class Menus {
@@ -193,6 +193,7 @@ public class Menus {
             edition = cbl.getEdition(ler());
             int op = 0;
             do {
+                op = -1;
                 System.out.println("------ Edição: " + edition.getName() + " ------");
                 System.out.println("1. Criar Projeto");
                 System.out.println("2. Remover Projeto");
@@ -312,7 +313,18 @@ public class Menus {
     public void verProjetosPorTag(Edicao edition) throws IOException{
         System.out.println("Insere a tag que deseja visualizar");
         try{
-            System.out.println(edition.getProjectsByTag(ler()).toString());
+            if(edition.getNumberOfProjects()==0){
+                System.out.println("Não existe nenhum projeto");
+            }
+            Project [] temp;
+            temp = edition.getProjectsByTag(ler());
+            
+            for(Project p : temp){
+                if(p!=null){
+                    System.out.println(p.toString());
+                }
+            }
+            
         }catch(IllegalArgumentException e){
             System.out.println(e.getMessage());
         }

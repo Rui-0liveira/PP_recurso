@@ -163,12 +163,15 @@ public class Edicao implements Edition{
 
     @Override
     public Project[] getProjectsByTag(String string) {
-        Project[] projectsByTag = null;
+        Project[] projectsByTag = new Project [numProjects];
         int count = 0;
         for(int i = 0; i < numProjects; i++){
             if(projects[i].hasTag(string)){
                 projectsByTag[count] = projects[i];
                 count++;
+            }
+            else{
+                throw new IllegalArgumentException("Não existe nenhum projeto com esta tag");
             }
         }
         return projectsByTag;
