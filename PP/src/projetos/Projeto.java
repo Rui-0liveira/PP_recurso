@@ -149,7 +149,7 @@ public class Projeto implements Project{
             numFacilitators++;
         }
         for(int i = 0; i < numParticipants; i++){
-            if(!(participants[i].equals(p))){
+            if(participants[i].equals(p)){
                 throw new ParticipantAlreadyInProject("Participante já se encontra neste projeto");
             }
         }
@@ -191,6 +191,10 @@ public class Projeto implements Project{
         for(int i = pos; i < numParticipants; i++){
             participants[i] = participants[i+1];
         }
+    }
+    
+    public Participante[] getParticipants() {
+        return participants;
     }
     
     @Override

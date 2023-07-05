@@ -12,7 +12,13 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import ma02_resources.project.Project;
+import ma02_resources.project.*;
+import ma02_resources.participants.*;
+import ma02_resources.project.exceptions.IllegalNumberOfParticipantType;
+import ma02_resources.project.exceptions.IllegalNumberOfTasks;
+import ma02_resources.project.exceptions.ParticipantAlreadyInProject;
+import ma02_resources.project.exceptions.TaskAlreadyInProject;
+import participantes.*;
 import projetos.*;
 
 /**
@@ -25,6 +31,7 @@ import projetos.*;
     -ver como funciona a ativa (só pode ser feito submissoes á ativa)
     -ao criar projeto o array das tags tem 10 posições !!! nao pode!!!
     -ver como funciona o maxtasks de um projeto
+    -ao criar outra instituição num participant dá erro
 */
 public class Menus {
     
@@ -53,7 +60,7 @@ public class Menus {
      
     }
     
-    public void menu(CBL cbl) throws IOException, ParseException{
+    public void menu(CBL cbl) throws IOException, ParseException, IllegalNumberOfParticipantType, ParticipantAlreadyInProject, TaskAlreadyInProject, IllegalNumberOfTasks{
     int op = 0;
     do {
         System.out.println("------ CBL ------");
@@ -186,7 +193,7 @@ public class Menus {
     }
     
     
-    public void menuEdicao(CBL cbl) throws IOException, java.text.ParseException{
+    public void menuEdicao(CBL cbl) throws IOException, java.text.ParseException, IllegalNumberOfParticipantType, ParticipantAlreadyInProject, TaskAlreadyInProject, IllegalNumberOfTasks{
         Edicao edition;
         System.out.println("Insira o nome da edição que deseja mexer");
         try{
@@ -225,7 +232,7 @@ public class Menus {
                         verProjetosPorTag(edition);
                         break;
                     case 6:
-                        //menuProjeto(edition);
+                        menuProjeto(edition);
                         break;
                     case 0:
                         break;
@@ -330,4 +337,295 @@ public class Menus {
         }
     }  
     
+    //menu de um projeto (CRUD de Participante e task)
+    public void menuProjeto(Edicao edition) throws IOException, ParseException, IllegalNumberOfParticipantType, ParticipantAlreadyInProject, IllegalNumberOfTasks, TaskAlreadyInProject{
+        Projeto projeto;
+        System.out.println("Insira o nome da edição que deseja mexer");
+        try{
+            projeto = (Projeto)edition.getProject(ler());
+            int op = 0;
+            do {
+                op = -1;
+                System.out.println("------ Edição: " + edition.getName() +", Projeto: "+ projeto.getName() + " ------");
+                System.out.println("1. Criar Participante");
+                System.out.println("2. Remover Participante");
+                System.out.println("3. Criar Task");//corrigir
+                System.out.println("4. Ver Participantes");
+                System.out.println("5. Ver Participante");
+                System.out.println("6. Ver tasks");
+                System.out.println("7. Ver task");
+                System.out.println("8. Ver tags");
+                System.out.println("10. Gerir Participante");
+                System.out.println("11. Gerir Task");
+                System.out.println("0. Exit");
+                System.out.print("Insira a opção ");
+                try{
+                    op = Integer.parseInt(ler());
+                }catch(NumberFormatException e){
+                    System.out.println(e);
+                }
+                switch (op) {
+                    case 1:
+                        criarParticipante(projeto);
+                        break;
+                    case 2:
+                        removerParticipante(projeto);
+                        break;
+                    case 3:
+                        criarTask(projeto);
+                        break;
+                    case 4:
+                        verParticipante(projeto);
+                        break;
+                    case 5:
+                        verParticipantes(projeto);
+                        break;
+                    case 6:
+                        verTasks(projeto);
+                        break;
+                    case 7:
+                        verTask(projeto);
+                        break;
+                    case 8:
+                        verTags(projeto);
+                        break;
+                    case 9:
+                        //menuParticipant(edition, projeto);
+                        break;
+                    case 10:
+                        //menuTask(edition, projeto);
+                        break;
+                    case 0:
+                        break;
+                    default:
+                        break;
+                }
+                System.out.println();
+            } while (op != 0);
+        }catch(IllegalArgumentException e){
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    public Contacto criarContacto() throws IOException{
+        System.out.println("Nome da rua: ");
+        String rua = ler();
+            
+        System.out.println("Nome da cidade: ");
+        String cidade = ler();
+            
+        System.out.println("Nome de estado: ");
+        String estado = ler();
+            
+        System.out.println("ZIPCODE: ");
+        String zip = ler();
+            
+        System.out.println("Nome do País: ");
+        String pais = ler();
+            
+        System.out.println("Numero de telefone: ");
+        String tele = ler();
+        
+        Contacto newC = new Contacto(rua, cidade, estado, zip, pais, tele);
+        
+        return newC;
+        
+    }
+    
+    public Instituicao criarInstituicao() throws IOException{
+        Instituicao newI = null;
+        Contacto contact;
+        InstituitionType type;
+        try{
+            System.out.println("Nome da Instituição: ");
+            String name = ler();
+            
+            System.out.println("Email da instituiçaõ: ");
+            String email = ler();
+            
+            System.out.println("Contacto da Instituição: ");
+            contact = criarContacto();
+            
+            System.out.println("WebSite da Instituição: ");
+            String web = ler();
+            
+            System.out.println("Descrição da Instituição: ");
+            String description = ler();
+            
+            System.out.println("1-COMPANY\n2-NGO\n3-UNIVERSITY\n4-OTHER\nTipo da instituição: ");
+            int tipo = lerInt();
+            if(tipo == 1){
+               type = InstituitionType.COMPANY;
+            }else if(tipo == 2){
+               type = InstituitionType.NGO;
+            }else if(tipo == 3){
+               type = InstituitionType.UNIVERSITY;
+            }else{
+               type = InstituitionType.OTHER;
+            }
+                       
+            newI = new Instituicao(name, email, type, contact, web, description);
+            
+        }catch(NumberFormatException e){
+            System.out.println(e.getMessage());
+        }
+        
+        return newI;
+    }
+    
+    public void criarParticipante(Projeto projeto) throws IOException, IllegalNumberOfParticipantType, ParticipantAlreadyInProject{
+        Participante participante;
+        Instituicao institut = null;
+        Contacto contacto;
+        int tipo = 0;
+        boolean encontrou = false;
+            try{
+                System.out.print("Que tipo de participante deseja criar?\n1-Estudante\n2-Parceiro\n3-Facilitador");
+                tipo = Integer.parseInt(ler());
+                if(tipo < 1 || tipo > 3){
+                    throw new IllegalArgumentException("Tipo de participante inválido");
+                }
+                System.out.print("Insira o nome do participante ");
+                String name = ler();
+
+                System.out.println("Insira o email do particioante: ");
+                String email = ler();
+                
+                System.out.println("Insira o contacto do participante: ");
+                contacto = criarContacto();
+                
+                System.out.print("Insira a instituição: ");
+                String nome = ler();
+                
+                for(Participante p: projeto.getParticipants()){
+                    if(p != null){
+                        if(p.getInstituition().getName().equals(nome)){
+                            institut = (Instituicao) p.getInstituition();
+                            encontrou = true;
+                            break;
+                        }  
+                    }
+                }
+                if(encontrou == false){
+                    System.out.println("Instituição não encontrada");
+                    institut = criarInstituicao();
+                }
+            switch (tipo) {
+                case 1:
+                    System.out.print("Insira o numero do estudante");
+                    int number = Integer.parseInt(ler());
+                    participante = new Estudante(name, email, institut, contacto, number);
+                    break;
+                case 2:
+                    System.out.print("Insira o vat");
+                    String vat = ler();
+                    
+                    System.out.print("Insira o numero do estudante");
+                    String site = ler();
+                    
+                    participante = new Parceiro(name, email, institut, contacto, vat, site);
+                    break;
+                default:
+                    System.out.print("Insira a area de expecialidade");
+                    String area = ler();
+                    participante = new Facilitador(name, email, institut, contacto, area);
+                    break;
+            }
+                
+                projeto.addParticipant(participante);
+            }catch(IllegalArgumentException e){
+                System.out.println(e.getMessage());
+            }
+    }
+
+    public void removerParticipante(Projeto projeto) throws IOException{
+        int op = 0;
+        if(projeto.getNumberOfParticipants() > 0){
+            System.out.println("\n----Lista de Participantes-----");
+            for(int i = 0; i < projeto.getNumberOfParticipants(); i++){
+                System.out.println( i + "-"+ projeto.getParticipants()[i].getName());
+            }
+            System.out.print("Insira o participante que pertende eliminar ");
+            try{
+                op = Integer.parseInt(ler());
+                if(op > projeto.getNumberOfParticipants() || op < 0){
+                    System.out.println("\nOpção inválida");
+                }
+                else{
+                    projeto.removeParticipant(projeto.getParticipant(projeto.getParticipants()[op].getName()).getEmail());
+                }
+            }catch(NumberFormatException e){
+                System.out.println(e);
+            }
+        }
+        else{
+            System.out.println("\nNão existe nenhum participante neste projeto");
+        }
+    }
+
+    public void criarTask(Projeto projeto) throws IOException, ParseException, IllegalNumberOfTasks, TaskAlreadyInProject{
+        Tarefas task;
+            try{
+                System.out.print("Insira o titulo da task ");
+                String title = ler();
+
+                System.out.print("Insira a descriçao ");
+                int duration = lerInt();
+
+                System.out.print("Insira a data de inicio (ano-mes-dia)");
+                String data = ler();
+
+                LocalDate start = LocalDate.parse(data, DateTimeFormatter.ISO_LOCAL_DATE);
+
+                System.out.println("Insira a descriçao ");
+                String descricao = ler();
+
+                task = new Tarefas(start, duration, title, descricao);
+                projeto.addTask(task);
+            }catch(IllegalArgumentException e){
+                System.out.println(e.getMessage());
+            }
+    }
+
+    public void verParticipante(Projeto projeto) throws IOException{
+        System.out.println("Insere o nome do participante que deseja visualizar");
+        try{
+            System.out.println(projeto.getParticipant(ler()).toString());
+        }catch(IllegalArgumentException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void verParticipantes(Projeto projeto){
+        for(Participante p : projeto.getParticipants()){
+            if(p != null){
+                System.out.println(p.toString());
+            }
+        }
+    }
+    
+    public void verTask(Projeto projeto) throws IOException{
+        System.out.println("Insere o titulo da task que deseja visualizar");
+        try{
+            System.out.println(projeto.getTask(ler()).toString());
+        }catch(IllegalArgumentException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void verTasks(Projeto projeto){
+        try{
+            System.out.println(projeto.getTasks().toString());
+        }catch(IllegalArgumentException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void verTags(Projeto projeto){
+        try{
+            System.out.println(projeto.getTags().toString());
+        }catch(IllegalArgumentException e){
+            System.out.println(e.getMessage());
+        }
+    }
 }

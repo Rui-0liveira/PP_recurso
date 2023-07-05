@@ -15,10 +15,6 @@ import ma02_resources.participants.Instituition;
 public class Facilitador extends Participante implements Facilitator{
     
     private String areaOfExpertise;
-    private String name;
-    private String email;
-    private Contact contact;
-    private Instituition instituition;
     
     public Facilitador(String name, String email, Instituition instituition, Contact contact,String areaOfExpertise) {
         super(name, email, instituition, contact);
@@ -36,34 +32,8 @@ public class Facilitador extends Participante implements Facilitator{
     }
 
     @Override
-    public String getName() {
-        return name;
+    public String toString() {
+        return "Facilitador{" + super.toString() + ", Area de Expecialidade=" + areaOfExpertise +'}';
     }
-
-    @Override
-    public String getEmail() {
-        return email;
-    }
-
-    @Override
-    public Contact getContact() {
-        return contact;
-    }
-
-    @Override
-    public Instituition getInstituition() {
-        return instituition;
-    }
-
-    @Override
-    public void setInstituition(Instituition instn) {
-        this.instituition = instn;
-    }
-
-    @Override
-    public void setContact(Contact cntct) {
-        this.contact = cntct;
-    }
-    
 }
 

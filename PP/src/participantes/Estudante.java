@@ -15,10 +15,7 @@ import ma02_resources.participants.Student;
 public class Estudante extends Participante implements Student{
     
     private int number;
-    private String name;
-    private String email;
-    private Contact contact;
-    private Instituition instituition;
+   
     private int numNotas;
     private int[] notas;
     private float media;
@@ -43,36 +40,6 @@ public class Estudante extends Participante implements Student{
     public int getNumber() {
         return number;
     }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public String getEmail() {
-        return email;
-    }
-
-    @Override
-    public Contact getContact() {
-        return contact;
-    }
-
-    @Override
-    public Instituition getInstituition() {
-        return instituition;
-    }
-
-    @Override
-    public void setInstituition(Instituition instn) {
-        this.instituition = instn;
-    }
-
-    @Override
-    public void setContact(Contact cntct) {
-        this.contact = cntct;
-    }
     
     public void setMedia(float media){
         this.media = media;
@@ -84,7 +51,7 @@ public class Estudante extends Participante implements Student{
     
     @Override
     public String toString() {
-        return "StudentClass{" + "name=" + name + ", email=" + email + ", instituition=" + instituition + ", contact=" + contact + ", number=" + number + '}';
+        return "Estudante{" + super.toString() + ", number=" + number + '}';
     }
     
     public void addNota(int nota){
