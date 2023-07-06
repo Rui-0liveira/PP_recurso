@@ -193,10 +193,6 @@ public class Projeto implements Project{
         }
     }
     
-    public Participante[] getParticipants() {
-        return participants;
-    }
-    
     @Override
     public Participant getParticipant(String string) {
         for(int i = 0; i < numParticipants; i++){
@@ -330,20 +326,24 @@ public class Projeto implements Project{
      */
     public double getProjectProgress(){
     //verificar se a task está completa baseado pelo tempo
-       for(int i = 0; i < maxTasks; i++){
-           if(this.getTasks()[i].getEnd().isBefore(java.time.LocalDate.now())){
-             if(this.getTasks()[i] instanceof Tarefas){
-                 Tarefas task = (Tarefas) this.getTasks()[i];
-                 task.setCompleted(true);
-                 totalTasksCompleted++;
-             }
-           }
-       }
-       double progress;
+        for(int i = 0; i < numTasks; i++){
+            if(this.getTasks()[i].getEnd().isBefore(java.time.LocalDate.now())){
+                if(this.getTasks()[i] instanceof Tarefas){
+                    Tarefas task = (Tarefas) this.getTasks()[i];
+                    task.setCompleted(true);
+                    totalTasksCompleted++;
+                }
+            }
+        }
+        double progress;
+        if(totalTasksCompleted == 0){
+           progress = 0;
+        }
+        else{
+            progress = maxTasks / totalTasksCompleted * 100;     
+        }
        
-       progress = maxTasks / totalTasksCompleted * 100;       
-       
-       return progress ;
+        return progress ;
 
    }
 
@@ -361,11 +361,16 @@ public class Projeto implements Project{
     public void mediaTempoTasks(){
         float media = 0;
         float soma = 0;
+        if(this.getNumberOfTasks() <= 0){
         for(int i = 0; i < this.numTasks; i++){
             soma += this.tasks[i].getDuration();
         }
         media = soma / this.numTasks;
         System.out.println("A media de tempo das tasks é: " + media);
+        }
+        else{
+           System.out.println("Não há tasks"); 
+        }
     }
 }
 

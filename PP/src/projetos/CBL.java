@@ -442,17 +442,19 @@ public class CBL {
         Estudante[] temp = new Estudante[3];
         int j = 0;
         for (Edicao e : editions) {
-            for (Project p : e.getProjects()) {
-                for (Task t : p.getTasks()) {
-                    for (Submission s : t.getSubmissions()) {
-                        if (s.getStudent() instanceof Estudante student) {
-                            if (j < 3) {
-                                temp[j] = student;
-                                j++;
-                            } else {
-                                for (int i = 0; i < temp.length; i++) {
-                                    if (student.getMedia() > temp[i].getMedia()) {
-                                        temp[i] = student;
+            if(e!=null){
+                for (Project p : e.getProjects()) {
+                    for (Task t : p.getTasks()) {
+                        for (Submission s : t.getSubmissions()) {
+                            if (s.getStudent() instanceof Estudante student) {
+                                if (j < 3) {
+                                    temp[j] = student;
+                                    j++;
+                                } else {
+                                    for (int i = 0; i < temp.length; i++) {
+                                        if (student.getMedia() > temp[i].getMedia()) {
+                                            temp[i] = student;
+                                        }
                                     }
                                 }
                             }
@@ -462,7 +464,9 @@ public class CBL {
             }
         }
         for (Estudante temp1 : temp) {
-            System.out.println(temp1.getName() + " " + temp1.getMedia());
+            if(temp1 != null){
+                System.out.println(temp1.getName() + " " + temp1.getMedia());
+            }
         }
     }
 
@@ -482,7 +486,9 @@ public class CBL {
             }
         }
         for (Edicao temp1 : temp) {
-            System.out.println(temp1.getName() + " " + temp1.getNumberOfProjects());
+            if(temp1 != null){
+                System.out.println(temp1.getName() + " " + temp1.getNumberOfProjects());
+            }   
         }
     }
 
