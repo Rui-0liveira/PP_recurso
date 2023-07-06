@@ -17,7 +17,6 @@ import ma02_resources.project.exceptions.TaskAlreadyInProject;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import participantes.Estudante;
 
 /**
  *

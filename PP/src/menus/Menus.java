@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import ma02_resources.project.*;
@@ -32,6 +33,9 @@ import projetos.*;
     -ao criar projeto o array das tags tem 10 posições !!! nao pode!!!
     -ver como funciona o maxtasks de um projeto
     -ao criar outra instituição num participant dá erro
+    -ao criar task, a data de inicio da task não pode ser antes da do inicio do projeto
+    -so na edição ativa pode criar submissão
+    -representaçoes textuais
 */
 public class Menus {
     
@@ -61,56 +65,77 @@ public class Menus {
     }
     
     public void menu(CBL cbl) throws IOException, ParseException, IllegalNumberOfParticipantType, ParticipantAlreadyInProject, TaskAlreadyInProject, IllegalNumberOfTasks{
-    int op = 0;
-    do {
-        System.out.println("------ CBL ------");
-        System.out.println("1. Criar Edição");
-        System.out.println("2. Remover Edição");
-        System.out.println("3. Visualizar Edições");
-        System.out.println("4. Visualizar Edição");
-        System.out.println("5. Definir edição ativa");
-        System.out.println("6. Visualizar edição ativa");
-        System.out.println("7. Gerir Edição");
-        System.out.println("0. Exit");
-        System.out.print("Insira a opção ");
-        try{
-            op = Integer.parseInt(ler());
-        }catch(NumberFormatException e){
-            System.out.println("Opção invalido");
-            op=-1;
-        }
-        switch (op) {
-            case 1:
-                criarEdicao(cbl);
-                break;
-            case 2:
-                removerEdicao(cbl);
-                break;
-            case 3:
-                System.out.println(cbl.toString());
-                break;
-            case 4:
-                verEdicao(cbl);
-                break;
-            case 5:
-                definirAtiva(cbl);
-                break;
-            case 6:
-                verAtiva(cbl);
-                break;
-            case 7:
-                menuEdicao(cbl);
-                break;
-            case 0:
-                //cbl.gerarJSON();
-                break;
-            default:
-                //cbl.gerarJSON();
-                break;
-        }
-        System.out.println();
-    } while (op != 0);
+        int op = 0;
+        do {
+            System.out.println("------ CBL ------");
+            System.out.println("1. Criar Edição");
+            System.out.println("2. Remover Edição");
+            System.out.println("3. Visualizar Edições");
+            System.out.println("4. Visualizar Edição");
+            System.out.println("5. Definir edição ativa");
+            System.out.println("6. Visualizar edição ativa");
+            System.out.println("7. Gerir Edição");
+            System.out.println("8. Representação textual de projeto");
+            System.out.println("9. Representação textual de edição");
+            System.out.println("10. Media de tempo tasks");
+            System.out.println("11. Top Alunos");
+            System.out.println("12. Top Edições");
+            System.out.println("0. Exit");
+            System.out.print("Insira a opção ");
+            try{
+                op = Integer.parseInt(ler());
+            }catch(NumberFormatException e){
+                System.out.println("Opção invalido");
+                op=-1;
+            }
+            switch (op) {
+                case 1:
+                    criarEdicao(cbl);
+                    break;
+                case 2:
+                    removerEdicao(cbl);
+                    break;
+                case 3:
+                    System.out.println(cbl.toString());
+                    break;
+                case 4:
+                    verEdicao(cbl);
+                    break;
+                case 5:
+                    definirAtiva(cbl);
+                    break;
+                case 6:
+                    verAtiva(cbl);
+                    break;
+                case 7:
+                    menuEdicao(cbl);
+                    break;
+                case 8:
+                    textoProjeto(cbl);
+                    break;
+                case 9:
+                    textoEdicao(cbl);
+                    break;
+                case 10:
+                    mediaTasks(cbl);
+                    break;
+                case 11:
+                    cbl.topTresAlunosMaiorMediaNotas();
+                    break;
+                case 12:
+                    cbl.topTresEdicoesComMaisPorjetos();
+                    break;
+                case 0:
+                    //cbl.gerarJSON(); 
+                    break;
+                default:
+                    //cbl.gerarJSON();
+                    break;
+            }
+            System.out.println();
+        } while (op != 0);
     }
+    
     //String name, LocalDate start, String template
     public void criarEdicao(CBL cbl) throws IOException{
         Edicao edition;
@@ -192,6 +217,109 @@ public class Menus {
         }
     }
     
+    public void textoProjeto(CBL cbl) throws IOException{
+        Edicao edition;
+        Project project;
+        if(cbl.getnumEdition() == 0){
+            throw new IllegalArgumentException("Não existe nenhuma edição");
+        }
+        else{
+            for(int i = 0; i < cbl.getnumEdition(); i++){
+                System.out.println("\n" + i + "-" +cbl.getEditions()[i].getName());
+            }
+            System.out.println("Insira a edição");
+            try{
+                int op = Integer.parseInt(ler());
+                if(op < 0 || op > cbl.getnumEdition()){
+                    throw new IllegalArgumentException("Edição inválida");
+                }
+                edition = cbl.getEdition(cbl.getEditions()[op].getName());
+                if(edition.getNumberOfProjects() == 0){
+                    throw new IllegalArgumentException("Não existe nenhum projeto nesta edição");
+                }
+                else{
+                    for(int i = 0; i < edition.getNumberOfProjects(); i++){
+                        System.out.println("\n" + i + "-" +edition.getProjects()[i].getName());
+                    }
+                    System.out.println("Insira o projeto");
+                    int op1 = Integer.parseInt(ler());
+                    if(op1 < 0 || op1 > edition.getNumberOfProjects()){
+                        throw new IllegalArgumentException("Projeto inválido");
+                    }
+                    project = edition.getProject(edition.getProjects()[op1].getName());
+                    System.out.println(cbl.progressProject(project.getName()));
+                }
+                System.out.println("Insira o projeto");
+            }catch(IllegalArgumentException e){
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+    
+    public void textoEdicao(CBL cbl) throws IOException{
+        Edicao edition;
+        if(cbl.getnumEdition() == 0){
+            throw new IllegalArgumentException("Não existe nenhuma edição");
+        }
+        else{
+            for(int i = 0; i < cbl.getnumEdition(); i++){
+                System.out.println("\n" + i + "-" +cbl.getEditions()[i].getName());
+            }
+            System.out.println("Insira a edição");
+            try{
+                int op = Integer.parseInt(ler());
+                if(op < 0 || op > cbl.getnumEdition()){
+                    throw new IllegalArgumentException("Edição inválida");
+                }
+                edition = cbl.getEdition(cbl.getEditions()[op].getName());
+                System.out.print(cbl.progressEdition(edition.getName()));
+                
+            }catch(IllegalArgumentException e){
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+    
+    public void mediaTasks(CBL cbl) throws IOException{
+        
+        Edicao edition;
+        Projeto project;
+        if(cbl.getnumEdition() == 0){
+            throw new IllegalArgumentException("Não existe nenhuma edição");
+        }
+        else{
+            for(int i = 0; i < cbl.getnumEdition(); i++){
+                System.out.println("\n" + i + "-" +cbl.getEditions()[i].getName());
+            }
+            System.out.println("Insira a edição");
+            try{
+                int op = Integer.parseInt(ler());
+                if(op < 0 || op > cbl.getnumEdition()){
+                    throw new IllegalArgumentException("Edição inválida");
+                }
+                edition = cbl.getEdition(cbl.getEditions()[op].getName());
+                if(edition.getNumberOfProjects() == 0){
+                    throw new IllegalArgumentException("Não existe nenhum projeto nesta edição");
+                }
+                else{
+                    for(int i = 0; i < edition.getNumberOfProjects(); i++){
+                        System.out.println("\n" + i + "-" +edition.getProjects()[i].getName());
+                    }
+                    System.out.println("Insira o projeto");
+                    int op1 = Integer.parseInt(ler());
+                    if(op1 < 0 || op1 > edition.getNumberOfProjects()){
+                        throw new IllegalArgumentException("Projeto inválido");
+                    }
+                    project =(Projeto) edition.getProject(edition.getProjects()[op1].getName());
+                    project.mediaTempoTasks();
+                }
+                System.out.println("Insira o projeto");
+            }catch(IllegalArgumentException e){
+                System.out.println(e.getMessage());
+            }
+        }
+
+    }
     
     public void menuEdicao(CBL cbl) throws IOException, java.text.ParseException, IllegalNumberOfParticipantType, ParticipantAlreadyInProject, TaskAlreadyInProject, IllegalNumberOfTasks{
         Edicao edition;
@@ -346,17 +474,16 @@ public class Menus {
             int op = 0;
             do {
                 op = -1;
-                System.out.println("------ Edição: " + edition.getName() +", Projeto: "+ projeto.getName() + " ------");
+                System.out.println("------ Edição: " + edition.getName() + ", Projeto: "+ projeto.getName() + " ------");
                 System.out.println("1. Criar Participante");
                 System.out.println("2. Remover Participante");
-                System.out.println("3. Criar Task");//corrigir
+                System.out.println("3. Criar Task");
                 System.out.println("4. Ver Participantes");
                 System.out.println("5. Ver Participante");
                 System.out.println("6. Ver tasks");
                 System.out.println("7. Ver task");
                 System.out.println("8. Ver tags");
-                System.out.println("10. Gerir Participante");
-                System.out.println("11. Gerir Task");
+                System.out.println("9. Gerir Task");
                 System.out.println("0. Exit");
                 System.out.print("Insira a opção ");
                 try{
@@ -390,10 +517,7 @@ public class Menus {
                         verTags(projeto);
                         break;
                     case 9:
-                        //menuParticipant(edition, projeto);
-                        break;
-                    case 10:
-                        //menuTask(edition, projeto);
+                        menuTask(edition, projeto);
                         break;
                     case 0:
                         break;
@@ -497,7 +621,7 @@ public class Menus {
                 System.out.print("Insira a instituição: ");
                 String nome = ler();
                 
-                for(Participante p: projeto.getParticipants()){
+                for(Participant p: projeto.getParticipants()){
                     if(p != null){
                         if(p.getInstituition().getName().equals(nome)){
                             institut = (Instituicao) p.getInstituition();
@@ -520,7 +644,7 @@ public class Menus {
                     System.out.print("Insira o vat");
                     String vat = ler();
                     
-                    System.out.print("Insira o numero do estudante");
+                    System.out.print("Insira o website");
                     String site = ler();
                     
                     participante = new Parceiro(name, email, institut, contacto, vat, site);
@@ -569,7 +693,7 @@ public class Menus {
                 System.out.print("Insira o titulo da task ");
                 String title = ler();
 
-                System.out.print("Insira a descriçao ");
+                System.out.print("Insira a duração ");
                 int duration = lerInt();
 
                 System.out.print("Insira a data de inicio (ano-mes-dia)");
@@ -590,14 +714,18 @@ public class Menus {
     public void verParticipante(Projeto projeto) throws IOException{
         System.out.println("Insere o nome do participante que deseja visualizar");
         try{
-            System.out.println(projeto.getParticipant(ler()).toString());
+            Participant p = projeto.getParticipant(ler());
+            if(p == null){
+                throw new IllegalArgumentException("Task não existe neste projeto");
+            }
+            System.out.println(p.toString());
         }catch(IllegalArgumentException e){
             System.out.println(e.getMessage());
         }
     }
 
     public void verParticipantes(Projeto projeto){
-        for(Participante p : projeto.getParticipants()){
+        for(Participant p : projeto.getParticipants()){
             if(p != null){
                 System.out.println(p.toString());
             }
@@ -607,25 +735,110 @@ public class Menus {
     public void verTask(Projeto projeto) throws IOException{
         System.out.println("Insere o titulo da task que deseja visualizar");
         try{
-            System.out.println(projeto.getTask(ler()).toString());
+            Task t = projeto.getTask(ler());
+            if(t == null){
+                throw new IllegalArgumentException("Task não existe neste projeto");
+            }
+            System.out.println(t.toString());
         }catch(IllegalArgumentException e){
             System.out.println(e.getMessage());
         }
     }
 
     public void verTasks(Projeto projeto){
+        for(Task t : projeto.getTasks()){
+            if(t != null){
+                System.out.println(t.toString());
+            }
+        }
+    }
+
+    public void verTags(Projeto projeto){
+        for(String t : projeto.getTags()){
+            if(t != null){
+                System.out.println(t);
+            }
+        }
+    }
+    
+    
+    public void menuTask(Edicao edition, Projeto projeto) throws IOException{
+        Tarefas task;
+        System.out.println("Insira o nome da task que deseja mexer");
         try{
-            System.out.println(projeto.getTasks().toString());
+            task = (Tarefas) projeto.getTask(ler());
+            int op = 0;
+            do {
+                System.out.println("------ Edição: " + edition.getName() +", Projeto: "+ projeto.getName() + ", Task: "+ task.getTitle() + " ------");
+                System.out.println("1. Ver dados");
+                System.out.println("2. Criar submissão");
+                System.out.println("3. Ver submissões");
+                System.out.println("0. Exit");
+                System.out.print("Insira a opção ");
+                try{
+                    op = Integer.parseInt(ler());
+                }catch(NumberFormatException e){
+                    System.out.println(e);
+                }
+                switch (op) {
+                    case 1:
+                        System.out.println(task.toString());
+                        break;
+                    case 2:
+                        criarSubmissao(projeto, task);
+                        break;
+                    case 3:
+                        verSubmissoes(task);
+                        break;
+                    case 0:
+                        break;
+                    default:
+                        break;
+                }
+                System.out.println();
+            } while (op != 0);
         }catch(IllegalArgumentException e){
             System.out.println(e.getMessage());
         }
     }
 
-    public void verTags(Projeto projeto){
-        try{
-            System.out.println(projeto.getTags().toString());
-        }catch(IllegalArgumentException e){
-            System.out.println(e.getMessage());
+
+    public void criarSubmissao(Projeto projeto, Tarefas task) throws IOException{
+        Submissao submissao;
+        Estudante estudante = null;
+        
+            try{
+                System.out.println("Insira o email do estudante que fez a submissão");
+                String email = ler();
+
+                
+                for(int i = 0; i < projeto.getNumberOfParticipants(); i++){
+                    if(projeto.getParticipants()[i].getEmail().equals(email)){
+                        estudante = (Estudante) projeto.getParticipants()[i];
+                    }
+                }
+                
+                System.out.println("Insira a data da submissão");
+                String data = ler();
+
+                LocalDateTime date = LocalDateTime.parse(data, DateTimeFormatter.ISO_LOCAL_DATE);
+
+                System.out.println("Insira o texto da submissão");
+                String texto = ler();
+
+                submissao = new Submissao(date, estudante, texto);
+                
+                task.addSubmission(submissao);
+            }catch(IllegalArgumentException e){
+                System.out.println(e.getMessage());
+            } 
+    }
+
+    public void verSubmissoes(Tarefas task){
+        for(Submission s : task.getSubmissions()){
+            if(s != null){
+                System.out.println(s.toString());
+            }
         }
     }
 }
