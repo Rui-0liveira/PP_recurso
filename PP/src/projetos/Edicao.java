@@ -19,8 +19,21 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 /**
- *
- * @author Rui
+ * Nome: Rodrigo Bamdé Chantre Lopes
+ * Número: 8210191
+ * Turma: T4
+ * 
+ * Nome: Rui Alexande da Silva Oliveira
+ * Número: 8210322
+ * Turma: T3
+ */
+
+
+/**
+ * Classe que define uma Edição
+ * Implementa a interface Edition
+ * @author Rodrigo Lopes
+ * @author Rui Oliveira
  */
 public class Edicao implements Edition {
     
@@ -31,6 +44,13 @@ public class Edicao implements Edition {
     private int numProjects;
     private Projeto[] projects;
     
+    
+    /**
+     * Método construtor para o objeto Edição
+     * @param name Nome da edição
+     * @param start Data de início da edição
+     * @param template Template da edição
+     */
     public Edicao(String name, LocalDate start, String template) {
         if (start.isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("Data inválida");
@@ -45,31 +65,59 @@ public class Edicao implements Edition {
         this.projects = new Projeto[0];
     }
     
+    /**
+     * Método que retorna o nome da edição
+     * @return Nome da edição
+     */
     @Override
     public String getName() {
         return name;
     }
     
+    /**
+     * Método que retorna a data de início da edição
+     * @return Data de início da edição
+     */
     @Override
     public LocalDate getStart() {
         return start;
     }
     
+    /**
+     * Método que retorna o template da edição
+     * @return Template da edição
+     */
     @Override
     public String getProjectTemplate() {
         return template;
     }
     
+    /**
+     * Método que retorna o estado da edição
+     * @return Estado da edição
+     */
     @Override
     public Status getStatus() {
         return status;
     }
     
+    /**
+     * Método que define o estado da edição
+     * @param status Estado da edição
+     */
     @Override
     public void setStatus(Status status) {
         this.status = status;
     }
     
+    /**
+     * Método que adiciona um projeto à edição, com base no template
+     * @param string Nome do projeto
+     * @param string1 Descrição do projeto
+     * @param strings Tags do projeto
+     * @throws IOException se o projeto não existir
+     * @throws ParseException se o template do projeto não for valido
+     */
     @Override
     public void addProject(String string, String string1, String[] strings) throws IOException, ParseException {
         int nStudents;
@@ -126,6 +174,10 @@ public class Edicao implements Edition {
         }
     }
     
+    /**
+     * Método que remove um projeto da edição
+     * @param string Nome do projeto
+     */
     @Override
     public void removeProject(String string) {
 
@@ -146,6 +198,11 @@ public class Edicao implements Edition {
         numProjects--;
     }
     
+    /**
+     * Metodo que retorna um projeto da edição
+     * @param string nome do Projeto a retornar
+     * @return Um projeto da edição
+     */
     @Override
     public Project getProject(String string) {
         if (string == null) {
@@ -159,11 +216,20 @@ public class Edicao implements Edition {
         throw new IllegalArgumentException("Projeto não encontrado na edição");
     }
     
+    /**
+     * Método que retorna todos os projetos da edição
+     * @return Array de projetos da edição
+     */
     @Override
     public Project[] getProjects() {
         return projects;
     }
     
+    /**
+     * Método que retorna todos os projetos da edição com uma determinada tag
+     * @param string Tag a procurar
+     * @return Array de projetos da edição com uma determinada tag
+     */
     @Override
     public Project[] getProjectsByTag(String string) {
         Project[] projectsByTag = new Project[numProjects];
