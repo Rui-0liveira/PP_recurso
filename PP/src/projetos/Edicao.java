@@ -383,5 +383,30 @@ public class Edicao implements Edition {
             }
         }
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setStart(LocalDate start) {
+        this.start = start;
+    }
+
+    public void setTemplate(String template) {
+        this.template = template;
+    }
+
+    public void setNumProjects(int numProjects) {
+        this.numProjects = numProjects;
+    }
+
+    public void setProjects(Projeto[] projects) {
+        this.projects = projects;
+    }
+    
+     public void addProjectJS(Project project) {
+        projects[numProjects] = (Projeto) project;
+        numProjects++;
+}
     
 }
