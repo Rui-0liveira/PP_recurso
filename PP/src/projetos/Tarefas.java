@@ -170,6 +170,36 @@ public class Tarefas implements Task{
     public void setCompleted(boolean completed) {
         this.completed = completed;
     }
+
+    public void setStart(LocalDate start) {
+        this.start = start;
+    }
+
+    public void setEnd(LocalDate end) {
+        this.end = end;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setNumSubmissions(int numSubmissions) {
+        this.numSubmissions = numSubmissions;
+    }
+
+    public void setSubmissions(Submissao[] submissions) {
+        this.submissions = submissions;
+    }
+    
+    
     
 }
 

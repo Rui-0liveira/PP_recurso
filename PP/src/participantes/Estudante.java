@@ -15,7 +15,6 @@ import ma02_resources.participants.Student;
 public class Estudante extends Participante implements Student{
     
     private int number;
-   
     private int numNotas;
     private int[] notas;
     private float media;

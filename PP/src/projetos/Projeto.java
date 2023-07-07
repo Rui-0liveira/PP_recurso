@@ -59,7 +59,6 @@ public class Projeto implements Project{
         maxTasks = 30;
         tasks = new Tarefas[maxTasks];
     }
-
     
     @Override
     public String getName() {
@@ -124,7 +123,7 @@ public class Projeto implements Project{
     public int getMaximumNumberOfFacilitators() {
         return maxFacilitators;
     }
-
+    
     @Override
     public void addParticipant(Participant p) throws IllegalNumberOfParticipantType, ParticipantAlreadyInProject {
         if(numParticipants == maxParticipants){
@@ -372,5 +371,75 @@ public class Projeto implements Project{
            System.out.println("Não há tasks"); 
         }
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setNumParticipants(int numParticipants) {
+        this.numParticipants = numParticipants;
+    }
+
+    public void setParticipants(Participante[] participants) {
+        this.participants = participants;
+    }
+
+    public void setNumStudents(int numStudents) {
+        this.numStudents = numStudents;
+    }
+
+    public void setNumPartners(int numPartners) {
+        this.numPartners = numPartners;
+    }
+
+    public void setNumFacilitators(int numFacilitators) {
+        this.numFacilitators = numFacilitators;
+    }
+
+    public void setNumTasks(int numTasks) {
+        this.numTasks = numTasks;
+    }
+
+    public void setTotalTasksCompleted(int totalTasksCompleted) {
+        this.totalTasksCompleted = totalTasksCompleted;
+    }
+
+    public void setTasks(Tarefas[] tasks) {
+        this.tasks = tasks;
+    }
+
+    public void setMaxTasks(int maxTasks) {
+        this.maxTasks = maxTasks;
+    }
+
+    public void setMaxParticipants(long maxParticipants) {
+        this.maxParticipants = maxParticipants;
+    }
+
+    public void setMaxPartners(int maxPartners) {
+        this.maxPartners = maxPartners;
+    }
+
+    public void setMaxStudents(int maxStudents) {
+        this.maxStudents = maxStudents;
+    }
+
+    public void setMaxFacilitators(int maxFacilitators) {
+        this.maxFacilitators = maxFacilitators;
+    }
+
+    public void setTags(String[] tags) {
+        this.tags = tags;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
+    
+    
 }
 
