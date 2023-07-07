@@ -38,7 +38,6 @@ public class Projeto implements Project{
     private int maxStudents;
     private int maxFacilitators;
     private String[] tags = new String[1];
-    private boolean completed;
 
     
     public Projeto(String name, String description, String[] tags, int maxStudents, int maxPartners, int maxFacilitators){
@@ -132,19 +131,19 @@ public class Projeto implements Project{
         }
         if(p instanceof Partner){
             if(maxPartners == numPartners){
-                throw new IllegalNumberOfParticipantType("Limite de partners já atingido");
+                throw new IllegalNumberOfParticipantType("Limite de parceiros já atingido");
             }
             numPartners++;
         }  
         if(p instanceof Student){
             if(maxStudents == numStudents){
-                throw new IllegalNumberOfParticipantType("Limite de students já atingido");
+                throw new IllegalNumberOfParticipantType("Limite de estudantes já atingido");
             }
             numStudents++;
         }
         if(p instanceof Facilitator){
             if( maxFacilitators == numFacilitators){
-                throw new IllegalNumberOfParticipantType("Limite de facilitators já atingido");
+                throw new IllegalNumberOfParticipantType("Limite de facilitatores já atingido");
             }
             numFacilitators++;
         }
@@ -273,11 +272,11 @@ public class Projeto implements Project{
         String string;
         string = " name = " + name +  
                 "\n description = " + description +
-                "\n tags = [ ";
+                "\n tags =  ";
         for (String tag : tags) {
-            string += tag + " ";
+            string += tag + "  ";
         }
-        string += "]\n numberOfParticipants = " + numParticipants +
+        string += "\n numberOfParticipants = " + numParticipants +
                 "\n numberOfStudents = " + numStudents +
                 "\n numberOfPartners = " + numPartners +
                 "\n numberOfFacilitators = " + numFacilitators +
