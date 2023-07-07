@@ -27,9 +27,12 @@ public class Tarefas implements Task{
      */
     private boolean completed;
 
-    public Tarefas(LocalDate start, LocalDate end, int duration, String title, String description, int numSubmissions, Submissao[] submissions) {
+    public Tarefas(LocalDate start, int duration, String title, String description, int numSubmissions, Submissao[] submissions) {
+        if (start.isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("Data inválida");
+        }
         this.start = start;
-        this.end = end;
+        this.end = this.start.plusDays(duration);
         this.duration = duration;
         this.title = title;
         this.description = description;

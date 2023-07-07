@@ -28,13 +28,9 @@ import projetos.*;
  */
 /*
     NOTAS
-    -ao adicionar posição a um array sempre que acabar(falta as tasks e tags)
-    -ver como funciona a ativa (só pode ser feito submissoes á ativa)
-    -ao criar projeto o array das tags tem 10 posições !!! nao pode!!!
-    -ver como funciona o maxtasks de um projeto
     -ao criar task, a data de inicio da task não pode ser antes da do inicio do projeto
-    -so na edição ativa pode criar submissão
-    -representaçoes textuais
+    -Como fazer as notas, totalmete separada(prefiro esta), ou junta com o estudante
+    -Falta por as avaliação a dar e no menu !!!!!!!!!!!!!!!!!!!!!!!!!
 */
 public class Menus {
     
@@ -46,6 +42,7 @@ public class Menus {
         } 
         return false;
     }
+    
     //função de ler input
     public String ler() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); 
@@ -143,7 +140,6 @@ public class Menus {
         } while (op != 0);
     }
     
-    //String name, LocalDate start, String template
     public void criarEdicao(CBL cbl) throws IOException{
         Edicao edition;
             try{
@@ -389,13 +385,16 @@ public class Menus {
     public void criarProjeto(Edicao edition) throws IOException, java.text.ParseException{
         int i = 0;
             try{
-                String[] tags = new String[10];
+                String[] tags = new String[0];
                 System.out.print("Insira o nome do projeto ");
                 String name = ler();
 
                 System.out.print("Insira a descriçao ");
                 String descricao = ler();
                 do{
+                    if(tags.length == i){
+                        tags = aumentarArrayString(tags); 
+                    }
                     System.out.print("Insira um tag");
                     tags[i]= ler();
                     i++;
@@ -410,8 +409,13 @@ public class Menus {
             }catch(IllegalArgumentException e){
                 System.out.println(e.getMessage());
             }
-            
-            
+    }
+    public String[] aumentarArrayString(String[] string) {
+        String[] temp = new String[string.length + 1];
+        for (int i = 0; i < string.length; i++) {
+            temp[i] = string[i];
+        }
+        return temp;
     }
     
     public void removerProjeto(Edicao edition) throws IOException{
@@ -796,7 +800,7 @@ public class Menus {
                         System.out.println(task.toString());
                         break;
                     case 2:
-                        criarSubmissao(projeto, task);
+                        criarSubmissao(edition,projeto, task);
                         break;
                     case 3:
                         verSubmissoes(task);
@@ -814,21 +818,24 @@ public class Menus {
     }
 
 
-    public void criarSubmissao(Projeto projeto, Tarefas task) throws IOException{
+    public void criarSubmissao(Edicao edition, Projeto projeto, Tarefas task) throws IOException{
         Submissao submissao;
         Estudante estudante = null;
-        
+        if(edition.getStatus() != Status.ACTIVE){
+            System.out.println("Só pode fazer sumissões á edição ativa");
+        }
+        else{
             try{
                 System.out.println("Insira o email do estudante que fez a submissão");
                 String email = ler();
 
-                
+
                 for(int i = 0; i < projeto.getNumberOfParticipants(); i++){
                     if(projeto.getParticipants()[i].getEmail().equals(email)){
                         estudante = (Estudante) projeto.getParticipants()[i];
                     }
                 }
-                
+
                 System.out.println("Insira a data da submissão");
                 String data = ler();
 
@@ -838,11 +845,12 @@ public class Menus {
                 String texto = ler();
 
                 submissao = new Submissao(date, estudante, texto);
-                
+
                 task.addSubmission(submissao);
             }catch(IllegalArgumentException e){
                 System.out.println(e.getMessage());
             } 
+        }
     }
 
     public void verSubmissoes(Tarefas task){
