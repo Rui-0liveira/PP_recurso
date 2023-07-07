@@ -442,7 +442,7 @@ public class CBL {
         Estudante[] temp = new Estudante[3];
         int j = 0;
         for (Edicao e : editions) {
-            if(e!=null){
+            if(e  != null){
                 for (Project p : e.getProjects()) {
                     for (Task t : p.getTasks()) {
                         for (Submission s : t.getSubmissions()) {
@@ -463,10 +463,13 @@ public class CBL {
                 }
             }
         }
+        
         for (Estudante temp1 : temp) {
-            if(temp1 != null){
-                System.out.println(temp1.getName() + " " + temp1.getMedia());
+            if(temp1 == null){
+                throw new IllegalArgumentException("Não há notas suficientes para um top 3");
             }
+            System.out.println(temp1.getName() + " " + temp1.getMedia());
+            
         }
     }
 
@@ -486,10 +489,10 @@ public class CBL {
             }
         }
         for (Edicao temp1 : temp) {
-            if(temp1 != null){
-                System.out.println(temp1.getName() + " " + temp1.getNumberOfProjects());
-            }   
+            if(temp1 == null){
+                throw new IllegalArgumentException("Não há edições com projetos suficientes para um top 3");
+            }
+            System.out.println(temp1.getName() + " " + temp1.getNumberOfProjects());
         }
     }
-
 }

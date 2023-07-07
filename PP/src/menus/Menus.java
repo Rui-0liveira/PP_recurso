@@ -32,7 +32,6 @@ import projetos.*;
     -ver como funciona a ativa (só pode ser feito submissoes á ativa)
     -ao criar projeto o array das tags tem 10 posições !!! nao pode!!!
     -ver como funciona o maxtasks de um projeto
-    -ao criar outra instituição num participant dá erro
     -ao criar task, a data de inicio da task não pode ser antes da do inicio do projeto
     -so na edição ativa pode criar submissão
     -representaçoes textuais
@@ -120,10 +119,18 @@ public class Menus {
                     mediaTasks(cbl);
                     break;
                 case 11:
-                    cbl.topTresAlunosMaiorMediaNotas();
+                    try{
+                        cbl.topTresAlunosMaiorMediaNotas();
+                    }catch(IllegalArgumentException e){
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case 12:
-                    cbl.topTresEdicoesComMaisPorjetos();
+                    try{
+                        cbl.topTresEdicoesComMaisPorjetos();
+                    }catch(IllegalArgumentException e){
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case 0:
                     //cbl.gerarJSON(); 
@@ -220,15 +227,16 @@ public class Menus {
     public void textoProjeto(CBL cbl) throws IOException{
         Edicao edition;
         Project project;
-        if(cbl.getnumEdition() == 0){
-            throw new IllegalArgumentException("Não existe nenhuma edição");
-        }
-        else{
-            for(int i = 0; i < cbl.getnumEdition(); i++){
-                System.out.println("\n" + i + "-" +cbl.getEditions()[i].getName());
+        try{
+            if(cbl.getnumEdition() == 0){
+                throw new IllegalArgumentException("Não existe nenhuma edição");
             }
-            System.out.println("Insira a edição");
-            try{
+            else{
+                for(int i = 0; i < cbl.getnumEdition(); i++){
+                    System.out.println("\n" + i + "-" +cbl.getEditions()[i].getName());
+                }
+                System.out.println("Insira a edição");
+
                 int op = Integer.parseInt(ler());
                 if(op < 0 || op > cbl.getnumEdition()){
                     throw new IllegalArgumentException("Edição inválida");
@@ -250,33 +258,35 @@ public class Menus {
                     System.out.println(cbl.progressProject(project.getName()));
                 }
                 System.out.println("Insira o projeto");
-            }catch(IllegalArgumentException e){
-                System.out.println(e.getMessage());
             }
+        }catch(IllegalArgumentException e){
+            System.out.println(e.getMessage());
         }
     }
     
     public void textoEdicao(CBL cbl) throws IOException{
         Edicao edition;
-        if(cbl.getnumEdition() == 0){
-            throw new IllegalArgumentException("Não existe nenhuma edição");
-        }
-        else{
-            for(int i = 0; i < cbl.getnumEdition(); i++){
-                System.out.println("\n" + i + "-" +cbl.getEditions()[i].getName());
+        try{
+            if(cbl.getnumEdition() == 0){
+                throw new IllegalArgumentException("Não existe nenhuma edição");
             }
-            System.out.println("Insira a edição");
-            try{
-                int op = Integer.parseInt(ler());
-                if(op < 0 || op > cbl.getnumEdition()){
-                    throw new IllegalArgumentException("Edição inválida");
+            else{
+                for(int i = 0; i < cbl.getnumEdition(); i++){
+                    System.out.println("\n" + i + "-" +cbl.getEditions()[i].getName());
                 }
-                edition = cbl.getEdition(cbl.getEditions()[op].getName());
-                System.out.print(cbl.progressEdition(edition.getName()));
-                
-            }catch(IllegalArgumentException e){
-                System.out.println(e.getMessage());
+                System.out.println("Insira a edição");
+
+                    int op = Integer.parseInt(ler());
+                    if(op < 0 || op > cbl.getnumEdition()){
+                        throw new IllegalArgumentException("Edição inválida");
+                    }
+                    edition = cbl.getEdition(cbl.getEditions()[op].getName());
+                    System.out.print(cbl.progressEdition(edition.getName()));
+
+
             }
+        }catch(IllegalArgumentException e){
+            System.out.println(e.getMessage());
         }
     }
     
@@ -284,15 +294,16 @@ public class Menus {
         
         Edicao edition;
         Projeto project;
-        if(cbl.getnumEdition() == 0){
-            throw new IllegalArgumentException("Não existe nenhuma edição");
-        }
-        else{
-            for(int i = 0; i < cbl.getnumEdition(); i++){
-                System.out.println("\n" + i + "-" +cbl.getEditions()[i].getName());
+        try{
+            if(cbl.getnumEdition() == 0){
+                throw new IllegalArgumentException("Não existe nenhuma edição");
             }
-            System.out.println("Insira a edição");
-            try{
+            else{
+                for(int i = 0; i < cbl.getnumEdition(); i++){
+                    System.out.println("\n" + i + "-" +cbl.getEditions()[i].getName());
+                }
+                System.out.println("Insira a edição");
+
                 int op = Integer.parseInt(ler());
                 if(op < 0 || op > cbl.getnumEdition()){
                     throw new IllegalArgumentException("Edição inválida");
@@ -314,9 +325,9 @@ public class Menus {
                     project.mediaTempoTasks();
                 }
                 System.out.println("Insira o projeto");
-            }catch(IllegalArgumentException e){
-                System.out.println(e.getMessage());
             }
+        }catch(IllegalArgumentException e){
+            System.out.println(e.getMessage());
         }
 
     }
@@ -468,7 +479,7 @@ public class Menus {
     //menu de um projeto (CRUD de Participante e task)
     public void menuProjeto(Edicao edition) throws IOException, ParseException, IllegalNumberOfParticipantType, ParticipantAlreadyInProject, IllegalNumberOfTasks, TaskAlreadyInProject{
         Projeto projeto;
-        System.out.println("Insira o nome da edição que deseja mexer");
+        System.out.println("Insira o nome do projeto que deseja mexer");
         try{
             projeto = (Projeto)edition.getProject(ler());
             int op = 0;
@@ -657,7 +668,7 @@ public class Menus {
             }
                 
                 projeto.addParticipant(participante);
-            }catch(IllegalArgumentException e){
+            }catch(IllegalArgumentException | IllegalNumberOfParticipantType e){
                 System.out.println(e.getMessage());
             }
     }
