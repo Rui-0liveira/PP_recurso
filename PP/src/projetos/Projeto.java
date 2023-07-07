@@ -38,7 +38,7 @@ public class Projeto implements Project{
     private int maxStudents;
     private int maxFacilitators;
     private String[] tags = new String[1];
-
+    private boolean completed;
     
     public Projeto(String name, String description, String[] tags, int maxStudents, int maxPartners, int maxFacilitators){
         this.name = name;
