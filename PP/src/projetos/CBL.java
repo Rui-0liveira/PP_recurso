@@ -4,7 +4,7 @@
  */
 package projetos;
 
-
+import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import ma02_resources.participants.Contact;
 import ma02_resources.participants.Facilitator;
 import ma02_resources.participants.Instituition;
+import ma02_resources.participants.InstituitionType;
 import ma02_resources.participants.Participant;
 import ma02_resources.participants.Partner;
 import ma02_resources.participants.Student;
@@ -27,20 +28,24 @@ import ma02_resources.project.exceptions.TaskAlreadyInProject;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import participantes.Contacto;
 import participantes.Estudante;
 import participantes.Facilitador;
+import participantes.Instituicao;
 import participantes.Parceiro;
 import participantes.Participante;
-/**
- * Nome: Rodrigo Bamdé Chantre Lopes
- * Número: 8210191
- * Turma: T4
- * 
- * Nome: Rui Alexande da Silva Oliveira
- * Número: 8210322
- * Turma: T3
- */
 
+/**
+ * Nome: Rodrigo Bamdé Chantre Lopes Número: 8210191 Turma: T4
+ *
+ * Nome: Rui Alexande da Silva Oliveira Número: 8210322 Turma: T3
+ */
+/**
+ * Classe que define o objeto CBL
+ *
+ * @author Rodrigo Lopes
+ * @author Rui Oliveira
+ */
 public class CBL {
 
     private Edicao[] editions;
@@ -54,47 +59,49 @@ public class CBL {
         editions = new Edicao[1];
     }
 
-    public void gerarJSON(){
+    public void gerarJSON() {
         try {
             FileWriter file = new FileWriter("data.json");
             JSONObject cbl = new JSONObject();
             cbl.put("numEditions", this.numEditions);
-            
+
             JSONArray editions = new JSONArray();
 
             for (Edicao e : this.editions) {
-                if(e != null){
+                if (e != null) {
                     JSONObject edicao = new JSONObject();
                     edicao.put("name", e.getName());
                     edicao.put("start", e.getStart().toString());
                     edicao.put("template", e.getProjectTemplate());
                     edicao.put("status", e.getStatus().toString());
                     edicao.put("numOfProjects", e.getNumberOfProjects());
-                    editions.add(edicao);
+
                     JSONArray projects = new JSONArray();
 
                     for (Project p : e.getProjects()) {
                         if (p != null) {
                             JSONObject projeto = new JSONObject();
-                            projeto.put("Nome ", p.getName());
-                            projeto.put("Descrição ", p.getDescription());
-                            projeto.put("Tags ", p.getTags());
-                            projeto.put("Número de participantes ", p.getNumberOfParticipants());
-                            projeto.put("Número de estudantes ", p.getNumberOfStudents());
-                            projeto.put("Número de partners ", p.getNumberOfPartners());
-                            projeto.put("Número de facilitadores ", p.getNumberOfFacilitators());
-                            projeto.put("Número de tarefas ", p.getNumberOfTasks());
-                            projeto.put("Número máximo de tarefas ", p.getMaximumNumberOfTasks());
-                            projeto.put("Número máximo de participantes ", p.getMaximumNumberOfParticipants());
-                            projeto.put("Número máximo de estudantes ", p.getMaximumNumberOfStudents());
-                            projeto.put("Número máximo de partners ", p.getMaximumNumberOfPartners());
-                            projeto.put("Número máximo de facilitadores ", p.getMaximumNumberOfFacilitators());
-                            JSONArray tasks = new JSONArray();
-                            JSONArray participants = new JSONArray();
+                            projeto.put("Nome", p.getName());
+                            projeto.put("Descrição", p.getDescription());
                             JSONArray tags = new JSONArray();
+                            for (String tag : p.getTags()) {
+                                tags.add(tag);
+                            }
+                            projeto.put("Tags", tags);
+                            projeto.put("Número de participantes", p.getNumberOfParticipants());
+                            projeto.put("Número de estudantes", p.getNumberOfStudents());
+                            projeto.put("Número de partners", p.getNumberOfPartners());
+                            projeto.put("Número de facilitadores", p.getNumberOfFacilitators());
+                            projeto.put("Número de tarefas", p.getNumberOfTasks());
+                            projeto.put("Número máximo de tarefas", p.getMaximumNumberOfTasks());
+                            projeto.put("Número máximo de participantes", p.getMaximumNumberOfParticipants());
+                            projeto.put("Número máximo de estudantes", p.getMaximumNumberOfStudents());
+                            projeto.put("Número máximo de partners", p.getMaximumNumberOfPartners());
+                            projeto.put("Número máximo de facilitadores", p.getMaximumNumberOfFacilitators());
 
+                            JSONArray tasks = new JSONArray();
                             for (Task t : p.getTasks()) {
-                                if(t != null){
+                                if (t != null) {
                                     JSONObject task = new JSONObject();
                                     task.put("title", t.getTitle());
                                     task.put("description", t.getDescription());
@@ -103,10 +110,10 @@ public class CBL {
                                     task.put("duration", t.getDuration());
                                     task.put("completed", ((Tarefas) t).isCompleted());
                                     task.put("numberOfSubmissions", t.getNumberOfSubmissions());
-                                    JSONArray submissions = new JSONArray();
 
+                                    JSONArray submissions = new JSONArray();
                                     for (Submission sub : t.getSubmissions()) {
-                                        if(sub!=null){
+                                        if (sub != null) {
                                             JSONObject submissao = new JSONObject();
                                             submissao.put("date", sub.getDate().toString());
                                             submissao.put("student", sub.getStudent().toString());
@@ -114,59 +121,191 @@ public class CBL {
                                             submissions.add(submissao);
                                         }
                                     }
-                                    for (Participant par : ((Projeto) p).getParticipants()) {
-                                        if(par != null){
-                                            JSONObject participante = new JSONObject();
-                                            participante.put("name", par.getName());
-                                            participante.put("email", par.getEmail());
-                                            participante.put("instituition", par.getInstituition().toString());
-                                            participante.put("contact", par.getContact().toString());
-                                            participants.add(participante);
-                                            if (par instanceof Student) {
-                                                Estudante student = (Estudante) par;
-                                                participante.put("numero", student.getNumber());
-                                            } else if (par instanceof Facilitator) {
-                                                Facilitador facilitator = (Facilitador) par;
-                                                participante.put("Area de Especialização", facilitator.getAreaOfExpertise());
-                                            } else if (par instanceof Partner) {
-                                                Parceiro partner = (Parceiro) par;
-                                                participante.put("VAT", partner.getVat());
-                                                participante.put("WebSite", partner.getWebsite());
-                                            }
-                                            JSONObject contacto = new JSONObject();
-                                            contacto.put("street", ((Participante) par).getContact().getStreet());
-                                            contacto.put("city", ((Participante) par).getContact().getCity());
-                                            contacto.put("state", ((Participante) par).getContact().getState());
-                                            contacto.put("zipcode", ((Participante) par).getContact().getZipCode());
-                                            contacto.put("country", ((Participante) par).getContact().getCountry());
-                                            contacto.put("phone", ((Participante) par).getContact().getPhone());
-
-                                            JSONObject instituicao = new JSONObject();
-                                            instituicao.put("name", ((Participante) par).getInstituition().getName());
-                                            instituicao.put("email", ((Participante) par).getInstituition().getEmail());
-                                            instituicao.put("type", ((Participante) par).getInstituition().getType().toString());
-                                            instituicao.put("contact", contacto);
-                                            instituicao.put("website", ((Participante) par).getInstituition().getWebsite());
-                                            instituicao.put("description", ((Participante) par).getInstituition().getDescription());
-                                        }
-                                    }
+                                    task.put("submissions", submissions);
+                                    tasks.add(task);
                                 }
                             }
-                            for (String tag : p.getTags()) {
-                                tags.add(tag);
+                            projeto.put("tasks", tasks);
+
+                            JSONArray participants = new JSONArray();
+                            for (Participant par : ((Projeto) p).getParticipants()) {
+                                if (par != null) {
+                                    JSONObject participante = new JSONObject();
+                                    participante.put("name", par.getName());
+                                    participante.put("email", par.getEmail());
+                                    participante.put("instituition", par.getInstituition().toString());
+                                    participante.put("contact", par.getContact().toString());
+
+                                    if (par instanceof Student) {
+                                        Estudante student = (Estudante) par;
+                                        participante.put("numero", student.getNumber());
+                                    } else if (par instanceof Facilitator) {
+                                        Facilitador facilitator = (Facilitador) par;
+                                        participante.put("Area de Especialização", facilitator.getAreaOfExpertise());
+                                    } else if (par instanceof Partner) {
+                                        Parceiro partner = (Parceiro) par;
+                                        participante.put("VAT", partner.getVat());
+                                        participante.put("WebSite", partner.getWebsite());
+                                    }
+
+                                    JSONObject contacto = new JSONObject();
+                                    contacto.put("street", ((Participante) par).getContact().getStreet());
+                                    contacto.put("city", ((Participante) par).getContact().getCity());
+                                    contacto.put("state", ((Participante) par).getContact().getState());
+                                    contacto.put("zipcode", ((Participante) par).getContact().getZipCode());
+                                    contacto.put("country", ((Participante) par).getContact().getCountry());
+                                    contacto.put("phone", ((Participante) par).getContact().getPhone());
+
+                                    JSONObject instituicao = new JSONObject();
+                                    instituicao.put("name", ((Participante) par).getInstituition().getName());
+                                    instituicao.put("email", ((Participante) par).getInstituition().getEmail());
+                                    instituicao.put("type", ((Participante) par).getInstituition().getType().toString());
+                                    instituicao.put("contact", contacto);
+                                    instituicao.put("website", ((Participante) par).getInstituition().getWebsite());
+                                    instituicao.put("description", ((Participante) par).getInstituition().getDescription());
+
+                                    participante.put("instituition", instituicao);
+
+                                    participants.add(participante);
+                                }
                             }
+                            projeto.put("participants", participants);
+
+                            projects.add(projeto);
+                        }
+                    }
+
+                    edicao.put("projects", projects);
+                    editions.add(edicao);
+                }
+            }
+
+            cbl.put("editions", editions);
+
+            file.write(cbl.toJSONString());
+            file.flush();
+            file.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void gerarCSV() {
+        try {
+            FileWriter file = new FileWriter("data.csv");
+            BufferedWriter writer = new BufferedWriter(file);
+
+            writer.write("numEditions,name,start,template,status,numOfProjects,Nome,Descrição,Tags,Número de participantes,Número de estudantes,Número de partners,Número de facilitadores,Número de tarefas,Título da Tarefa,Descrição da Tarefa,Data de Início da Tarefa,Data de Término da Tarefa,Duração da Tarefa,Completada,Número de Submissões,Nome do Participante,Tipo do Participante,Instituição do Participante,Email do Participante,Telefone do Participante,Rua,Cidade,Estado,CEP,País\n");
+
+            writer.write("numEditions=" + this.numEditions);
+            writer.newLine();
+
+            for (Edicao e : this.editions) {
+                writer.write("name=" + e.getName());
+                writer.newLine();
+                writer.write("start=" + e.getStart().toString());
+                writer.newLine();
+                writer.write("template=" + e.getProjectTemplate());
+                writer.newLine();
+                writer.write("status=" + e.getStatus().toString());
+                writer.newLine();
+                writer.write("numOfProjects=" + e.getNumberOfProjects());
+                writer.newLine();
+
+                for (Project p : e.getProjects()) {
+                    writer.write("Nome=" + p.getName());
+                    writer.newLine();
+                    writer.write("Descrição=" + p.getDescription());
+                    writer.newLine();
+                    writer.write("Tags=" + String.join(",", p.getTags()));
+                    writer.newLine();
+                    writer.write("Número de participantes=" + p.getNumberOfParticipants());
+                    writer.newLine();
+                    writer.write("Número de estudantes=" + p.getNumberOfStudents());
+                    writer.newLine();
+                    writer.write("Número de partners=" + p.getNumberOfPartners());
+                    writer.newLine();
+                    writer.write("Número de facilitadores=" + p.getNumberOfFacilitators());
+                    writer.newLine();
+                    writer.write("Número de tarefas=" + p.getNumberOfTasks());
+                    writer.newLine();
+
+                    for (Task t : p.getTasks()) {
+                        writer.write("Título da Tarefa=" + t.getTitle());
+                        writer.newLine();
+                        writer.write("Descrição da Tarefa=" + t.getDescription());
+                        writer.newLine();
+                        writer.write("Data de Início da Tarefa=" + t.getStart().toString());
+                        writer.newLine();
+                        writer.write("Data de Término da Tarefa=" + t.getEnd().toString());
+                        writer.newLine();
+                        writer.write("Duração da Tarefa=" + t.getDuration());
+                        writer.newLine();
+                        writer.write("Completada=" + ((Tarefas) t).isCompleted());
+                        writer.newLine();
+                        writer.write("Número de Submissões=" + t.getNumberOfSubmissions());
+                        writer.newLine();
+
+                        for (Submission s : t.getSubmissions()) {
+                            writer.write("Nome do Participante=" + s.getStudent().getName());
+                            writer.newLine();
+                            writer.write("Tipo do Participante=" + s.getStudent().getClass().getSimpleName());
+
+                            Participant par = s.getStudent();
+                            if (par instanceof Estudante) {
+                                Estudante student = (Estudante) par;
+                                writer.write("Instituição do Participante=" + student.getInstituition().getName());
+                                writer.newLine();
+                                writer.write("Email do Participante=" + student.getEmail());
+                                writer.newLine();
+                                writer.write("Telefone do Participante=" + student.getContact().getPhone());
+                                writer.newLine();
+                            } else if (par instanceof Facilitador) {
+                                Facilitador facilitator = (Facilitador) par;
+                                writer.write("Instituição do Participante=" + facilitator.getInstituition().getName());
+                                writer.newLine();
+                                writer.write("Email do Participante=" + facilitator.getEmail());
+                                writer.newLine();
+                                writer.write("Telefone do Participante=" + facilitator.getContact().getPhone());
+                                writer.newLine();
+                            } else if (par instanceof Parceiro) {
+                                Parceiro partner = (Parceiro) par;
+                                writer.write("Instituição do Participante=" + partner.getInstituition().getName());
+                                writer.newLine();
+                                writer.write("Email do Participante=" + partner.getEmail());
+                                writer.newLine();
+                                writer.write("Telefone do Participante=" + partner.getContact().getPhone());
+                                writer.newLine();
+                            } else {
+                                writer.write("Instituição do Participante=,,,");
+                                writer.newLine();
+                                writer.write("Email do Participante=,,,");
+                                writer.newLine();
+                                writer.write("Telefone do Participante=,,,");
+                                writer.newLine();
+                            }
+
+                            Contact contact = par.getContact();
+                            writer.write("Rua=" + contact.getStreet());
+                            writer.newLine();
+                            writer.write("Cidade=" + contact.getCity());
+                            writer.newLine();
+                            writer.write("Estado=" + contact.getState());
+                            writer.newLine();
+                            writer.write("CEP=" + contact.getZipCode());
+                            writer.newLine();
+                            writer.write("País=" + contact.getCountry());
+                            writer.newLine();
+
+                            writer.newLine();
                         }
                     }
                 }
             }
-            cbl.put("editions", editions);
-        
 
-            
-            
-            file.write(cbl.toJSONString());
-            file.flush();
-            file.close();
+            writer.close();
+            System.out.println("CSV gerado com sucesso!");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -183,21 +322,29 @@ public class CBL {
             JSONArray editions = (JSONArray) cbl.get("editions");
 
             for (Object obj : editions) {
-                if(obj != null){
+                if (obj != null) {
                     JSONObject edicao = (JSONObject) obj;
                     String name = (String) edicao.get("name");
                     String start = (String) edicao.get("start");
                     String template = (String) edicao.get("template");
-                    String status = (String) edicao.get("status");
+                    String statusStr = (String) edicao.get("status");
                     int numOfProjects = ((Long) edicao.get("numOfProjects")).intValue();
                     JSONArray projects = (JSONArray) edicao.get("projects");
 
                     Edicao edicaoObj = new Edicao(name, LocalDate.parse(start), template);
-//Falta ler os status //edicaoObj.setStatus(Status.valueOf(status));
+                    Status status;
+
+                    if (statusStr.equalsIgnoreCase("Active")) {
+                        status = Status.ACTIVE;
+                    } else {
+                        status = Status.valueOf(statusStr.toUpperCase());
+                    }
+
+                    edicaoObj.setStatus(status);
                     ((Edicao) edicaoObj).setNumProjects(numOfProjects);
-                    if(projects != null){
+                    if (projects != null) {
                         for (Object objProjeto : projects) {
-                            if(objProjeto != null){
+                            if (objProjeto != null) {
                                 JSONObject projeto = (JSONObject) objProjeto;
                                 String nome = (String) projeto.get("Nome");
                                 String descricao = (String) projeto.get("Descrição");
@@ -228,61 +375,104 @@ public class CBL {
                                 projetoObj.setMaxTasks(maxNumTarefas);
                                 projetoObj.setMaxParticipants(maxNumParticipantes);
 
-                                for (Object objTarefa : tasks) {
-                                    if(objTarefa != null){
-                                        JSONObject task = (JSONObject) objTarefa;
-                                        String title = (String) task.get("title");
-                                        String description = (String) task.get("description");
-                                        String taskStart = (String) task.get("start");
-                                        String taskEnd = (String) task.get("end");
-                                        int duration = ((Long) task.get("duration")).intValue();
-                                        boolean completed = (boolean) task.get("completed");
-                                        int numberOfSubmissions = ((Long) task.get("numberOfSubmissions")).intValue();
-                                        JSONArray submissions = (JSONArray) task.get("submissions");
+                                if (tasks != null) {
+                                    for (Object objTarefa : tasks) {
+                                        if (objTarefa != null) {
+                                            JSONObject task = (JSONObject) objTarefa;
+                                            String title = (String) task.get("title");
+                                            String description = (String) task.get("description");
+                                            String taskStart = (String) task.get("start");
+                                            String taskEnd = (String) task.get("end");
+                                            int duration = ((Long) task.get("duration")).intValue();
+                                            boolean completed = (boolean) task.get("completed");
+                                            int numberOfSubmissions = ((Long) task.get("numberOfSubmissions")).intValue();
+                                            JSONArray submissions = (JSONArray) task.get("submissions");
 
-                                        Tarefas taskObj = new Tarefas(LocalDate.parse(taskStart), duration, title, description);
-                                        taskObj.setEnd(LocalDate.parse(taskEnd));
-                                        taskObj.setCompleted(completed);
-                                        taskObj.setNumSubmissions(numberOfSubmissions);
-                                        projetoObj.addTask(taskObj);
+                                            Tarefas taskObj = new Tarefas(LocalDate.parse(taskStart), duration, title, description);
+                                            taskObj.setEnd(LocalDate.parse(taskEnd));
+                                            taskObj.setCompleted(completed);
+                                            taskObj.setNumSubmissions(numberOfSubmissions);
 
-                                        for (Object objSubmissao : submissions) {
-                                            if(objSubmissao != null){
-                                                JSONObject submissao = (JSONObject) objSubmissao;
-                                                String date = (String) submissao.get("date");
-                                                Estudante student = (Estudante) submissao.get("student");
-                                                String text = (String) submissao.get("text");
+                                            for (Object objSubmissao : submissions) {
+                                                if (objSubmissao != null) {
+                                                    JSONObject submissao = (JSONObject) objSubmissao;
+                                                    String date = (String) submissao.get("date");
+                                                    Estudante student = (Estudante) submissao.get("student");
+                                                    String text = (String) submissao.get("text");
 
-                                                Submissao submissaoObj = new Submissao(LocalDateTime.parse(date), student, text);
+                                                    Submissao submissaoObj = new Submissao(LocalDateTime.parse(date), student, text);
 
-                                                taskObj.addSubmission(submissaoObj);
+                                                    if (submissaoObj != null) {
+                                                        taskObj.addSubmission(submissaoObj);
+                                                    }
+                                                }
+                                            }
+                                            if (taskObj != null) {
+                                                projetoObj.addTask(taskObj);
                                             }
                                         }
-
-                                        projetoObj.addTask(taskObj);
                                     }
                                 }
 
                                 for (Object objParticipante : participants) {
-                                    if(objParticipante != null){
+                                    if (objParticipante != null) {
                                         JSONObject participante = (JSONObject) objParticipante;
                                         String nameParticipant = (String) participante.get("name");
                                         String email = (String) participante.get("email");
-                                        Instituition instituition = (Instituition) participante.get("instituition");
-                                        Contact contact = (Contact) participante.get("contact");
+
+                                        // Criar objetos Instituition e Contact
+                                        JSONObject instituitionJson = (JSONObject) participante.get("instituition");
+                                        Instituition instituition = new Instituicao();
+                                        ((Instituicao) instituition).setName((String) instituitionJson.get("name"));
+                                        ((Instituicao) instituition).setEmail((String) instituitionJson.get("email"));
+                                        instituition.setWebsite((String) instituitionJson.get("website"));
+                                        instituition.setDescription((String) instituitionJson.get("description"));
+                                        String typeString = (String) instituitionJson.get("type");
+                                        InstituitionType type;
+
+                                        if (typeString.equalsIgnoreCase("Universitary")) {
+                                            type = InstituitionType.UNIVERSITY;
+                                        } else if (typeString.equalsIgnoreCase("Company")) {
+                                            type = InstituitionType.COMPANY;
+                                        } else if (typeString.equalsIgnoreCase("Ngo")) {
+                                            type = InstituitionType.NGO;
+                                        } else if (typeString.equalsIgnoreCase("Other")) {
+                                            type = InstituitionType.OTHER;
+                                        } else {
+                                            throw new IllegalArgumentException("Tipo de instituição desconhecido: " + typeString);
+                                        }
+
+                                        instituition.setType(type);
+
+                                        Object contactObj = participante.get("contact");
+                                        Contact contact;
+
+                                        if (contactObj instanceof JSONObject) {
+                                            JSONObject contactJson = (JSONObject) contactObj;
+                                            contact = new Contacto(
+                                                    (String) contactJson.get("street"),
+                                                    (String) contactJson.get("city"),
+                                                    (String) contactJson.get("state"),
+                                                    (String) contactJson.get("zipcode"),
+                                                    (String) contactJson.get("country"),
+                                                    (String) contactJson.get("phone")
+                                            );
+                                        } else {
+                                            throw new IllegalArgumentException("Valor inválido para a chave 'contact'");
+                                        }
 
                                         Participant participanteObj;
 
                                         if (participante.containsKey("numero")) {
                                             int numero = ((Long) participante.get("numero")).intValue();
-                                            participanteObj = new Estudante(name, email, instituition, contact, numero);
+                                            participanteObj = new Estudante(nameParticipant, email, instituition, contact, numero);
                                         } else if (participante.containsKey("Area de Especialização")) {
                                             String areaEspecializacao = (String) participante.get("Area de Especialização");
-                                            participanteObj = new Facilitador(name, email, instituition, contact,  areaEspecializacao);
+                                            participanteObj = new Facilitador(nameParticipant, email, instituition, contact, areaEspecializacao);
                                         } else if (participante.containsKey("VAT")) {
                                             String vat = (String) participante.get("VAT");
                                             String website = (String) participante.get("WebSite");
-                                            participanteObj = new Parceiro(name, email, instituition, contact, vat, website);
+                                            participanteObj = new Parceiro(nameParticipant, email, instituition, contact, vat, website);
                                         } else {
                                             throw new IllegalArgumentException("Tipo de participante desconhecido");
                                         }

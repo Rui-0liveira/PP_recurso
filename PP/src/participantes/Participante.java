@@ -23,13 +23,21 @@ import ma02_resources.participants.*;
  * @author Rui Oliveira
  */
 public abstract class Participante implements Participant{
-    
+    /**
+     * Variavel que guarda o nome do participante
+     */
     private String name;
-    
+    /**
+     * Variavel que guarda o email do participante
+     */
     private String email;
-    
+    /**
+     * Variavel que guarda o contacto do participante
+     */
     private Contact contact;
-    
+    /**
+     * Variavel que guarda a instituição do participante
+     */
     private Instituition instituition;
 
     /**

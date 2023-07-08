@@ -26,17 +26,37 @@ import ma02_resources.participants.Partner;
  * @author Rui Oliveira
  */
 public class Parceiro extends Participante implements Partner{
-    
+    /**
+     * Variavel que guarda o VAT do parceiro
+     */
     private String vat;
-    
+    /**
+     * Variavel que guarda o website do parceiro
+     */
     private String site;
     
+    /**
+     * Construtor do objeto Parceiro
+     * @param name Nome do parceiro
+     * @param email Email do parceiro
+     * @param instituition Instituicao do parceiro
+     * @param contact Contacto do parceiro
+     * @param vat VAT do parceiro
+     * @param website Website do parceiro
+     */
     public Parceiro(String name, String email, Instituition instituition, Contact contact, String vat, String website) {
         super(name, email, instituition, contact);
         this.vat = vat;
         this.site = website;
     }
     
+    /**
+     * Construtor do objeto Parceiro
+     * @param name Nome do parceiro
+     * @param email Email do parceiro
+     * @param vat VAT do parceiro
+     * @param website Website do parceiro
+     */
     public Parceiro(String name, String email, String vat, String website) {
         super(name, email);
         this.vat = vat;

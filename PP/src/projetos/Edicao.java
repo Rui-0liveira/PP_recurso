@@ -19,24 +19,18 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 /**
- * Nome: Rodrigo Bamdé Chantre Lopes
- * Número: 8210191
- * Turma: T4
- * 
- * Nome: Rui Alexande da Silva Oliveira
- * Número: 8210322
- * Turma: T3
+ * Nome: Rodrigo Bamdé Chantre Lopes Número: 8210191 Turma: T4
+ *
+ * Nome: Rui Alexande da Silva Oliveira Número: 8210322 Turma: T3
  */
-
-
 /**
- * Classe que define uma Edição
- * Implementa a interface Edition
+ * Classe que define uma Edição Implementa a interface Edition
+ *
  * @author Rodrigo Lopes
  * @author Rui Oliveira
  */
 public class Edicao implements Edition {
-    
+
     /**
      * Variavel que guarda o nome da edição
      */
@@ -61,10 +55,10 @@ public class Edicao implements Edition {
      * Variavel que guarda os projetos da edição
      */
     private Projeto[] projects;
-    
-    
+
     /**
      * Método construtor para o objeto Edição
+     *
      * @param name Nome da edição
      * @param start Data de início da edição
      * @param template Template da edição
@@ -80,56 +74,62 @@ public class Edicao implements Edition {
         this.template = template;
         this.status = Status.INACTIVE;
         this.numProjects = 0;
-        this.projects = new Projeto[0];
+        this.projects = new Projeto[10];
     }
-    
+
     /**
      * Método que retorna o nome da edição
+     *
      * @return Nome da edição
      */
     @Override
     public String getName() {
         return name;
     }
-    
+
     /**
      * Método que retorna a data de início da edição
+     *
      * @return Data de início da edição
      */
     @Override
     public LocalDate getStart() {
         return start;
     }
-    
+
     /**
      * Método que retorna o template da edição
+     *
      * @return Template da edição
      */
     @Override
     public String getProjectTemplate() {
         return template;
     }
-    
+
     /**
      * Método que retorna o estado da edição
+     *
      * @return Estado da edição
      */
     @Override
     public Status getStatus() {
         return status;
     }
-    
+
     /**
      * Método que define o estado da edição
+     *
      * @param status Estado da edição
      */
     @Override
     public void setStatus(Status status) {
         this.status = status;
     }
-    
+
     /**
      * Método que adiciona um projeto à edição, com base no template
+     *
      * @param string Nome do projeto
      * @param string1 Descrição do projeto
      * @param strings Tags do projeto
@@ -141,23 +141,23 @@ public class Edicao implements Edition {
         int nStudents;
         int nPartners;
         int nFacilitators;
-        
+
         try {
             String jsonFilePath = template;
             BufferedReader reader = new BufferedReader(new FileReader(jsonFilePath));
-            
+
             JSONParser parser = new JSONParser();
             JSONObject obj = (JSONObject) parser.parse(reader);
-            
+
             Number n = (Number) obj.get("number_of_facilitors");
             nFacilitators = n.intValue();
             n = (Number) obj.get("number_of_students");
             nStudents = n.intValue();
             n = (Number) obj.get("number_of_partners");
             nPartners = n.intValue();
-            
+
             Projeto novoProjeto = new Projeto(string, string1, strings, nStudents, nPartners, nFacilitators);
-            
+
             JSONArray tasks = (JSONArray) obj.get("tasks");
             for (Object o : tasks) {
                 if (o instanceof JSONObject) {
@@ -169,18 +169,18 @@ public class Edicao implements Edition {
                     LocalDate start = this.getStart().plusDays((long) task.get("start_at"));
                     Task novaTask = new Tarefas(start, duration, title, description);
                     novoProjeto.addTask(novaTask);
-                }                
+                }
             }
-            
+
             if (projects.length == numProjects) {
                 aumentarProjetos();
             }
-            
+
             this.projects[numProjects] = novoProjeto;
             numProjects++;
-            
+
             reader.close();
-            
+
         } catch (IOException e) {
             e.printStackTrace();
         } catch (org.json.simple.parser.ParseException ex) {
@@ -191,20 +191,21 @@ public class Edicao implements Edition {
             Logger.getLogger(Edicao.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     /**
      * Método que remove um projeto da edição
+     *
      * @param string Nome do projeto
      */
     @Override
     public void removeProject(String string) {
 
-        if(!projectExists(string)){
+        if (!projectExists(string)) {
             throw new IllegalArgumentException("Projeto não existe");
         }
-        for(int i = 0; i < numProjects; i++){
-            if(projects[i].getName().equals(string)){
-                for(int j = i; j < numProjects; j++){
+        for (int i = 0; i < numProjects; i++) {
+            if (projects[i].getName().equals(string)) {
+                for (int j = i; j < numProjects; j++) {
 
                     projects[j] = projects[j + 1];
                     if (j == numProjects - 1) {
@@ -215,36 +216,39 @@ public class Edicao implements Edition {
         }
         numProjects--;
     }
-    
+
     /**
      * Metodo que retorna um projeto da edição
+     *
      * @param string nome do Projeto a retornar
      * @return Um projeto da edição
      */
     @Override
-    public Project getProject(String string) {
+    public Projeto getProject(String string) {
         if (string == null) {
-            throw new IllegalArgumentException("Nome de projeto invalido");            
+            throw new IllegalArgumentException("Nome de projeto inválido");
         }
         for (int i = 0; i < numProjects; i++) {
-            if (projects[i].getName().equals(string)) {
+            if (projects[i] != null && projects[i].getName().equals(string)) {
                 return projects[i];
             }
         }
         throw new IllegalArgumentException("Projeto não encontrado na edição");
     }
-    
+
     /**
      * Método que retorna todos os projetos da edição
+     *
      * @return Array de projetos da edição
      */
     @Override
     public Project[] getProjects() {
         return projects;
     }
-    
+
     /**
      * Método que retorna todos os projetos da edição com uma determinada tag
+     *
      * @param string Tag a procurar
      * @return Array de projetos da edição com uma determinada tag
      */
@@ -262,16 +266,18 @@ public class Edicao implements Edition {
         }
         return projectsByTag;
     }
-    
+
     /**
-     * Método que retorna todos os projetos da edição com um determinado participante
+     * Método que retorna todos os projetos da edição com um determinado
+     * participante
+     *
      * @param string Participante a procurar
      * @return Array de projetos da edição com um determinado participante
      */
     @Override
     public Project[] getProjectsOf(String string) {
         Projeto[] temp = null;
-        int size = 0;        
+        int size = 0;
         for (int i = 0; i < numProjects; i++) {
             if (projects[i].hasParticipant(string)) {
                 temp[size] = projects[i];
@@ -280,18 +286,20 @@ public class Edicao implements Edition {
         }
         return temp;
     }
-    
+
     /**
      * Método que retorna o número de projetos da edição
+     *
      * @return Número de projetos da edição
      */
     @Override
     public int getNumberOfProjects() {
         return numProjects;
     }
-    
+
     /**
      * Método que retorna a data de fim da edição
+     *
      * @return Data de fim da edição
      */
     @Override
@@ -308,9 +316,10 @@ public class Edicao implements Edition {
         }
         return temp;
     }
-    
+
     /**
      * Método toString da edição
+     *
      * @return uma string com todos os dados da edição
      */
     @Override
@@ -321,20 +330,19 @@ public class Edicao implements Edition {
                 + "\n template = " + template
                 + "\n status = " + status
                 + "\n numOfProjects = " + numProjects
-                + "\n projects: ";        
+                + "\n projects: ";
         if (numProjects == 0) {
             string += "null";
 
-        }
-        else{
-            for(int i = 0; i < numProjects; i++){
-                if(projects[i]!=null){
-                    string+= "\n{\n" + projects[i].toString() + "\n}";
+        } else {
+            for (int i = 0; i < numProjects; i++) {
+                if (projects[i] != null) {
+                    string += "\n{\n" + projects[i].toString() + "\n}";
                 }
 
             }
         }
-        
+
         return string;
     }
 
@@ -352,8 +360,7 @@ public class Edicao implements Edition {
         }
         return false;
     }
-    
-    
+
     public void autoAvaliacao(Avaliacao av, int nota) {
         if (this.getStatus() == Status.ACTIVE) {
             for (int i = 0; i < this.numProjects; i++) {
@@ -368,7 +375,7 @@ public class Edicao implements Edition {
                                 throw new IllegalArgumentException("Estudante não fez essa submissão....");
                             }
                         } else {
-                            throw new IllegalArgumentException("Submissão não encontrada nesta ediçaõ de CBL....");                            
+                            throw new IllegalArgumentException("Submissão não encontrada nesta ediçaõ de CBL....");
                         }
                     }
                 }
@@ -377,7 +384,7 @@ public class Edicao implements Edition {
             throw new IllegalArgumentException("Ediçaõ não está ativa....");
         }
     }
-    
+
     public void heteroAvaliacao(Avaliacao av, int nota) {
         if (this.getStatus() == Status.ACTIVE) {
             for (int i = 0; i < this.numProjects; i++) {
@@ -393,7 +400,7 @@ public class Edicao implements Edition {
                                 throw new IllegalArgumentException("Estudante não fez essa submissão....");
                             }
                         } else {
-                            throw new IllegalArgumentException("Submissão não encontrada nesta ediçaõ de CBL....");                            
+                            throw new IllegalArgumentException("Submissão não encontrada nesta ediçaõ de CBL....");
                         }
                     }
                 }
@@ -402,7 +409,7 @@ public class Edicao implements Edition {
             throw new IllegalArgumentException("Ediçaõ não está ativa....");
         }
     }
-    
+
     /**
      * Metodo que aumenta tamanho do array de projetos
      */
@@ -413,21 +420,22 @@ public class Edicao implements Edition {
         }
         projects = temp;
     }
-    
+
     /**
      * Metodo que imprime a media de tempo de conclusão das tasks dos projetos
      */
-    public void listarMediaDurationTask(){
-        for(int i = 0; i < this.getNumberOfProjects(); i++){
-            if(this.getProjects()[i] instanceof Projeto){
+    public void listarMediaDurationTask() {
+        for (int i = 0; i < this.getNumberOfProjects(); i++) {
+            if (this.getProjects()[i] instanceof Projeto) {
                 Projeto project = (Projeto) this.getProjects()[i];
                 project.mediaTempoTasks();
             }
         }
     }
-    
+
     /**
      * Metodo set do nome
+     *
      * @param name nome da edição
      */
     public void setName(String name) {
@@ -436,6 +444,7 @@ public class Edicao implements Edition {
 
     /**
      * Metodo set da data de inicio
+     *
      * @param start data de inicio da edição
      */
     public void setStart(LocalDate start) {
@@ -444,6 +453,7 @@ public class Edicao implements Edition {
 
     /**
      * Metodo set da template
+     *
      * @param template template da edição
      */
     public void setTemplate(String template) {
@@ -452,6 +462,7 @@ public class Edicao implements Edition {
 
     /**
      * Metodo set do numero de projetos
+     *
      * @param numProjects numero de projetos
      */
     public void setNumProjects(int numProjects) {
@@ -460,19 +471,30 @@ public class Edicao implements Edition {
 
     /**
      * ~Metodo set de projetos
+     *
      * @param projects aray de projetos
      */
     public void setProjects(Projeto[] projects) {
         this.projects = projects;
     }
-    
+
     /**
      * Metoo que adiciona projetos lidos pelo json
-     * @param project 
+     *
+     * @param project projeto a ser adicionado
      */
     public void addProjectJS(Project project) {
+        if (numProjects == projects.length) {
+            int newCapacity = projects.length * 2;
+            Projeto[] newProjects = new Projeto[newCapacity];
+
+            System.arraycopy(projects, 0, newProjects, 0, numProjects);
+
+            projects = newProjects;
+        }
+
         projects[numProjects] = (Projeto) project;
         numProjects++;
-}
-    
+    }
+
 }

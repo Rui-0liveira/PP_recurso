@@ -68,6 +68,10 @@ public class Instituicao implements Instituition{
         this.description = description;
     }
 
+    public Instituicao() {
+        
+    }
+
      /**
      * Metodo que retorna o nome da instituição
      * @return Nome da instituição
@@ -180,6 +184,19 @@ public class Instituicao implements Instituition{
         }
         return true;
     } 
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setSite(String site) {
+        this.site = site;
+    }
+    
     
 }
 
