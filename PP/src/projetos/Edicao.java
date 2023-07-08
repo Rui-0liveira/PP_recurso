@@ -37,11 +37,29 @@ import org.json.simple.parser.JSONParser;
  */
 public class Edicao implements Edition {
     
+    /**
+     * Variavel que guarda o nome da edição
+     */
     private String name;
+    /**
+     * Variavel que guarda a data de inicio da edição
+     */
     private LocalDate start;
+    /**
+     * Variavel que guarda o template da edição
+     */
     private String template;
+    /**
+     * Variavel que guarda o estado da edição
+     */
     private Status status;
+    /**
+     * Variavel que guarda o numero de projetos da edição
+     */
     private int numProjects;
+    /**
+     * Variavel que guarda os projetos da edição
+     */
     private Projeto[] projects;
     
     

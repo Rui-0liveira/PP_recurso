@@ -10,23 +10,65 @@ import ma02_resources.project.Submission;
 import ma02_resources.project.Task;
 
 /**
- *
- * @author Rui
+ * Nome: Rodrigo Bamdé Chantre Lopes
+ * Número: 8210191
+ * Turma: T4
+ * 
+ * Nome: Rui Alexande da Silva Oliveira
+ * Número: 8210322
+ * Turma: T3
+ */
+
+/**
+ * Classe que define o objeto Tarefas
+ * Implementa a Interface Task
+ * @author Rodrigo Lopes
+ * @author Rui Oliveira
  */
 public class Tarefas implements Task{
-    
+    /**
+     * Variável que guarda a data de início da tarefa
+     */
     private LocalDate start;
+    /**
+     * Variável que guarda a data de fim da tarefa
+     */
     private LocalDate end;
+    /**
+     * Variável que guarda a duração da tarefa
+     */
     private int duration;
+    /**
+     * Variável que guarda o título da tarefa
+     */
     private String title;
+    /**
+     * Variável que guarda a descrição da tarefa
+     */
     private String description;
+    /**
+     * Variável que guarda o número de submissões da tarefa
+     */
     private int numSubmissions;
+    /**
+     * Array que guarda as submissões da tarefa
+     */
     private Submissao[] submissions;
      /**
      * Booleano que indica se a tarefa está completa
      */
     private boolean completed;
 
+    /**
+     * Método construtor para o objeto Tarefa
+     * @param start Data de início da tarefa
+     * @param end Data de fim da tarefa
+     * @param duration Duração da tarefa
+     * @param title Título da tarefa
+     * @param description Descrição da tarefa
+     * @param submissions Array de Submissões da tarefa
+     * @param numberOfSubmissions Número de submissões da tarefa
+     */
     public Tarefas(LocalDate start, int duration, String title, String description, int numSubmissions, Submissao[] submissions) {
         if (start.isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("Data inválida");
@@ -40,6 +82,13 @@ public class Tarefas implements Task{
         this.submissions = submissions;
     }
     
+    /**
+     * Método construtor para o objeto Tarefa
+     * @param start Data de início da tarefa
+     * @param duration Duração da tarefa
+     * @param title Título da tarefa
+     * @param description Descrição da tarefa
+     */
     public Tarefas(LocalDate start, int duration, String title, String description){
         this.start = start;
         this.duration = duration;
@@ -50,41 +99,74 @@ public class Tarefas implements Task{
         this.numSubmissions = 0;
     }
 
+    /**
+     * Metodo que retorna a data de início da tarefa
+     * @return Data de início da tarefa
+     */
     @Override
     public LocalDate getStart() {
         return start;
     }
 
+    /**
+     * Metodo que retorna a data de fim da tarefa
+     * @return Data de fim da tarefa
+     */
     @Override
     public LocalDate getEnd() {
         return end;
     }
 
+    /**
+     * Metodo que retorna a duração da tarefa
+     * @return Duração da tarefa
+     */
     @Override
     public int getDuration() {
         return duration;
     }
 
+    /**
+     * Metodo que retorna o título da tarefa
+     * @return Título da tarefa
+     */
     @Override
     public String getTitle() {
         return title;
     }
 
+    /**
+     * Metodo que retorna a descrição da tarefa
+     * @return Descrição da tarefa
+     */
     @Override
     public String getDescription() {
         return description;
     }
 
+    /**
+     * Metodo que retorna o array de submissões da tarefa
+     * @return Array de submissões da tarefa
+     */
     @Override
     public Submission[] getSubmissions() {
         return submissions;
     }
 
+    /**
+     * Metodo que retorna o número de submissões da tarefa
+     * @return Número de submissões da tarefa
+     */
     @Override
     public int getNumberOfSubmissions() {
         return numSubmissions;
     }
 
+    /**
+     * Metodo que adiciona uma submissão à tarefa
+     * @param sbmsn Submissão a adicionar
+     * @throws IllegalArgumentException "Submission cannot be null." se a submissão for nula
+     */
     @Override
     public void addSubmission(Submission sbmsn) {
         if(sbmsn == null){
@@ -101,6 +183,11 @@ public class Tarefas implements Task{
         numSubmissions++;
     }
 
+    /**
+     * Metodo que estende o prazo da tarefa pelo número de dias dado
+     * @param i Número de dias a adicionar
+     * @throws IllegalArgumentException "Number of days must be positive." se o número de dias for negativo
+     */
     @Override
     public void extendDeadline(int i) {
         if(i < 0){
@@ -109,6 +196,11 @@ public class Tarefas implements Task{
         end = end.plusDays(i);
     }
 
+    /**
+     * Metodo que compara duas tarefas pela sua data de início
+     * @param task Tarefa a comparar
+     * @return -1, 1 se a tarefa for menor, igual ou maior que a tarefa especificada
+     */
     @Override
     public int compareTo(Task task) {
         if(task.getStart().isBefore(start)){
@@ -117,6 +209,11 @@ public class Tarefas implements Task{
         return -1;
     }
     
+    /**
+     * Metodo que compara dois objetos
+     * @param obj Objeto a comparar
+     * @return true se os objetos forem iguais, false se não forem
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -135,6 +232,9 @@ public class Tarefas implements Task{
         return true;
     }
     
+    /**
+     * Metodo que retorna uma string com a informação da tarefa
+     */
     @Override
     public String toString() {
         String string;
@@ -174,30 +274,58 @@ public class Tarefas implements Task{
         this.completed = completed;
     }
 
+    /**
+     * Metodo que defone a data de início da tarefa
+     * @param start Data de início da tarefa
+     */
     public void setStart(LocalDate start) {
         this.start = start;
     }
 
+    /**
+     * Metodo que define a data de fim da tarefa
+     * @param end Data de fim da tarefa
+     */
     public void setEnd(LocalDate end) {
         this.end = end;
     }
 
+    /**
+     * Metodo que define a duração da tarefa
+     * @param duration Duração da tarefa
+     */
     public void setDuration(int duration) {
         this.duration = duration;
     }
 
+    /**
+     * Metodo que define o título da tarefa
+     * @param title Título da tarefa
+     */
     public void setTitle(String title) {
         this.title = title;
     }
 
+    /**
+     * Metodo que define a descrição da tarefa
+     * @param description Descrição da tarefa
+     */
     public void setDescription(String description) {
         this.description = description;
     }
 
+    /**
+     * Metodo que define o número de submissões da tarefa
+     * @param numSubmissions Número de submissões da tarefa
+     */
     public void setNumSubmissions(int numSubmissions) {
         this.numSubmissions = numSubmissions;
     }
 
+    /**
+     * Metodo que define o array de submissões da tarefa
+     * @param submissions Array de submissões da tarefa
+     */
     public void setSubmissions(Submissao[] submissions) {
         this.submissions = submissions;
     }

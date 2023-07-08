@@ -33,23 +33,73 @@ import participantes.*;
  * @author Rui Oliveira
  */
 public class Projeto implements Project{
-
+    /**
+     * Variavel que guarda o nome do projeto
+     */
     private String name;
+    /**
+     * Variavel que guarda a descrição do projeto
+     */
     private String description;
+    /**
+     * Variavel que guarda o número de participantes do projeto
+     */
     private int numParticipants;
+    /**
+     * Variavel que guarda o array de participantes do projeto
+     */
     private Participante[] participants;
+    /**
+     * Variavel que guarda o número de estudantes do projeto
+     */
     private int numStudents;
+    /**
+     * Variavel que guarda o número de partners do projeto
+     */
     private int numPartners;
+    /**
+     * Variavel que guarda o número de facilitadores do projeto
+     */
     private int numFacilitators;
+    /**
+     * Variavel que guarda o número de tarefas do projeto
+     */
     private int numTasks;
+    /**
+     * Variavel que guarda o número total de tarefas concluidas do projeto
+     */
     private int totalTasksCompleted;
+    /**
+     * Variavel que guarda o array de tarefas do projeto
+     */
     private Tarefas[] tasks;
+    /**
+     * Variavel que guarda o número máximo de tarefas do projeto
+     */
     private int maxTasks;
+    /**
+     * Variavel que guarda o número máximo de participantes do projeto
+     */
     private long maxParticipants;
+    /**
+     * Variavel que guarda o número máximo de partners do projeto
+     */
     private int maxPartners;
+    /**
+     * Variavel que guarda o número máximo de estudantes do projeto
+     */
     private int maxStudents;
+    /**
+     * Variavel que guarda o número máximo de facilitadores do projeto
+     */
     private int maxFacilitators;
+    /**
+     * Variavel que guarda as tags do projeto
+     */
     private String[] tags = new String[1];
+    /**
+     * Variavel que guarda se o projeto está completo
+     */
     private boolean completed;
     
     /**
@@ -237,6 +287,12 @@ public class Projeto implements Project{
         numParticipants++;
     }
 
+    /**
+     * Metodo que remove um participante do projeto
+     * @param string Email do participante a remover
+     * @return Participante removido
+     * @throws IllegalArgumentException Exceção que indica que o participante não existe
+     */
     @Override
     public Participant removeParticipant(String string) {
         Participant temp;
@@ -260,6 +316,10 @@ public class Projeto implements Project{
         throw new IllegalArgumentException("Participante não existe");
     }
 
+    /**
+     * Metodo que organiza o array de participantes
+     * @param pos Posição do array
+     */
     private void organizar_array(int pos){
         
         if(pos > maxParticipants){
@@ -270,6 +330,11 @@ public class Projeto implements Project{
         }
     }
     
+    /**
+     * Metodo que retorna o array de participantes
+     * @return Array de participantes
+     * @throws IllegalNumberOfParticipantType Exceção que indica que o número máximo de participantes foi atingido
+     */
     @Override
     public Participant getParticipant(String string) {
         for(int i = 0; i < numParticipants; i++){
@@ -280,11 +345,20 @@ public class Projeto implements Project{
         throw new IllegalArgumentException("Participante não existe");
     }
 
+    /**
+     * Metodo que retorna as tags
+     * @return Tags do projeto
+     */
     @Override
     public String[] getTags() {
         return tags;
     }
 
+    /**
+     * Metodo que verifica se o projeto tem uma determinada tag
+     * @param string Tag a verificar
+     * @return Booleano que indica se o projeto tem a tag
+     */
     @Override
     public boolean hasTag(String string) {
         for (String tag : tags) {
@@ -297,6 +371,12 @@ public class Projeto implements Project{
         return false;
     }
 
+    /**
+     * Metodo que adiciona uma tarefa ao projeto
+     * @param task Tarefa a adicionar
+     * @throws IllegalNumberOfTasks Exceção que indica que o número máximo de tarefas foi atingido
+     * @throws TaskAlreadyInProject Exceção que indica que a tarefa já se encontra no projeto
+     */
     @Override
     public void addTask(Task task) throws IllegalNumberOfTasks, TaskAlreadyInProject {
         if(numTasks == maxTasks){
@@ -311,6 +391,11 @@ public class Projeto implements Project{
         numTasks++;
     }
 
+    /**
+     * Metodo que retorna uma tarefa do projeto com um determinado título
+     * @param string Título da tarefa
+     * @return Tarefa com o título
+     */
     @Override
     public Task getTask(String string) {
         for(int i = 0; i < numTasks; i++){
@@ -321,11 +406,19 @@ public class Projeto implements Project{
         return null;
     }
 
+    /**
+     * Metodo que retorna o array de tarefas do projeto
+     * @return Array de tarefas do projeto
+     */
     @Override
     public Task[] getTasks() {
         return tasks;
     }
 
+    /**
+     * Metodo que verifica se a tarefa ja está completa
+     * @return Booleano que indica se a tarefa está completa
+     */
     @Override
     public boolean isCompleted() {
         for(int i = 0; i < numTasks; i++){
@@ -336,6 +429,11 @@ public class Projeto implements Project{
         return false;
     }
     
+    /**
+     * Metodo que verifica se o projeto tem um determinado participante
+     * @param email Email do participante
+     * @return Booleano que indica se o projeto tem o participante
+     */
     public boolean hasParticipant(String email){
         for(int i = 0; i < numParticipants; i++){
             if(participants[i].getEmail().equals(email)){
@@ -345,6 +443,9 @@ public class Projeto implements Project{
         return false;
     }
     
+    /**
+     * Metodo que retorna uma String com a informação do projeto
+     */
     @Override
     public String toString() {
         String string;
@@ -424,6 +525,9 @@ public class Projeto implements Project{
 
    }
 
+   /**
+    * Metodo que aumenta o array de Participantes
+    */
     public void aumentarParticipantes() {
         Participante[] temp = new Participante[getNumberOfParticipants() + 5];
         for (int i = 0; i < participants.length; i++) {
@@ -450,70 +554,138 @@ public class Projeto implements Project{
         }
     }
 
+    /**
+     * Metodo que define o nome do projeto
+     * @param name Nome do projeto
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Metodo que define a descrição do projeto
+     * @param description Descrição do projeto
+     */
     public void setDescription(String description) {
         this.description = description;
     }
 
+    /**
+     * Metodo que define o número de participantes do projeto
+     * @param numParticipants Número de participantes do projeto
+     */
     public void setNumParticipants(int numParticipants) {
         this.numParticipants = numParticipants;
     }
 
+    /**
+     * Metodo que define o array de participantes do projeto
+     * @param participants Array de participantes do projeto
+     */
     public void setParticipants(Participante[] participants) {
         this.participants = participants;
     }
 
+    /**
+     * Metodo que define o número de estudantes do projeto
+     * @param numStudents Número de estudantes do projeto
+     */
     public void setNumStudents(int numStudents) {
         this.numStudents = numStudents;
     }
 
+    /**
+     * Metodo que define o número de partners do projeto
+     * @param numPartners Número de partners do projeto
+     */
     public void setNumPartners(int numPartners) {
         this.numPartners = numPartners;
     }
 
+    /**
+     * Metodo que define o número de facilitadores do projeto
+     * @param numFacilitators Número de facilitadores do projeto
+     */
     public void setNumFacilitators(int numFacilitators) {
         this.numFacilitators = numFacilitators;
     }
 
+    /**
+     * Metodo que define o número de tarefas do projeto
+     * @param numTasks Número de tarefas do projeto
+     */
     public void setNumTasks(int numTasks) {
         this.numTasks = numTasks;
     }
 
+    /**
+     * Metodo que define o número máximo de tarefas do projeto
+     * @param maxTasks Número máximo de tarefas do projeto
+     */
     public void setTotalTasksCompleted(int totalTasksCompleted) {
         this.totalTasksCompleted = totalTasksCompleted;
     }
 
+    /**
+     * Metodo que define o array de tarefas do projeto
+     * @param tasks Array de tarefas do projeto
+     */
     public void setTasks(Tarefas[] tasks) {
         this.tasks = tasks;
     }
 
+    /**
+     * Metodo que define o número máximo de tarefas do projeto
+     * @param maxTasks Número máximo de tarefas do projeto
+     */
     public void setMaxTasks(int maxTasks) {
         this.maxTasks = maxTasks;
     }
 
+    /**
+     * Metodo que define o número máximo de participantes do projeto
+     * @param maxParticipants Número máximo de participantes do projeto
+     */
     public void setMaxParticipants(long maxParticipants) {
         this.maxParticipants = maxParticipants;
     }
 
+    /**
+     * Metodo que define o número máximo de parceiros do projeto
+     * @param maxPartners Número máximo de parceiros do projeto
+     */
     public void setMaxPartners(int maxPartners) {
         this.maxPartners = maxPartners;
     }
 
+    /**
+     * Metodo que define o número máximo de estudantes do projeto
+     * @param maxStudents Número máximo de estudantes do projeto
+     */
     public void setMaxStudents(int maxStudents) {
         this.maxStudents = maxStudents;
     }
 
+    /**
+     * Metodo que define o número máximo de facilitadores do projeto
+     * @param maxFacilitators Número máximo de facilitadores do projeto
+     */
     public void setMaxFacilitators(int maxFacilitators) {
         this.maxFacilitators = maxFacilitators;
     }
 
+    /**
+     * Metodo que define as tags do projeto
+     * @param tags Tags do projeto
+     */
     public void setTags(String[] tags) {
         this.tags = tags;
     }
 
+    /**
+     * Metodo que define se o projeto está completo
+     * @param completed Booleano que indica se o projeto está completo
+     */
     public void setCompleted(boolean completed) {
         this.completed = completed;
     }
