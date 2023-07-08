@@ -129,6 +129,9 @@ public class Menus {
                         System.out.println(e.getMessage());
                     }
                     break;
+                case 13:
+                    cbl.gerarJSON(); 
+                    break;
                 case 0:
                     //cbl.gerarJSON(); 
                     break;

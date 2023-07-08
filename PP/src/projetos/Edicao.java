@@ -245,6 +245,11 @@ public class Edicao implements Edition {
         return projectsByTag;
     }
     
+    /**
+     * Método que retorna todos os projetos da edição com um determinado participante
+     * @param string Participante a procurar
+     * @return Array de projetos da edição com um determinado participante
+     */
     @Override
     public Project[] getProjectsOf(String string) {
         Projeto[] temp = null;
@@ -258,11 +263,19 @@ public class Edicao implements Edition {
         return temp;
     }
     
+    /**
+     * Método que retorna o número de projetos da edição
+     * @return Número de projetos da edição
+     */
     @Override
     public int getNumberOfProjects() {
         return numProjects;
     }
     
+    /**
+     * Método que retorna a data de fim da edição
+     * @return Data de fim da edição
+     */
     @Override
     public LocalDate getEnd() {
         LocalDate temp = LocalDate.of(1, 1, 1);
@@ -278,6 +291,10 @@ public class Edicao implements Edition {
         return temp;
     }
     
+    /**
+     * Método toString da edição
+     * @return uma string com todos os dados da edição
+     */
     @Override
     public String toString() {
         String string;
@@ -317,6 +334,7 @@ public class Edicao implements Edition {
         }
         return false;
     }
+    
     
     public void autoAvaliacao(Avaliacao av, int nota) {
         if (this.getStatus() == Status.ACTIVE) {
@@ -367,6 +385,9 @@ public class Edicao implements Edition {
         }
     }
     
+    /**
+     * Metodo que aumenta tamanho do array de projetos
+     */
     public void aumentarProjetos() {
         Projeto[] temp = new Projeto[getNumberOfProjects() + 5];
         for (int i = 0; i < projects.length; i++) {
@@ -375,6 +396,9 @@ public class Edicao implements Edition {
         projects = temp;
     }
     
+    /**
+     * Metodo que imprime a media de tempo de conclusão das tasks dos projetos
+     */
     public void listarMediaDurationTask(){
         for(int i = 0; i < this.getNumberOfProjects(); i++){
             if(this.getProjects()[i] instanceof Projeto){
@@ -383,28 +407,52 @@ public class Edicao implements Edition {
             }
         }
     }
-
+    
+    /**
+     * Metodo set do nome
+     * @param name nome da edição
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Metodo set da data de inicio
+     * @param start data de inicio da edição
+     */
     public void setStart(LocalDate start) {
         this.start = start;
     }
 
+    /**
+     * Metodo set da template
+     * @param template template da edição
+     */
     public void setTemplate(String template) {
         this.template = template;
     }
 
+    /**
+     * Metodo set do numero de projetos
+     * @param numProjects numero de projetos
+     */
     public void setNumProjects(int numProjects) {
         this.numProjects = numProjects;
     }
 
+    /**
+     * ~Metodo set de projetos
+     * @param projects aray de projetos
+     */
     public void setProjects(Projeto[] projects) {
         this.projects = projects;
     }
     
-     public void addProjectJS(Project project) {
+    /**
+     * Metoo que adiciona projetos lidos pelo json
+     * @param project 
+     */
+    public void addProjectJS(Project project) {
         projects[numProjects] = (Projeto) project;
         numProjects++;
 }

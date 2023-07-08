@@ -17,8 +17,20 @@ import ma02_resources.project.exceptions.TaskAlreadyInProject;
 import participantes.*;
 
 /**
- *
- * @author Rui
+ * Nome: Rodrigo Bamdé Chantre Lopes
+ * Número: 8210191
+ * Turma: T4
+ * 
+ * Nome: Rui Alexande da Silva Oliveira
+ * Número: 8210322
+ * Turma: T3
+ */
+
+/**
+ * Classe que define o objeto Projeto
+ * Implementa a interface Project
+ * @author Rodrigo Lopes
+ * @author Rui Oliveira
  */
 public class Projeto implements Project{
 
@@ -40,6 +52,15 @@ public class Projeto implements Project{
     private String[] tags = new String[1];
     private boolean completed;
     
+    /**
+     * Método construtor para o objeto Projeto
+     * @param name nome do projeto
+     * @param description descrição do projeto
+     * @param tags tags do projeto
+     * @param maxStudents numero maximo de estudantes
+     * @param maxPartners numero maximo de parceiros
+     * @param maxFacilitators numero maximo de facilitadores
+     */
     public Projeto(String name, String description, String[] tags, int maxStudents, int maxPartners, int maxFacilitators){
         this.name = name;
         this.description = description;
@@ -59,70 +80,128 @@ public class Projeto implements Project{
         tasks = new Tarefas[maxTasks];
     }
     
+    /**
+     * Metodo que retorna o nome do projeto
+     * @return Nome do projeto
+     */
     @Override
     public String getName() {
         return name;
     }
 
+    /**
+     * Metodo que retorna a descrição do projeto
+     * @return Descrição do projeto
+     */
     @Override
     public String getDescription() {
         return description;
     }
 
+    /**
+     * Metodo que retorna o número de participantes do projeto
+     * @return Número de participantes do projeto
+     */
     @Override
     public int getNumberOfParticipants() {
         return numParticipants;
     }
 
+    /**
+     * Metodo que retorna o número de estudantes do projeto
+     * @return Número de estudantes do projeto
+     */
     @Override
     public int getNumberOfStudents() {
         return numStudents;
     }
 
+    /**
+     * Metodo que retorna o número de partners do projeto
+     * @return Número de partners do projeto
+     */
     @Override
     public int getNumberOfPartners() {
         return numPartners;
     }
 
+    /**
+     * Metodo que retorna o número de facilitadores do projeto
+     * @return Número de facilitadores do projeto
+     */
     @Override
     public int getNumberOfFacilitators() {
         return numFacilitators;
     }
 
+    /**
+     * Metodo que retorna o número de tarefas do projeto
+     * @return Número de tarefas do projeto
+     */
     @Override
     public int getNumberOfTasks() {
         return numTasks;
     }
 
+    /**
+     * Metodo que retorna o número máximo de tarefas do projeto
+     * @return Número máximo de tarefas do projeto
+     */
     @Override
     public int getMaximumNumberOfTasks() {
         return maxTasks;
     }
 
+    /**
+     * Metodo que retorna o número máximo de participantes do projeto
+     * @return Número máximo de participantes do projeto
+     */
     @Override
     public long getMaximumNumberOfParticipants() {
         return maxParticipants;
     }
     
+    /**
+     * Metodo que retorna os participantes do projeto
+     * @return Array de participantes do projeto
+     */
     public Participant[] getParticipants(){
         return participants;
     }
 
+    /**
+     * Metodo que retorna o número máximo de estudantes do projeto
+     * @return Número máximo de estudantes do projeto
+     */
     @Override
     public int getMaximumNumberOfStudents() {
         return maxStudents;
     }
 
+    /**
+     * Metodo que retorna o número máximo de partners do projeto
+     * @return Número máximo de partners do projeto
+     */
     @Override
     public int getMaximumNumberOfPartners() {
        return maxPartners;
     }
 
+    /**
+     * Metodo que retorna o número máximo de facilitadores do projeto
+     * @return Número máximo de facilitadores do projeto
+     */
     @Override
     public int getMaximumNumberOfFacilitators() {
         return maxFacilitators;
     }
     
+    /**
+     * Metodo que adiciona um participante ao projeto
+     * @param p Participante a adicionar
+     * @throws IllegalNumberOfParticipantType Exceção que indica que o número máximo de participantes foi atingido
+     * @throws ParticipantAlreadyInProject Exceção que indica que o participante já se encontra no projeto
+     */
     @Override
     public void addParticipant(Participant p) throws IllegalNumberOfParticipantType, ParticipantAlreadyInProject {
         if(numParticipants == maxParticipants){
@@ -438,7 +517,5 @@ public class Projeto implements Project{
     public void setCompleted(boolean completed) {
         this.completed = completed;
     }
-    
-    
 }
 
