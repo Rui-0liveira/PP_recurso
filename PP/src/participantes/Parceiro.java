@@ -9,12 +9,26 @@ import ma02_resources.participants.Instituition;
 import ma02_resources.participants.Partner;
 
 /**
- *
- * @author Rui
+ * Nome: Rodrigo Bamdé Chantre Lopes
+ * Número: 8210191
+ * Turma: T4
+ * 
+ * Nome: Rui Alexande da Silva Oliveira
+ * Número: 8210322
+ * Turma: T3
+ */
+
+/**
+ * Classe que define o objeto Parceiro
+ * Implementa a Interface Partner
+ * Extends a classe Participante
+ * @author Rodrigo Lopes
+ * @author Rui Oliveira
  */
 public class Parceiro extends Participante implements Partner{
     
     private String vat;
+    
     private String site;
     
     public Parceiro(String name, String email, Instituition instituition, Contact contact, String vat, String website) {
@@ -29,16 +43,28 @@ public class Parceiro extends Participante implements Partner{
         this.site = website;
     }
 
+    /**
+     * Metodo que retorna o VAT do parceiro
+     * @return VAT do parceiro
+     */
     @Override
     public String getVat() {
         return vat;
     }
 
+    /**
+     * Metodo que retorna o website do parceiro
+     * @return Website do parceiro
+     */
     @Override
     public String getWebsite() {
         return site;
     }
     
+    /**
+     * Metodo que retorna o nome do parceiro
+     * @return Nome do parceiro
+     */
     @Override
     public String toString() {
         return "Parceiro{" + super.toString() + ", vat=" + vat + ", website=" + site +'}';
