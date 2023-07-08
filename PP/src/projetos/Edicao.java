@@ -361,6 +361,11 @@ public class Edicao implements Edition {
         return false;
     }
 
+    /**
+     * Metodo que faz a auto avaliação de um estudante
+     * @param av avaliação a ser feita
+     * @param nota nota a ser atribuida
+     */
     public void autoAvaliacao(Avaliacao av, int nota) {
         if (this.getStatus() == Status.ACTIVE) {
             for (int i = 0; i < this.numProjects; i++) {
@@ -385,6 +390,11 @@ public class Edicao implements Edition {
         }
     }
 
+    /**
+     * Metodo que faz a avaliação de um estudante
+     * @param av avaliação a ser feita
+     * @param nota nota a ser atribuida
+     */
     public void heteroAvaliacao(Avaliacao av, int nota) {
         if (this.getStatus() == Status.ACTIVE) {
             for (int i = 0; i < this.numProjects; i++) {

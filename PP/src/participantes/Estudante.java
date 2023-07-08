@@ -82,8 +82,8 @@ public class Estudante extends Participante implements Student{
     }
     
     /**
-     * Metodo que define o número do estudante
-     * @param number Número do estudante
+     * Metodo que define o a media de notas de um estudante
+     * @param media media de notas de um estudante
      */
     public void setMedia(float media){
         this.media = media;

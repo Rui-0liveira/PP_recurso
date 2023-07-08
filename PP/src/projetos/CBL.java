@@ -48,8 +48,22 @@ import participantes.Participante;
  */
 public class CBL {
 
+    /**
+     * Variavel que guarda o array de edições
+     */
     private Edicao[] editions;
+    /**
+     * Variavel que guarda o numero de edições
+     */
     private int numEditions;
+    /**
+     * Variavel que guarda o array de avaliações
+     */
+    private Avaliacao[] avaliacao;
+    /**
+     * Variavel que guarda o numero de avaliações
+     */
+    private int numAvaliacoes;
 
     /**
      * Metodo construtor do CBL
@@ -57,8 +71,13 @@ public class CBL {
     public CBL() {
         numEditions = 0;
         editions = new Edicao[1];
+        avaliacao = new Avaliacao[10];
+        numAvaliacoes = 0;
     }
 
+    /**
+     * Metodo que guarda as informações do CBL num ficheiro JSON
+     */
     public void gerarJSON() {
         try {
             FileWriter file = new FileWriter("data.json");
@@ -191,6 +210,9 @@ public class CBL {
         }
     }
 
+    /**
+     * Metodo que guarda as informações do CBL num ficheiro CSV
+     */
     public void gerarCSV() {
         try {
             FileWriter file = new FileWriter("data.csv");
@@ -202,80 +224,93 @@ public class CBL {
             writer.newLine();
 
             for (Edicao e : this.editions) {
-                writer.write("name=" + e.getName());
+                writer.write("name=" + e.getName() + ",");
                 writer.newLine();
-                writer.write("start=" + e.getStart().toString());
+                writer.write("start=" + e.getStart().toString() + ",");
                 writer.newLine();
-                writer.write("template=" + e.getProjectTemplate());
+                writer.write("template=" + e.getProjectTemplate() + ",");
                 writer.newLine();
-                writer.write("status=" + e.getStatus().toString());
+                writer.write("status=" + e.getStatus().toString() + ",");
                 writer.newLine();
-                writer.write("numOfProjects=" + e.getNumberOfProjects());
+                writer.write("numOfProjects=" + e.getNumberOfProjects() + ",");
                 writer.newLine();
 
                 for (Project p : e.getProjects()) {
-                    writer.write("Nome=" + p.getName());
+                    writer.write("Nome=" + p.getName() + ",");
                     writer.newLine();
-                    writer.write("Descrição=" + p.getDescription());
+                    writer.write("Descrição=" + p.getDescription() + ",");
                     writer.newLine();
-                    writer.write("Tags=" + String.join(",", p.getTags()));
+                    writer.write("Tags=" + String.join(",", p.getTags()) + ",");
                     writer.newLine();
-                    writer.write("Número de participantes=" + p.getNumberOfParticipants());
+                    writer.write("Número de participantes=" + p.getNumberOfParticipants() + ",");
                     writer.newLine();
-                    writer.write("Número de estudantes=" + p.getNumberOfStudents());
+                    writer.write("Número de estudantes=" + p.getNumberOfStudents() + ",");
                     writer.newLine();
-                    writer.write("Número de partners=" + p.getNumberOfPartners());
+                    writer.write("Número de partners=" + p.getNumberOfPartners() + ",");
                     writer.newLine();
-                    writer.write("Número de facilitadores=" + p.getNumberOfFacilitators());
+                    writer.write("Número de facilitadores=" + p.getNumberOfFacilitators() + ",");
                     writer.newLine();
-                    writer.write("Número de tarefas=" + p.getNumberOfTasks());
+                    writer.write("Número de tarefas=" + p.getNumberOfTasks() + ",");
                     writer.newLine();
 
                     for (Task t : p.getTasks()) {
-                        writer.write("Título da Tarefa=" + t.getTitle());
+                        writer.write("Título da Tarefa=" + t.getTitle() + ",");
                         writer.newLine();
-                        writer.write("Descrição da Tarefa=" + t.getDescription());
+                        writer.write("Descrição da Tarefa=" + t.getDescription() + ",");
                         writer.newLine();
-                        writer.write("Data de Início da Tarefa=" + t.getStart().toString());
+                        writer.write("Data de Início da Tarefa=" + t.getStart().toString() + ",");
                         writer.newLine();
-                        writer.write("Data de Término da Tarefa=" + t.getEnd().toString());
+                        writer.write("Data de Término da Tarefa=" + t.getEnd().toString() + ",");
                         writer.newLine();
-                        writer.write("Duração da Tarefa=" + t.getDuration());
+                        writer.write("Duração da Tarefa=" + t.getDuration() + ",");
                         writer.newLine();
-                        writer.write("Completada=" + ((Tarefas) t).isCompleted());
+                        writer.write("Completada=" + ((Tarefas) t).isCompleted() + ",");
                         writer.newLine();
                         writer.write("Número de Submissões=" + t.getNumberOfSubmissions());
                         writer.newLine();
 
                         for (Submission s : t.getSubmissions()) {
-                            writer.write("Nome do Participante=" + s.getStudent().getName());
+                            writer.write("Nome do Participante=" + s.getStudent().getName() + ",");
                             writer.newLine();
-                            writer.write("Tipo do Participante=" + s.getStudent().getClass().getSimpleName());
+                            writer.write("Texto da Submissão=" + s.getText() + ",");
 
                             Participant par = s.getStudent();
                             if (par instanceof Estudante) {
                                 Estudante student = (Estudante) par;
-                                writer.write("Instituição do Participante=" + student.getInstituition().getName());
+                                writer.write("Instituição do Participante=" + student.getInstituition().getName() + ",");
                                 writer.newLine();
-                                writer.write("Email do Participante=" + student.getEmail());
+                                writer.write("Email do Participante=" + student.getEmail() + ",");
                                 writer.newLine();
-                                writer.write("Telefone do Participante=" + student.getContact().getPhone());
+                                writer.write("Telefone do Participante=" + student.getContact().getPhone() + ",");
                                 writer.newLine();
+                                writer.write("Nome do Participante=" + student.getName() + ",");
+                                writer.newLine();
+                                writer.write("Número do Participante=" + student.getNumber() + ",");
                             } else if (par instanceof Facilitador) {
                                 Facilitador facilitator = (Facilitador) par;
-                                writer.write("Instituição do Participante=" + facilitator.getInstituition().getName());
+                                writer.write("Instituição do Participante=" + facilitator.getInstituition().getName() + ",");
                                 writer.newLine();
-                                writer.write("Email do Participante=" + facilitator.getEmail());
+                                writer.write("Email do Participante=" + facilitator.getEmail() + ",");
                                 writer.newLine();
-                                writer.write("Telefone do Participante=" + facilitator.getContact().getPhone());
+                                writer.write("Telefone do Participante=" + facilitator.getContact().getPhone() + ",");
+                                writer.newLine();
+                                writer.write("Nome do Participante=" + facilitator.getName() + ",");
+                                writer.newLine();
+                                writer.write("Área de Especialização do Participante=" + facilitator.getAreaOfExpertise() + ",");
                                 writer.newLine();
                             } else if (par instanceof Parceiro) {
                                 Parceiro partner = (Parceiro) par;
-                                writer.write("Instituição do Participante=" + partner.getInstituition().getName());
+                                writer.write("Instituição do Participante=" + partner.getInstituition().getName() + ",");
                                 writer.newLine();
-                                writer.write("Email do Participante=" + partner.getEmail());
+                                writer.write("Email do Participante=" + partner.getEmail() + ",");
                                 writer.newLine();
-                                writer.write("Telefone do Participante=" + partner.getContact().getPhone());
+                                writer.write("Telefone do Participante=" + partner.getContact().getPhone() + ",");
+                                writer.newLine();
+                                writer.write("Nome do Participante=" + partner.getName() + ",");
+                                writer.newLine();
+                                writer.write("VAT do Participante=" + partner.getVat() + ",");
+                                writer.newLine();
+                                writer.write("Website do Participante=" + partner.getWebsite() + ",");
                                 writer.newLine();
                             } else {
                                 writer.write("Instituição do Participante=,,,");
@@ -286,16 +321,28 @@ public class CBL {
                                 writer.newLine();
                             }
 
+                            Instituition instituition = par.getInstituition();
+                            writer.write("Tipo de Instituição=" + instituition.getType().toString() + ",");
+                            writer.newLine();
+                            writer.write("Nome da Instituição=" + instituition.getName() + ",");
+                            writer.newLine();
+                            writer.write("Email da Instituição=" + instituition.getEmail() + ",");
+                            writer.newLine();
+                            writer.write("Website da Instituição=" + instituition.getWebsite() + ",");
+                            writer.newLine();
+                            writer.write("Descrição da Instituição=" + instituition.getDescription() + ",");
+                            writer.newLine();
+
                             Contact contact = par.getContact();
-                            writer.write("Rua=" + contact.getStreet());
+                            writer.write("Rua=" + contact.getStreet() + ",");
                             writer.newLine();
-                            writer.write("Cidade=" + contact.getCity());
+                            writer.write("Cidade=" + contact.getCity() + ",");
                             writer.newLine();
-                            writer.write("Estado=" + contact.getState());
+                            writer.write("Estado=" + contact.getState() + ",");
                             writer.newLine();
-                            writer.write("CEP=" + contact.getZipCode());
+                            writer.write("CEP=" + contact.getZipCode() + ",");
                             writer.newLine();
-                            writer.write("País=" + contact.getCountry());
+                            writer.write("País=" + contact.getCountry() + ",");
                             writer.newLine();
 
                             writer.newLine();
@@ -312,6 +359,14 @@ public class CBL {
         }
     }
 
+    /**
+     * Metodo que le o fichiro JSON com as informações do CBL e guarda essas informações no objeto CBL
+     * @throws org.json.simple.parser.ParseException Exceção lançada quando ocorre um erro na leitura do ficheiro JSON
+     * @throws IllegalNumberOfTasks Exceção lançada quando o número de tarefas é inválido
+     * @throws TaskAlreadyInProject Exceção lançada quando a tarefa já existe no projeto
+     * @throws IllegalNumberOfParticipantType Exceção lançada quando o número de participantes é inválido
+     * @throws ParticipantAlreadyInProject Exceção lançada quando o participante já existe no projeto
+     */
     public void lerJSON() throws org.json.simple.parser.ParseException, IllegalNumberOfTasks, TaskAlreadyInProject, IllegalNumberOfParticipantType, ParticipantAlreadyInProject {
         JSONParser parser = new JSONParser();
 
@@ -420,7 +475,6 @@ public class CBL {
                                         String nameParticipant = (String) participante.get("name");
                                         String email = (String) participante.get("email");
 
-                                        // Criar objetos Instituition e Contact
                                         JSONObject instituitionJson = (JSONObject) participante.get("instituition");
                                         Instituition instituition = new Instituicao();
                                         ((Instituicao) instituition).setName((String) instituitionJson.get("name"));
@@ -580,7 +634,6 @@ public class CBL {
         throw new IllegalArgumentException("Não existe nenhuma edição ativa");
     }
 
-    //ver se todas as tasks tem pelo menos uma submissão
     /**
      * Método que verifica se todas as tarefas de uma edição têm pelo menos uma
      * submissão
@@ -865,5 +918,60 @@ public class CBL {
             }
             System.out.println(temp1.getName() + " " + temp1.getNumberOfProjects());
         }
+    }
+
+    /**
+     * metodo que retorna as avaliações de um cbl
+     * @return avaliacoes de um cbl
+     */
+    public Avaliacao[] getAvaliacao() {
+        return avaliacao;
+    }
+
+    /**
+     * metodo que define as avaliações de um cbl
+     * @param avaliacao avaliações de um cbl
+     */
+    public void setAvaliacao(Avaliacao[] avaliacao) {
+        this.avaliacao = avaliacao;
+    }
+
+    /**
+     * metodo que retorna o numero de avaliações de um cbl
+     * @return numero de avaliações de um cbl
+     */
+    public int getNumAvaliacoes() {
+        return numAvaliacoes;
+    }
+
+    /**
+     * metodo que define o numero de avaliações de um cbl
+     * @param numAvaliacoes numero de avaliações de um cbl
+     */
+    public void setNumAvaliacoes(int numAvaliacoes) {
+        this.numAvaliacoes = numAvaliacoes;
+    }
+    
+    /**
+     * metodo que adiciona uma avaliação a um cbl
+     * @param av avaliação a adicionar
+     */
+    public void addAvaliacao(Avaliacao av) {
+        if (getNumAvaliacoes() == avaliacao.length) {
+            aumentarAvaliacoes();
+        }
+        avaliacao[numAvaliacoes] = av;
+        numAvaliacoes++;
+    }
+    
+    /**
+     * metodo que aumenta o tamanho do array de avaliações
+     */
+    public void aumentarAvaliacoes() {
+        Avaliacao[] temp = new Avaliacao[getNumAvaliacoes() + 5];
+        for (int i = 0; i < avaliacao.length; i++) {
+            temp[i] = avaliacao[i];
+        }
+        avaliacao = temp;
     }
 }
