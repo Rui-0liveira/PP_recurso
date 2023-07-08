@@ -60,7 +60,7 @@ public class Menus {
      
     }
     
-    public void menu(CBL cbl) throws IOException, ParseException, IllegalNumberOfParticipantType, ParticipantAlreadyInProject, TaskAlreadyInProject, IllegalNumberOfTasks{
+    public void menu(CBL cbl) throws IOException, ParseException, IllegalNumberOfParticipantType, ParticipantAlreadyInProject, TaskAlreadyInProject, IllegalNumberOfTasks, org.json.simple.parser.ParseException{
         int op = 0;
         do {
             System.out.println("------ CBL ------");
@@ -131,6 +131,9 @@ public class Menus {
                     break;
                 case 13:
                     cbl.gerarJSON(); 
+                    break;
+                case 14:
+                    cbl.lerJSON();
                     break;
                 case 0:
                     //cbl.gerarJSON(); 
