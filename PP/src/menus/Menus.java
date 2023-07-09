@@ -76,6 +76,9 @@ public class Menus {
             System.out.println("10. Media de tempo tasks");
             System.out.println("11. Top Alunos");
             System.out.println("12. Top Edições");
+            System.out.println("13. Exportar dados para JSON");
+            System.out.println("14. Carregar CBL");
+            System.out.println("15. Exportar dados para CSV");
             System.out.println("0. Exit");
             System.out.print("Insira a opção ");
             try{
@@ -134,6 +137,9 @@ public class Menus {
                     break;
                 case 14:
                     cbl.lerJSON();
+                    break;
+                case 15:
+                    cbl.gerarCSV();
                     break;
                 case 0:
                     //cbl.gerarJSON(); 
@@ -483,7 +489,7 @@ public class Menus {
         }catch(IllegalArgumentException e){
             System.out.println(e.getMessage());
         }
-    }  
+    }
     
     //menu de um projeto (CRUD de Participante e task)
     public void menuProjeto(Edicao edition) throws IOException, ParseException, IllegalNumberOfParticipantType, ParticipantAlreadyInProject, IllegalNumberOfTasks, TaskAlreadyInProject{

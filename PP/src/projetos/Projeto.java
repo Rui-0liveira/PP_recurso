@@ -656,7 +656,7 @@ public class Projeto implements Project {
     /**
      * Metodo que define o número máximo de tarefas do projeto
      *
-     * @param maxTasks Número máximo de tarefas do projeto
+     * @param totalTasksCompleted total de tasks xompletas
      */
     public void setTotalTasksCompleted(int totalTasksCompleted) {
         this.totalTasksCompleted = totalTasksCompleted;
