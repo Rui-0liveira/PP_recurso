@@ -4,6 +4,7 @@
  */
 package projetos;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -177,8 +178,8 @@ public class CBL {
                                     contact.put("zipcode", ((Participante) par).getContact().getZipCode());
                                     contact.put("country", ((Participante) par).getContact().getCountry());
                                     contact.put("phone", ((Participante) par).getContact().getPhone());
-                                    participante.put("contact",contact);
-                                    
+                                    participante.put("contact", contact);
+
                                     JSONObject contacto = new JSONObject();
                                     contacto.put("street", par.getInstituition().getContact().getStreet());
                                     contacto.put("city", par.getInstituition().getContact().getCity());
@@ -186,7 +187,7 @@ public class CBL {
                                     contacto.put("zipcode", par.getInstituition().getContact().getZipCode());
                                     contacto.put("country", par.getInstituition().getContact().getCountry());
                                     contacto.put("phone", par.getInstituition().getContact().getPhone());
-                                    
+
                                     JSONObject instituicao = new JSONObject();
                                     instituicao.put("name", ((Participante) par).getInstituition().getName());
                                     instituicao.put("email", ((Participante) par).getInstituition().getEmail());
@@ -225,144 +226,142 @@ public class CBL {
     /**
      * Metodo que guarda as informações do CBL num ficheiro CSV
      */
-    public void gerarCSV() {
+    public void gerarCSV() throws IOException {
         try {
             FileWriter file = new FileWriter("data.csv");
             BufferedWriter writer = new BufferedWriter(file);
 
-            writer.write("numEditions,name,start,template,status,numOfProjects,Nome,Descrição,Tags,Número de participantes,Número de estudantes,Número de partners,Número de facilitadores,Número de tarefas,Título da Tarefa,Descrição da Tarefa,Data de Início da Tarefa,Data de Término da Tarefa,Duração da Tarefa,Completada,Número de Submissões,Nome do Participante,Tipo do Participante,Instituição do Participante,Email do Participante,Telefone do Participante,Rua,Cidade,Estado,CEP,País\n");
-
+            writer.write("Edicao: ");
             writer.write("numEditions=" + this.numEditions);
             writer.newLine();
 
             for (Edicao e : this.editions) {
-                writer.write("name=" + e.getName() + ",");
-                writer.newLine();
-                writer.write("start=" + e.getStart().toString() + ",");
-                writer.newLine();
-                writer.write("template=" + e.getProjectTemplate() + ",");
-                writer.newLine();
-                writer.write("status=" + e.getStatus().toString() + ",");
-                writer.newLine();
-                writer.write("numOfProjects=" + e.getNumberOfProjects() + ",");
-                writer.newLine();
-
-                for (Project p : e.getProjects()) {
-                    writer.write("Nome=" + p.getName() + ",");
+                if (e != null) {
+                    writer.write("name= " + e.getName() + ";");
                     writer.newLine();
-                    writer.write("Descrição=" + p.getDescription() + ",");
+                    writer.write("start= " + e.getStart().toString() + ";");
                     writer.newLine();
-                    writer.write("Tags=" + String.join(",", p.getTags()) + ",");
+                    writer.write("template= " + e.getProjectTemplate() + ";");
                     writer.newLine();
-                    writer.write("Número de participantes=" + p.getNumberOfParticipants() + ",");
+                    writer.write("status= " + e.getStatus().toString() + ";");
                     writer.newLine();
-                    writer.write("Número de estudantes=" + p.getNumberOfStudents() + ",");
-                    writer.newLine();
-                    writer.write("Número de partners=" + p.getNumberOfPartners() + ",");
-                    writer.newLine();
-                    writer.write("Número de facilitadores=" + p.getNumberOfFacilitators() + ",");
-                    writer.newLine();
-                    writer.write("Número de tarefas=" + p.getNumberOfTasks() + ",");
+                    writer.write("numOfProjects= " + e.getNumberOfProjects() + ";");
                     writer.newLine();
 
-                    for (Task t : p.getTasks()) {
-                        writer.write("Título da Tarefa=" + t.getTitle() + ",");
-                        writer.newLine();
-                        writer.write("Descrição da Tarefa=" + t.getDescription() + ",");
-                        writer.newLine();
-                        writer.write("Data de Início da Tarefa=" + t.getStart().toString() + ",");
-                        writer.newLine();
-                        writer.write("Data de Término da Tarefa=" + t.getEnd().toString() + ",");
-                        writer.newLine();
-                        writer.write("Duração da Tarefa=" + t.getDuration() + ",");
-                        writer.newLine();
-                        writer.write("Completada=" + ((Tarefas) t).isCompleted() + ",");
-                        writer.newLine();
-                        writer.write("Número de Submissões=" + t.getNumberOfSubmissions());
-                        writer.newLine();
-
-                        for (Submission s : t.getSubmissions()) {
-                            writer.write("Nome do Participante=" + s.getStudent().getName() + ",");
+                    for (Project p : e.getProjects()) {
+                        if (p != null) {
+                            writer.write("Projeto: ");
                             writer.newLine();
-                            writer.write("Texto da Submissão=" + s.getText() + ",");
+                            writer.write("Nome= " + p.getName() + ";");
+                            writer.newLine();
+                            writer.write("Descricao= " + p.getDescription() + ";");
+                            writer.newLine();
+                            writer.write("Tags= " + String.join(",", p.getTags()) + ";");
+                            writer.newLine();
+                            writer.write("Numero de participantes= " + p.getNumberOfParticipants() + ";");
+                            writer.newLine();
+                            writer.write("Numero de estudantes= " + p.getNumberOfStudents() + ";");
+                            writer.newLine();
+                            writer.write("Numero de partners= " + p.getNumberOfPartners() + ";");
+                            writer.newLine();
+                            writer.write("Numero de facilitadores= " + p.getNumberOfFacilitators() + ";");
+                            writer.newLine();
+                            writer.write("Numero de tarefas= " + p.getNumberOfTasks() + ";");
+                            writer.newLine();
 
-                            Participant par = s.getStudent();
-                            if (par instanceof Estudante) {
-                                Estudante student = (Estudante) par;
-                                writer.write("Instituição do Participante=" + student.getInstituition().getName() + ",");
-                                writer.newLine();
-                                writer.write("Email do Participante=" + student.getEmail() + ",");
-                                writer.newLine();
-                                writer.write("Telefone do Participante=" + student.getContact().getPhone() + ",");
-                                writer.newLine();
-                                writer.write("Nome do Participante=" + student.getName() + ",");
-                                writer.newLine();
-                                writer.write("Número do Participante=" + student.getNumber() + ",");
-                            } else if (par instanceof Facilitador) {
-                                Facilitador facilitator = (Facilitador) par;
-                                writer.write("Instituição do Participante=" + facilitator.getInstituition().getName() + ",");
-                                writer.newLine();
-                                writer.write("Email do Participante=" + facilitator.getEmail() + ",");
-                                writer.newLine();
-                                writer.write("Telefone do Participante=" + facilitator.getContact().getPhone() + ",");
-                                writer.newLine();
-                                writer.write("Nome do Participante=" + facilitator.getName() + ",");
-                                writer.newLine();
-                                writer.write("Área de Especialização do Participante=" + facilitator.getAreaOfExpertise() + ",");
-                                writer.newLine();
-                            } else if (par instanceof Parceiro) {
-                                Parceiro partner = (Parceiro) par;
-                                writer.write("Instituição do Participante=" + partner.getInstituition().getName() + ",");
-                                writer.newLine();
-                                writer.write("Email do Participante=" + partner.getEmail() + ",");
-                                writer.newLine();
-                                writer.write("Telefone do Participante=" + partner.getContact().getPhone() + ",");
-                                writer.newLine();
-                                writer.write("Nome do Participante=" + partner.getName() + ",");
-                                writer.newLine();
-                                writer.write("VAT do Participante=" + partner.getVat() + ",");
-                                writer.newLine();
-                                writer.write("Website do Participante=" + partner.getWebsite() + ",");
-                                writer.newLine();
-                            } else {
-                                writer.write("Instituição do Participante=,,,");
-                                writer.newLine();
-                                writer.write("Email do Participante=,,,");
-                                writer.newLine();
-                                writer.write("Telefone do Participante=,,,");
-                                writer.newLine();
+                            for (Task t : p.getTasks()) {
+                                if (t != null) {
+                                    writer.write("Tasks: ");
+                                    writer.newLine();
+                                    writer.write("Titulo da Tarefa= " + t.getTitle() + ";");
+                                    writer.newLine();
+                                    writer.write("Descriaoo da Tarefa= " + t.getDescription() + ";");
+                                    writer.newLine();
+                                    writer.write("Data de Inicio da Tarefa= " + t.getStart().toString() + ";");
+                                    writer.newLine();
+                                    writer.write("Data de Termino da Tarefa= " + t.getEnd().toString() + ";");
+                                    writer.newLine();
+                                    writer.write("Duracao da Tarefa= " + t.getDuration() + ";");
+                                    writer.newLine();
+                                    writer.write("Completada= " + ((Tarefas) t).isCompleted() + ";");
+                                    writer.newLine();
+                                    writer.write("Numero de Submissoes= " + t.getNumberOfSubmissions());
+                                    writer.newLine();
+
+                                    for (Submission s : t.getSubmissions()) {
+                                        if (s != null) {
+                                            writer.write("Submissoes: ");
+                                            writer.newLine();
+                                            writer.write("Nome do Estudante= " + s.getStudent().getName() + ";");
+                                            writer.newLine();
+                                            writer.write("Texto da Submissao= " + s.getText() + ";");
+                                        }
+                                    }
+                                }
                             }
 
-                            Instituition instituition = par.getInstituition();
-                            writer.write("Tipo de Instituição=" + instituition.getType().toString() + ",");
-                            writer.newLine();
-                            writer.write("Nome da Instituição=" + instituition.getName() + ",");
-                            writer.newLine();
-                            writer.write("Email da Instituição=" + instituition.getEmail() + ",");
-                            writer.newLine();
-                            writer.write("Website da Instituição=" + instituition.getWebsite() + ",");
-                            writer.newLine();
-                            writer.write("Descrição da Instituição=" + instituition.getDescription() + ",");
-                            writer.newLine();
+                            for (Participant par : ((Projeto) p).getParticipants()) {
+                                if (par != null) {
+                                    writer.write("Participante: ");
+                                    writer.newLine();
+                                    writer.write("name Participant= " + par.getName() + ";");
+                                    writer.newLine();
+                                    writer.write("email Participant= " + par.getEmail() + ";");
+                                    writer.newLine();
+                                    Contact contact = par.getContact();
+                                    if (contact != null) {
+                                        writer.write("Contact Participant - Street= " + contact.getStreet() + ";");
+                                        writer.newLine();
+                                        writer.write("Contact Participant - City= " + contact.getCity() + ";");
+                                        writer.newLine();
+                                        writer.write("Contact Participant - State= " + contact.getState() + ";");
+                                        writer.newLine();
+                                        writer.write("Contact Participant - ZipCode= " + contact.getZipCode() + ";");
+                                        writer.newLine();
+                                        writer.write("Contact Participant - Country= " + contact.getCountry() + ";");
+                                        writer.newLine();
+                                        writer.write("Contact Participant - Phone= " + contact.getPhone() + ";");
+                                        writer.newLine();
+                                    }
 
-                            Contact contact = par.getContact();
-                            writer.write("Rua=" + contact.getStreet() + ",");
-                            writer.newLine();
-                            writer.write("Cidade=" + contact.getCity() + ",");
-                            writer.newLine();
-                            writer.write("Estado=" + contact.getState() + ",");
-                            writer.newLine();
-                            writer.write("CEP=" + contact.getZipCode() + ",");
-                            writer.newLine();
-                            writer.write("País=" + contact.getCountry() + ",");
-                            writer.newLine();
+                                    // Detalhes da instituição (Instituition)
+                                    Instituition instituition = par.getInstituition();
+                                    if (instituition != null) {
+                                        writer.write("Instituition Participant - Name= " + instituition.getName() + ";");
+                                        writer.newLine();
+                                        writer.write("Instituition Participant - Email= " + instituition.getEmail() + ";");
+                                        writer.newLine();
+                                        writer.write("Instituition Participant - Website= " + instituition.getWebsite() + ";");
+                                        writer.newLine();
+                                        writer.write("Instituition Participant - Description= " + instituition.getDescription() + ";");
+                                        writer.newLine();
+                                        writer.write("Instituition Type= " + instituition.getType() + ";");
+                                        writer.newLine();
 
-                            writer.newLine();
+                                        // Detalhes do contato da instituição
+                                        Contact institutionContact = instituition.getContact();
+                                        if (institutionContact != null) {
+                                            writer.write("Instituition Participant - Contact - Street= " + institutionContact.getStreet() + ";");
+                                            writer.newLine();
+                                            writer.write("Instituition Participant - Contact - City= " + institutionContact.getCity() + ";");
+                                            writer.newLine();
+                                            writer.write("Instituition Participant - Contact - State= " + institutionContact.getState() + ";");
+                                            writer.newLine();
+                                            writer.write("Instituition Participant - Contact - ZipCode= " + institutionContact.getZipCode() + ";");
+                                            writer.newLine();
+                                            writer.write("Instituition Participant - Contact - Country= " + institutionContact.getCountry() + ";");
+                                            writer.newLine();
+                                            writer.write("Instituition Participant - Contact - Phone= " + institutionContact.getPhone() + ";");
+                                            writer.newLine();
+                                        }
+                                    }
+
+                                }
+                            }
                         }
                     }
                 }
             }
-
             writer.close();
             System.out.println("CSV gerado com sucesso!");
 
@@ -372,12 +371,19 @@ public class CBL {
     }
 
     /**
-     * Metodo que le o fichiro JSON com as informações do CBL e guarda essas informações no objeto CBL
-     * @throws org.json.simple.parser.ParseException Exceção lançada quando ocorre um erro na leitura do ficheiro JSON
-     * @throws IllegalNumberOfTasks Exceção lançada quando o número de tarefas é inválido
-     * @throws TaskAlreadyInProject Exceção lançada quando a tarefa já existe no projeto
-     * @throws IllegalNumberOfParticipantType Exceção lançada quando o número de participantes é inválido
-     * @throws ParticipantAlreadyInProject Exceção lançada quando o participante já existe no projeto
+     * Metodo que le o fichiro JSON com as informações do CBL e guarda essas
+     * informações no objeto CBL
+     *
+     * @throws org.json.simple.parser.ParseException Exceção lançada quando
+     * ocorre um erro na leitura do ficheiro JSON
+     * @throws IllegalNumberOfTasks Exceção lançada quando o número de tarefas é
+     * inválido
+     * @throws TaskAlreadyInProject Exceção lançada quando a tarefa já existe no
+     * projeto
+     * @throws IllegalNumberOfParticipantType Exceção lançada quando o número de
+     * participantes é inválido
+     * @throws ParticipantAlreadyInProject Exceção lançada quando o participante
+     * já existe no projeto
      */
     public void lerJSON() throws org.json.simple.parser.ParseException, IllegalNumberOfTasks, TaskAlreadyInProject, IllegalNumberOfParticipantType, ParticipantAlreadyInProject {
         JSONParser parser = new JSONParser();
@@ -430,14 +436,13 @@ public class CBL {
                                 Projeto projetoObj = new Projeto(nome, descricao, tags, maxNumEstudantes, maxNumPartners, maxNumFacilitadores);
                                 projetoObj.setMaxTasks(maxNumTarefas);
                                 projetoObj.setMaxParticipants(maxNumParticipantes);
-                                
 
                                 for (Object objParticipante : participants) {
                                     if (objParticipante != null) {
                                         JSONObject participante = (JSONObject) objParticipante;
                                         String nameParticipant = (String) participante.get("name");
                                         String email = (String) participante.get("email");
-                                        
+
                                         JSONObject instituitionJson = (JSONObject) participante.get("instituition");
                                         Instituition instituition = new Instituicao();
                                         ((Instituicao) instituition).setName((String) instituitionJson.get("name"));
@@ -460,7 +465,7 @@ public class CBL {
                                         }
 
                                         instituition.setType(type);
-                                        
+
                                         Object contactoObj = instituitionJson.get("contacto");
                                         Contact contacto;
 
@@ -477,7 +482,7 @@ public class CBL {
                                         } else {
                                             throw new IllegalArgumentException("Valor inválido para a chave 'contacto'");
                                         }
-                                        
+
                                         Object contactObj = participante.get("contact");
                                         Contact contact;
 
@@ -494,7 +499,7 @@ public class CBL {
                                         } else {
                                             throw new IllegalArgumentException("Valor inválido para a chave 'contact'");
                                         }
-                                        
+
                                         instituition.setContact(contacto);
                                         Participant participanteObj;
 
@@ -530,7 +535,6 @@ public class CBL {
                                             Tarefas taskObj = new Tarefas(LocalDate.parse(taskStart), duration, title, description);
                                             taskObj.setEnd(LocalDate.parse(taskEnd));
                                             taskObj.setCompleted(completed);
-                                            
 
                                             for (Object objSubmissao : submissions) {
                                                 if (objSubmissao != null) {
@@ -539,11 +543,11 @@ public class CBL {
                                                     String date = (String) submissao.get("date");
                                                     String nomeEstudante = (String) submissao.get("student");
                                                     String text = (String) submissao.get("text");
-                                                    for (Object objParticipante : participants){
+                                                    for (Object objParticipante : participants) {
                                                         if (objParticipante != null) {
                                                             JSONObject participante = (JSONObject) objParticipante;
-                                                            if(nomeEstudante.equals((String) participante.get("name"))){
-                                                                student = (Estudante)projetoObj.getParticipant(nomeEstudante);
+                                                            if (nomeEstudante.equals((String) participante.get("name"))) {
+                                                                student = (Estudante) projetoObj.getParticipant(nomeEstudante);
                                                             }
                                                         }
                                                     }  
@@ -554,6 +558,7 @@ public class CBL {
                                                     int hetero = ((Long) avaliacao.get("heteroavaliacao")).intValue();
                                                     Avaliacao av = new Avaliacao(auto,hetero);
                                                     av.setClassificacao(hetero);
+
                                                     Submissao submissaoObj = new Submissao(LocalDateTime.parse(date), student, text);
                                                     submissaoObj.setAvaliacao(av);
                                                     if (submissaoObj != null) {
@@ -579,6 +584,25 @@ public class CBL {
             e.printStackTrace();
         }
     }
+    
+    /**
+     * Metodo que le o fichiro CSV com as informações do CBL e guarda essas
+     * informações no objeto CBL
+     */
+    private void lerCSV() throws IllegalNumberOfTasks, TaskAlreadyInProject, IllegalNumberOfParticipantType, ParticipantAlreadyInProject{
+         try {
+        BufferedReader reader = new BufferedReader(new FileReader("data.csv"));
+        
+        
+
+        reader.close();
+        System.out.println("Dados importados com sucesso!");
+
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    }
+    
 
     /**
      * Método que retorna o número de edições
@@ -922,6 +946,7 @@ public class CBL {
                                                     nomes[i] = nome;
                                                     medias[i] = nota;
                                                     break;
+
                                                 }
                                             }
                                         } else {
@@ -1004,6 +1029,7 @@ public class CBL {
 
     /**
      * metodo que retorna as avaliações de um cbl
+     *
      * @return avaliacoes de um cbl
      */
     public Avaliacao[] getAvaliacao() {
@@ -1012,6 +1038,7 @@ public class CBL {
 
     /**
      * metodo que define as avaliações de um cbl
+     *
      * @param avaliacao avaliações de um cbl
      */
     public void setAvaliacao(Avaliacao[] avaliacao) {
@@ -1020,6 +1047,7 @@ public class CBL {
 
     /**
      * metodo que retorna o numero de avaliações de um cbl
+     *
      * @return numero de avaliações de um cbl
      */
     public int getNumAvaliacoes() {
@@ -1028,14 +1056,16 @@ public class CBL {
 
     /**
      * metodo que define o numero de avaliações de um cbl
+     *
      * @param numAvaliacoes numero de avaliações de um cbl
      */
     public void setNumAvaliacoes(int numAvaliacoes) {
         this.numAvaliacoes = numAvaliacoes;
     }
-    
+
     /**
      * metodo que adiciona uma avaliação a um cbl
+     *
      * @param av avaliação a adicionar
      */
     public void addAvaliacao(Avaliacao av) {
@@ -1045,7 +1075,7 @@ public class CBL {
         avaliacao[numAvaliacoes] = av;
         numAvaliacoes++;
     }
-    
+
     /**
      * metodo que aumenta o tamanho do array de avaliações
      */
