@@ -246,7 +246,9 @@ public class Tarefas implements Task{
         }
         else{   
             for (Submission submission : submissions) {
-                string += submission.toString();
+                if(submission != null){
+                    string += submission.toString();
+                }
             }
         }
         string+=  "\nnumberOfSubmissions = " + numSubmissions +

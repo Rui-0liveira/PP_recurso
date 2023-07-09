@@ -186,7 +186,7 @@ public class Menus {
         if(cbl.getnumEdition()>0){
             System.out.println("\n----Lista de Edições-----");
             for(int i = 0; i < cbl.getnumEdition(); i++){
-                System.out.println("\n" + i+1 + "-" + cbl.getEditions()[i].getName());
+                System.out.println("\n" + i + "-" + cbl.getEditions()[i].getName());
             }
             System.out.print("Insira a edição que pertende eliminar ");
             try{
@@ -198,7 +198,7 @@ public class Menus {
                 System.out.println("\nOpção inválida");
             }
             else{
-                cbl.removeEdition(cbl.getEditions()[op-1].getName());
+                cbl.removeEdition(cbl.getEditions()[op].getName());
             }
         }
         else{
@@ -226,7 +226,7 @@ public class Menus {
     
     public void verAtiva(CBL cbl){
         try{
-            cbl.getEditionActive();
+            System.out.println(cbl.getEditionActive().toString());
         }catch(IllegalArgumentException e){
              System.out.println(e.getMessage());
         }
@@ -332,7 +332,6 @@ public class Menus {
                     project =(Projeto) edition.getProject(edition.getProjects()[op1].getName());
                     project.mediaTempoTasks();
                 }
-                System.out.println("Insira o projeto");
             }
         }catch(IllegalArgumentException e){
             System.out.println(e.getMessage());
@@ -838,6 +837,7 @@ public class Menus {
         }
         else{
             try{
+                do{
                 System.out.println("Insira o email do estudante que fez a submissão");
                 String email = ler();
 
@@ -847,11 +847,9 @@ public class Menus {
                         estudante = (Estudante) projeto.getParticipants()[i];
                     }
                 }
-
-                System.out.println("Insira a data da submissão");
-                String data = ler();
-
-                LocalDateTime date = LocalDateTime.parse(data, DateTimeFormatter.ISO_LOCAL_DATE);
+                }while (estudante == null);
+                LocalDateTime date = LocalDateTime.now();
+                
 
                 System.out.println("Insira o texto da submissão");
                 String texto = ler();
@@ -861,7 +859,9 @@ public class Menus {
                 task.addSubmission(submissao);
             }catch(IllegalArgumentException e){
                 System.out.println(e.getMessage());
-            } 
+            }/*catch (DateTimeParseException e) {
+                System.out.println("Data inserida inválida");
+            }*/
         }
     }
 
