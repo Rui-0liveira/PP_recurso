@@ -53,7 +53,7 @@ public class Contacto implements Contact{
      * @param street Identificação da rua
      * @param city Identificação da cidade
      * @param state Indentificação do estado
-     * @param zipcode Identificação xxxxxxxxxxx
+     * @param zipCode Identificação xxxxxxxxxxx
      * @param country Identificação do pais
      * @param phone Número de telefone
      */
@@ -184,9 +184,6 @@ public class Contacto implements Contact{
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-    
-    
-    
+    }    
 }
 

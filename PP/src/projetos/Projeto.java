@@ -288,9 +288,11 @@ public class Projeto implements Project {
             }
             numFacilitators++;
         }
-        for (int i = 0; i < numParticipants; i++) {
-            if (participants[i].equals(p)) {
-                throw new ParticipantAlreadyInProject("Participante já se encontra neste projeto");
+        for (Participante p1 : participants) {
+            if(p1!=null){
+                if(p1.equals(p)) {
+                    throw new ParticipantAlreadyInProject("Participante já se encontra neste projeto");
+                }
             }
         }
         if (numParticipants == participants.length) {
@@ -350,8 +352,6 @@ public class Projeto implements Project {
      * Metodo que retorna o array de participantes
      *
      * @return Array de participantes
-     * @throws IllegalNumberOfParticipantType Exceção que indica que o número
-     * máximo de participantes foi atingido
      */
     @Override
     public Participant getParticipant(String string) {
@@ -402,9 +402,6 @@ public class Projeto implements Project {
      */
     @Override
     public void addTask(Task task) throws IllegalNumberOfTasks, TaskAlreadyInProject {
-        if (numTasks >= maxTasks) {
-            throw new IllegalNumberOfTasks("Limite de tasks já atingido");
-        }
         if (task == null) {
             throw new IllegalArgumentException("Tarefa não pode ser nula");
         }
@@ -521,9 +518,9 @@ public class Projeto implements Project {
      */
     public int getNumSubmissionTask() {
         int numTasks = 0;
-        for (int i = 0; i < numTasks; i++) {
+        for (int i = 0; i < this.numTasks; i++) {
             if (tasks[i].getNumberOfSubmissions() > 0) {
-                numTasks = numTasks + tasks[i].getNumberOfSubmissions();
+                numTasks += tasks[i].getNumberOfSubmissions();
             }
         }
         return numTasks;
@@ -573,7 +570,7 @@ public class Projeto implements Project {
     public void mediaTempoTasks() {
         float media = 0;
         float soma = 0;
-        if (this.getNumberOfTasks() <= 0) {
+        if (this.getNumberOfTasks() > 0) {
             for (int i = 0; i < this.numTasks; i++) {
                 soma += this.tasks[i].getDuration();
             }

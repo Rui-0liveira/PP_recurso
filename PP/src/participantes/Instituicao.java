@@ -56,7 +56,7 @@ public class Instituicao implements Instituition{
      * @param email Email da instituição
      * @param type Tipo de instituição
      * @param contact Contacto da instituição
-     * @param website Website da instituição
+     * @param site Website da instituição
      * @param description Descrição da instituição
      */
     public Instituicao(String name, String email, InstituitionType type, Contact contact, String site, String description) {
