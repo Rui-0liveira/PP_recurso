@@ -29,18 +29,6 @@ public class Estudante extends Participante implements Student{
      * Variável que guarda o número do estudante
      */
     private int number;
-    /**
-     * Variável que guarda o número de notas do estudante
-     */
-    private int numNotas;
-    /**
-     * Array que guarda as notas do estudante
-     */
-    private int[] notas;
-    /**
-     * Variável que guarda a média do estudante
-     */
-    private float media;
     
     /**
      * Método construtor para o objeto Estudante
@@ -53,9 +41,6 @@ public class Estudante extends Participante implements Student{
     public Estudante(String name, String email, Instituition instituition, Contact contact, int number) {
         super(name, email, instituition, contact);
         this.number = number;
-        this.numNotas = 0;
-        this.notas = new int[10];
-        this.media = 0;
     }
 
     /**
@@ -67,9 +52,6 @@ public class Estudante extends Participante implements Student{
     public Estudante(String name, String email, int number) {
         super(name, email);
         this.number = number;
-        this.numNotas = 0;
-        this.notas = new int[10];
-        this.media = 0;
     }
     
     /**
@@ -82,22 +64,6 @@ public class Estudante extends Participante implements Student{
     }
     
     /**
-     * Metodo que define o a media de notas de um estudante
-     * @param media media de notas de um estudante
-     */
-    public void setMedia(float media){
-        this.media = media;
-    }
-    
-    /**
-     * Metodo que retorna a média do estudante
-     * @return Média do estudante
-     */
-    public float getMedia(){
-        return media;
-    }
-    
-    /**
      * Metodo que transforma o objeto numa String
      * @return
      */
@@ -105,27 +71,4 @@ public class Estudante extends Participante implements Student{
     public String toString() {
         return "Estudante{" + super.toString() + ", number=" + number + '}';
     }
-    
-    /**
-     * Método que adiciona uma nota ao estudante
-     * @param nota Nota a adicionar
-     */
-    public void addNota(int nota){
-        notas[numNotas] = nota;
-        numNotas++;
-    }
-    
-    /**
-     * Método que calcula a média das notas do estudante
-     */
-    public void mediaDasNotas(){
-        int soma = 0;
-        if(this.numNotas != 0){
-            for(int nota : notas){
-                soma += nota;
-            }
-            this.setMedia(soma/this.numNotas);
-        }
-    }
-   
 }

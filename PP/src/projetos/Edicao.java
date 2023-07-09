@@ -361,64 +361,9 @@ public class Edicao implements Edition {
         return false;
     }
 
-    /**
-     * Metodo que faz a auto avaliação de um estudante
-     * @param av avaliação a ser feita
-     * @param nota nota a ser atribuida
-     */
-    public void autoAvaliacao(Avaliacao av, int nota) {
-        if (this.getStatus() == Status.ACTIVE) {
-            for (int i = 0; i < this.numProjects; i++) {
-                Projeto project = (Projeto) this.getProjects()[i];
-                for (int j = 0; j < project.getNumberOfTasks(); j++) {
-                    Tarefas task = (Tarefas) project.getTasks()[j];
-                    for (int k = 0; k < task.getNumberOfSubmissions(); k++) {
-                        if (task.getSubmissions()[k].equals(av.getSubmission())) {
-                            if (task.getSubmissions()[k].getStudent().equals(av.getStudent())) {
-                                av.setAutoAvaliacao(nota);
-                            } else {
-                                throw new IllegalArgumentException("Estudante não fez essa submissão....");
-                            }
-                        } else {
-                            throw new IllegalArgumentException("Submissão não encontrada nesta ediçaõ de CBL....");
-                        }
-                    }
-                }
-            }
-        } else {
-            throw new IllegalArgumentException("Ediçaõ não está ativa....");
-        }
-    }
+    
 
-    /**
-     * Metodo que faz a avaliação de um estudante
-     * @param av avaliação a ser feita
-     * @param nota nota a ser atribuida
-     */
-    public void heteroAvaliacao(Avaliacao av, int nota) {
-        if (this.getStatus() == Status.ACTIVE) {
-            for (int i = 0; i < this.numProjects; i++) {
-                Projeto project = (Projeto) this.getProjects()[i];
-                for (int j = 0; j < project.getNumberOfTasks(); j++) {
-                    Tarefas task = (Tarefas) project.getTasks()[j];
-                    for (int k = 0; k < task.getNumberOfSubmissions(); k++) {
-                        if (task.getSubmissions()[k].equals(av.getSubmission())) {
-                            if (task.getSubmissions()[k].getStudent().equals(av.getStudent())) {
-                                av.setAutoAvaliacao(nota);
-                                av.getStudent().addNota(nota);
-                            } else {
-                                throw new IllegalArgumentException("Estudante não fez essa submissão....");
-                            }
-                        } else {
-                            throw new IllegalArgumentException("Submissão não encontrada nesta ediçaõ de CBL....");
-                        }
-                    }
-                }
-            }
-        } else {
-            throw new IllegalArgumentException("Ediçaõ não está ativa....");
-        }
-    }
+    
 
     /**
      * Metodo que aumenta tamanho do array de projetos

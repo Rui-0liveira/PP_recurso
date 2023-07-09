@@ -329,5 +329,16 @@ public class Tarefas implements Task{
         this.submissions = submissions;
     } 
     
+    public boolean submissoesAvaliadas(){
+        for(Submissao s :(Submissao[]) this.getSubmissions()){
+            if(s!=null){
+                if(s.getAvaliacao() == null){
+
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }
 

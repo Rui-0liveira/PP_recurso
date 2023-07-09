@@ -6,6 +6,7 @@ package projetos;
 
 import java.time.LocalDateTime;
 import ma02_resources.participants.Student;
+import ma02_resources.project.Status;
 import ma02_resources.project.Submission;
 import participantes.Estudante;
 
@@ -38,7 +39,12 @@ public class Submissao implements Submission{
      * Variável que guarda o texto da submissão
      */
     private String text;
-
+    
+    /**
+     * Variavel que guarda a avaliação da submissão
+     */
+    private Avaliacao avaliacao;
+    
     /**
      * Método construtor para o objeto Submissão
      * @param date Data da submissão
@@ -78,6 +84,14 @@ public class Submissao implements Submission{
         return text;
     }
 
+    public Avaliacao getAvaliacao() {
+        return avaliacao;
+    }
+
+    public void setAvaliacao(Avaliacao avaliacao) {
+        this.avaliacao = avaliacao;
+    }
+    
     /**
      * Método que compara duas submissões
      * @param sbmsn Submissão a comparar
@@ -100,7 +114,11 @@ public class Submissao implements Submission{
         String string;
         string="date = " + date +
                 "\nstudent: " + student.toString() +
-                "\ntext = " + text;                
+                "\navaliação: ";
+        if(avaliacao != null){
+            string  += avaliacao.toString();
+        }    
+        string += "\ntext = " + text;                
                 
         return string;
         
