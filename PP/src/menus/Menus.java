@@ -57,7 +57,6 @@ public class Menus {
             System.out.println("Valor invalido! Insira novamente: ");
             return lerInt();
         }
-     
     }
     
     public void menu(CBL cbl) throws IOException, ParseException, IllegalNumberOfParticipantType, ParticipantAlreadyInProject, TaskAlreadyInProject, IllegalNumberOfTasks, org.json.simple.parser.ParseException{
@@ -127,7 +126,7 @@ public class Menus {
                     break;
                 case 12:
                     try{
-                        cbl.topTresEdicoesComMaisPorjetos();
+                        cbl.topTresEdicoesComMaisProjetos();
                     }catch(IllegalArgumentException e){
                         System.out.println(e.getMessage());
                     }
@@ -799,6 +798,7 @@ public class Menus {
                 System.out.println("1. Ver dados");
                 System.out.println("2. Criar submissão");
                 System.out.println("3. Ver submissões");
+                System.out.println("4. Avaliar submissões");
                 System.out.println("0. Exit");
                 System.out.print("Insira a opção ");
                 try{
@@ -816,6 +816,9 @@ public class Menus {
                     case 3:
                         verSubmissoes(task);
                         break;
+                    case 4:
+                        avaliar(task);
+                        break;
                     case 0:
                         break;
                     default:
@@ -827,7 +830,51 @@ public class Menus {
             System.out.println(e.getMessage());
         }
     }
+    
+    public void avaliar(Tarefas task) throws IOException{
+        System.out.println("Submissões por avaliar:");
+        Avaliacao av = new Avaliacao();
+        int i;
+        int op;
+        if(!task.submissoesAvaliadas()){
+            do{
+                i = 0;
+                op = 0;
+                for(Submissao s :(Submissao[]) task.getSubmissions()){
+                    if(s != null){
+                        if(s.getAvaliacao() == null){
+                            System.out.println(i + "-" + s.getStudent().getName());
+                            
+                        }
+                        i++;
+                    }
+                }
+                System.out.println("Insira qual pertende avaliar");
+                op = Integer.parseInt(ler());
 
+                if(op > task.getNumberOfSubmissions() || op < 0){
+                    System.out.println("\nOpção inválida");
+                }
+                else if(((Submissao[])task.getSubmissions())[op].getAvaliacao()!= null){
+                    System.out.println("\nSubmissão já avaliada");
+                }
+                else{
+                    System.out.println("Insira a autoavaliação");
+                    int auto = lerInt();
+                    System.out.println("Insira a heteroavaliação");
+                    int hetero = lerInt();
+
+                    av.setAutoAvaliacao(auto);
+                    av.setHeteroAvaliacao(hetero);
+                    ((Submissao[])task.getSubmissions())[op].setAvaliacao(av);
+                }
+            }while(op > task.getNumberOfSubmissions() || op < 0);
+
+            
+        }else{
+            System.out.println("Não ha submissões por avaliar nesta tarefa");
+        }
+    }
 
     public void criarSubmissao(Edicao edition, Projeto projeto, Tarefas task) throws IOException{
         Submissao submissao;

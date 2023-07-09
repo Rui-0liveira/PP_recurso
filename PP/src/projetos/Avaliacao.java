@@ -4,30 +4,22 @@
  */
 package projetos;
 
-import participantes.Estudante;
-
 /**
  *
  * @author rodri
  */
 public class Avaliacao {
     
-    private Estudante student;
-    private Submissao submission;
     private int autoAvaliacao;
     private int heteroAvaliacao;
     private Classificacao classificacao;
 
-    public Avaliacao(Estudante student, Submissao submission, int autoAvaliacao, int heteroAvaliacao) {
-        this.submission = submission;
-        this.student = student;
+    public Avaliacao(int autoAvaliacao, int heteroAvaliacao) {
         this.autoAvaliacao = autoAvaliacao;
         this.heteroAvaliacao = heteroAvaliacao;
     }
 
-    public Avaliacao(Estudante student, Submissao submission) {
-        this.submission = submission;
-        this.student = student;
+    public Avaliacao() {
         this.autoAvaliacao = 0;
         this.heteroAvaliacao = 0;
     }
@@ -68,13 +60,12 @@ public class Avaliacao {
             throw new IllegalArgumentException("Nota fora da escala......Impossivel atribuir Rank");
         }
     }
-    
-    public Estudante getStudent(){
-        return student;
-    }
-    
-    public Submissao getSubmission(){
-        return submission;
+
+    @Override
+    public String toString() {
+        return "AutoAvaliação: " + autoAvaliacao +
+                ", HeteroAvaliação: " + heteroAvaliacao +
+                ", Classificação: " + classificacao;
     }
     
     

@@ -132,12 +132,17 @@ public class CBL {
                                     task.put("numberOfSubmissions", t.getNumberOfSubmissions());
 
                                     JSONArray submissions = new JSONArray();
-                                    for (Submission sub : t.getSubmissions()) {
+                                    for (Submissao sub : (Submissao[])t.getSubmissions()) {
                                         if (sub != null) {
                                             JSONObject submissao = new JSONObject();
                                             submissao.put("date", sub.getDate().toString());
                                             submissao.put("student", sub.getStudent().getName());
                                             submissao.put("text", sub.getText());
+                                            JSONObject avaliacoes = new JSONObject();
+                                            avaliacoes.put("autoavaliacao", sub.getAvaliacao().getAutoAvaliacao());
+                                            avaliacoes.put("heteroavaliacao", sub.getAvaliacao().getHeteroAvaliacao());
+                                            avaliacoes.put("classificacao", sub.getAvaliacao().getClassificacao().toString());
+                                            submissao.put("avaliacao", avaliacoes);
                                             submissions.add(submissao);
                                         }
                                     }
@@ -545,9 +550,17 @@ public class CBL {
                                                                 student = (Estudante) projetoObj.getParticipant(nomeEstudante);
                                                             }
                                                         }
-                                                    }
-                                                    Submissao submissaoObj = new Submissao(LocalDateTime.parse(date), student, text);
+                                                    }  
+                                                    
+                                                    JSONObject avaliacao = (JSONObject) submissao.get("avaliacao");
+                                                    Classificacao clas;
+                                                    int auto = ((Long) avaliacao.get("autoavaliacao")).intValue();
+                                                    int hetero = ((Long) avaliacao.get("heteroavaliacao")).intValue();
+                                                    Avaliacao av = new Avaliacao(auto,hetero);
+                                                    av.setClassificacao(hetero);
 
+                                                    Submissao submissaoObj = new Submissao(LocalDateTime.parse(date), student, text);
+                                                    submissaoObj.setAvaliacao(av);
                                                     if (submissaoObj != null) {
                                                         taskObj.addSubmission(submissaoObj);
                                                     }
@@ -900,28 +913,45 @@ public class CBL {
     /**
      * Metodo que imprime os 3 melhores alunos consuante as notas
      */
+    
     public void topTresAlunosMaiorMediaNotas() {
         Estudante[] temp = new Estudante[3];
-        int j = 0;
+        String[] nomes = new String[3];
+        double[] medias = new double[3];
+
         for (Edicao e : editions) {
             if (e != null) {
                 for (Project p : e.getProjects()) {
                     if (p != null) {
                         for (Task t : p.getTasks()) {
                             if (t != null) {
-                                for (Submission s : t.getSubmissions()) {
+                                for (Submissao s : (Submissao[]) t.getSubmissions()) {
                                     if (s != null) {
-                                        if (s.getStudent() instanceof Estudante student) {
-                                            if (j < 3) {
-                                                temp[j] = student;
-                                                j++;
-                                            } else {
-                                                for (int i = 0; i < temp.length; i++) {
-                                                    if (student.getMedia() > temp[i].getMedia()) {
-                                                        temp[i] = student;
-                                                    }
+                                        int nota = s.getAvaliacao().getHeteroAvaliacao();
+                                        String nome = s.getStudent().getName();
+
+                                        // Procura se o estudante já está na lista dos três melhores
+                                        int index = -1;
+                                        for (int i = 0; i < 3; i++) {
+                                            if (nomes[i] != null && nomes[i].equals(nome)) {
+                                                index = i;
+                                                break;
+                                            }
+                                        }
+
+                                        if (index == -1) {
+                                            // O estudante ainda não está na lista dos três melhores
+                                            for (int i = 0; i < 3; i++) {
+                                                if (nomes[i] == null) {
+                                                    nomes[i] = nome;
+                                                    medias[i] = nota;
+                                                    break;
+
                                                 }
                                             }
+                                        } else {
+                                            // Atualiza a média do estudante na lista
+                                            medias[index] = (medias[index] + nota) / 2.0;
                                         }
                                     }
                                 }
@@ -931,38 +961,69 @@ public class CBL {
                 }
             }
         }
-        for (Estudante temp1 : temp) {
-            if (temp1 == null) {
-                throw new IllegalArgumentException("Não há notas suficientes para um top 3");
-            }
-            System.out.println(temp1.getName() + " " + temp1.getMedia());
 
+        // Ordena os estudantes com base nas médias
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2 - i; j++) {
+                if (medias[j] < medias[j + 1]) {
+                    // Troca as posições
+                    double tempMedia = medias[j];
+                    medias[j] = medias[j + 1];
+                    medias[j + 1] = tempMedia;
+
+                    String tempNome = nomes[j];
+                    nomes[j] = nomes[j + 1];
+                    nomes[j + 1] = tempNome;
+                }
+            }
         }
+        
+        // Imprime os três melhores estudantes com as maiores médias
+        System.out.println("Os três melhores estudantes são:");
+        for (int i = 0; i < 3; i++) {
+            if(nomes[i]!=null){
+                System.out.println((i + 1) + ". " + nomes[i] + " - Média: " + medias[i]);
+            }
+        }
+        
     }
 
     /**
      * Metodo que imprime as 3 edições com maior numero de projetos
      */
-    public void topTresEdicoesComMaisPorjetos() {
+    public void topTresEdicoesComMaisProjetos() {
         Edicao[] temp = new Edicao[3];
-        int j = 0;
+        int[] projetos = new int[3];
+
         for (Edicao e : editions) {
-            if (j < 3) {
-                temp[j] = e;
-                j++;
-            } else {
-                for (int i = 0; i < temp.length; i++) {
-                    if (e.getNumberOfProjects() > temp[i].getNumberOfProjects()) {
+            if (e != null) {
+                int numProjetos = e.getNumberOfProjects();
+
+                // Verifica se o número de projetos é maior do que os projetos armazenados
+                for (int i = 0; i < 3; i++) {
+                    if (numProjetos > projetos[i]) {
+                        // Desloca os projetos anteriores
+                        for (int j = 2; j > i; j--) {
+                            projetos[j] = projetos[j - 1];
+                            temp[j] = temp[j - 1];
+                        }
+
+                        // Armazena a nova quantidade de projetos e a edição correspondente
+                        projetos[i] = numProjetos;
                         temp[i] = e;
+
+                        break;
                     }
                 }
             }
         }
-        for (Edicao temp1 : temp) {
-            if (temp1 == null) {
-                throw new IllegalArgumentException("Não há edições com projetos suficientes para um top 3");
+
+        // Imprime as três edições com mais projetos
+        System.out.println("As três edições com mais projetos são:");
+        for (int i = 0; i < 3; i++) {
+            if(temp[i]!=null){
+                System.out.println((i + 1) + ". " + temp[i].getName() + " - Número de Projetos: " + projetos[i]);
             }
-            System.out.println(temp1.getName() + " " + temp1.getNumberOfProjects());
         }
     }
 
