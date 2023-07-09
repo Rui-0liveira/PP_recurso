@@ -342,7 +342,6 @@ public class Edicao implements Edition {
 
             }
         }
-
         return string;
     }
 
@@ -443,7 +442,6 @@ public class Edicao implements Edition {
 
             projects = newProjects;
         }
-
         projects[numProjects] = (Projeto) project;
         numProjects++;
     }

@@ -11,10 +11,17 @@ import ma02_resources.project.exceptions.IllegalNumberOfTasks;
 import ma02_resources.project.exceptions.ParticipantAlreadyInProject;
 import ma02_resources.project.exceptions.TaskAlreadyInProject;
 import projetos.CBL;
+
 /**
- *
- * @author Rui
+ * Nome: Rodrigo Bamdé Chantre Lopes
+ * Número: 8210191
+ * Turma: T4
+ * 
+ * Nome: Rui Alexande da Silva Oliveira
+ * Número: 8210322
+ * Turma: T3
  */
+
 public class main {
 
     public static void main(String[] args) throws IOException, ParseException, IllegalNumberOfParticipantType, ParticipantAlreadyInProject, TaskAlreadyInProject, IllegalNumberOfTasks, org.json.simple.parser.ParseException {

@@ -6,7 +6,6 @@ package projetos;
 
 import java.time.LocalDateTime;
 import ma02_resources.participants.Student;
-import ma02_resources.project.Status;
 import ma02_resources.project.Submission;
 import participantes.Estudante;
 
