@@ -350,8 +350,6 @@ public class Projeto implements Project {
      * Metodo que retorna o array de participantes
      *
      * @return Array de participantes
-     * @throws IllegalNumberOfParticipantType Exceção que indica que o número
-     * máximo de participantes foi atingido
      */
     @Override
     public Participant getParticipant(String string) {
@@ -659,7 +657,7 @@ public class Projeto implements Project {
     /**
      * Metodo que define o número máximo de tarefas do projeto
      *
-     * @param maxTasks Número máximo de tarefas do projeto
+     * @param totalTasksCompleted total de tasks xompletas
      */
     public void setTotalTasksCompleted(int totalTasksCompleted) {
         this.totalTasksCompleted = totalTasksCompleted;

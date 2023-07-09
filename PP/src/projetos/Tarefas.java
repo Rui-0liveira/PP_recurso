@@ -62,12 +62,11 @@ public class Tarefas implements Task{
     /**
      * Método construtor para o objeto Tarefa
      * @param start Data de início da tarefa
-     * @param end Data de fim da tarefa
      * @param duration Duração da tarefa
      * @param title Título da tarefa
      * @param description Descrição da tarefa
      * @param submissions Array de Submissões da tarefa
-     * @param numberOfSubmissions Número de submissões da tarefa
+     * @param numSubmissions Número de submissões da tarefa
      */
     public Tarefas(LocalDate start, int duration, String title, String description, int numSubmissions, Submissao[] submissions) {
         if (start.isBefore(LocalDate.now())) {
@@ -226,10 +225,8 @@ public class Tarefas implements Task{
             return false;
         }
         final Tarefas other = (Tarefas) obj;
-        if (!Objects.equals(this.title, other.title)) {
-            return false;
-        }
-        return true;
+        
+        return Objects.equals(this.title, other.title);
     }
     
     /**
@@ -328,9 +325,7 @@ public class Tarefas implements Task{
      */
     public void setSubmissions(Submissao[] submissions) {
         this.submissions = submissions;
-    }
-    
-    
+    } 
     
 }
 

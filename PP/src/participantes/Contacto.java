@@ -162,26 +162,50 @@ public class Contacto implements Contact{
         return true;
     }  
 
+    /**
+     * Metodo que define a rua 
+     * @param street Identificação da rua
+     */
     public void setStreet(String street) {
         this.street = street;
     }
 
+    /**
+     * Metodo que define a cidade
+     * @param city Identificação da cidade
+     */
     public void setCity(String city) {
         this.city = city;
     }
 
+    /**
+     * Metodo que define o estado
+     * @param state Identificação do estado
+     */
     public void setState(String state) {
         this.state = state;
     }
 
+    /**
+     * Metodo que define o código postal
+     * @param zipCode Identificação do código postal
+     */
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
     }
 
+    /**
+     * Metodo que define o pais
+     * @param country Identificação do pais
+     */
     public void setCountry(String country) {
         this.country = country;
     }
 
+    /**
+     * Metodo que define o número de telefone
+     * @param phone Número de telefone
+     */
     public void setPhone(String phone) {
         this.phone = phone;
     }
