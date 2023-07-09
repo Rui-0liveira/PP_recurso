@@ -614,7 +614,7 @@ public class CBL {
      * @throws ma02_resources.project.exceptions.TaskAlreadyInProject
      * @throws java.io.IOException
      */
-    public void lerCSV() throws IOException, IllegalNumberOfTasks, TaskAlreadyInProject {
+    public void lerCSV() throws IOException, IllegalNumberOfTasks, TaskAlreadyInProject, IllegalNumberOfParticipantType, ParticipantAlreadyInProject {
         try {
             FileReader file = new FileReader("data.csv");
             BufferedReader reader = new BufferedReader(file);
@@ -740,116 +740,155 @@ public class CBL {
                                             task.setEnd(taskEnd);
                                             task.setCompleted(completedTask);
                                             for (int i = 0; i < numSubmissoes; i++) {
-                                                String nomeEstudante = null;
-                                                String text = null;
-                                                String date = null;
-                                                Estudante student = null;
-                                                while ((line = reader.readLine()) != null && !line.startsWith("Submissoes: ")) {
-                                                    if (line.startsWith("Nome do Estudante=")) {
-                                                        nomeEstudante = line.split("=")[1].replaceAll(";", "");
-                                                    } else if (line.startsWith("Texto da Submissao=")) {
-                                                        text = line.split("=")[1].replaceAll(";", "");
-                                                    } else if (line.startsWith("Data da Submissao=")) {
-                                                        date = line.split("=")[1].trim().replaceAll(";", "");
+                                                int numSubmissoes = Integer.parseInt(line.split("=")[1].replaceAll(";", ""));
+                                                task = new Tarefas(taskStart, duration, title, description);
+                                                task.setEnd(taskEnd);
+                                                task.setCompleted(completedTask);
+                                                for (int i = 0; i < numSubmissoes; i++) {
+                                                    String nomeEstudante = null;
+                                                    String text = null;
+                                                    String date = null;
+                                                    Estudante student = null;
+                                                    while ((line = reader.readLine()) != null && !line.startsWith("Submissoes: ")) {
+                                                        if (line.startsWith("Nome do Estudante=")) {
+                                                            nomeEstudante = line.split("=")[1].replaceAll(";", "");
+                                                        } else if (line.startsWith("Texto da Submissao=")) {
+                                                            text = line.split("=")[1].replaceAll(";", "");
+                                                        } else if (line.startsWith("Data da Submissao=")) {
+                                                            date = line.split("=")[1].trim().replaceAll(";", "");
+                                                        }
                                                     }
-                                                }
-                                                for (int j = 0; j < numParticipantes; j++) {
-                                                    if (projeto.getParticipants()[j].getName().equals(nomeEstudante)) {
-                                                        student = (Estudante) projeto.getParticipants()[j];
-                                                        break;
+                                                    for (int j = 0; j < numParticipantes; j++) {
+                                                        if (projeto.getParticipants()[j].getName().equals(nomeEstudante)) {
+                                                            student = (Estudante) projeto.getParticipants()[j];
+                                                            break;
+                                                        }
                                                     }
-                                                }
-                                                if (student != null) {
-                                                    Submissao submissao = new Submissao(LocalDateTime.parse(date), student, text);
-                                                    task.addSubmission(submissao);
-                                                } else {
-                                                    throw new IllegalArgumentException("Não existe nenhum participante com esse nome: " + nomeEstudante);
+                                                    if (student != null) {
+                                                        Submissao submissao = new Submissao(LocalDateTime.parse(date), student, text);
+                                                        task.addSubmission(submissao);
+                                                    } else {
+                                                        throw new IllegalArgumentException("Não existe nenhum participante com esse nome: " + nomeEstudante);
+                                                    }
                                                 }
                                             }
                                         }
+                                        if (task != null) {
+                                            projeto.addTask(task);
+                                        }
+                                    
                                     }
-                                    if (task != null) {
-                                        projeto.addTask(task);
-                                    }
-                                } else if (line.startsWith("Participante: ")) {
-                                    String nameParticipant = null;
+                                }else if(line.startsWith("Participante: ")){
+                                    String name = null;
                                     String email = null;
-                                    Instituition instituition = null;
-                                    Contact contact = null;
-                                    int numero = 0;
+                                    String street = null;
+                                    String city = null;
+                                    String state = null;
+                                    String zipcode = null;
+                                    String country = null;
+                                    String phone = null;
+                                    String instituitionName = null;
+                                    String instituitionEmail = null;
+                                    String instituitionWebsite = null;
+                                    String instituitionDescription = null;
+                                    String instituitionType = null;
+                                    String instituitionStreet = null;
+                                    String instituitionCity = null;
+                                    String instituitionState = null;
+                                    String instituitionZipcode = null;
+                                    String instituitionCountry = null;
+                                    String instituitionPhone = null;
+                                    String participantType = null;
                                     String areaEspecializacao = null;
                                     String vat = null;
                                     String website = null;
-
+                                    InstituitionType type = null;
+                                    Contact contact = null;
+                                    Contact institutionContact = null;
+                                    Instituition instituition = null;
+                                    Participant participant = null;
                                     while ((line = reader.readLine()) != null && !line.startsWith("Participante: ")) {
                                         if (line.startsWith("name Participant=")) {
-                                            nameParticipant = line.split("=")[1].replaceAll(";", "");
+                                            name = line.split("=")[1].replaceAll(";", "");
                                         } else if (line.startsWith("email Participant=")) {
                                             email = line.split("=")[1].replaceAll(";", "");
+                                        } else if (line.startsWith("Contact Participant - Street=")) {
+                                            street = line.split("=")[1].replaceAll(";", "");
+                                        } else if (line.startsWith("Contact Participant - City=")) {
+                                            city = line.split("=")[1].replaceAll(";", "");
+                                        } else if (line.startsWith("Contact Participant - State=")) {
+                                            state = line.split("=")[1].replaceAll(";", "");
+                                        } else if (line.startsWith("Contact Participant - ZipCode=")) {
+                                            zipcode = line.split("=")[1].replaceAll(";", "");
+                                        } else if (line.startsWith("Contact Participant - Country=")) {
+                                            country = line.split("=")[1].replaceAll(";", "");
+                                        } else if (line.startsWith("Contact Participant - Phone=")) {
+                                            phone = line.split("=")[1].replaceAll(";", "");
                                         } else if (line.startsWith("Instituition Participant - Name=")) {
-                                            String instituitionName = line.split("=")[1].replaceAll(";", "");
-                                            String instituitionEmail = null;
-                                            String instituitionWebsite = null;
-                                            String instituitionDescription = null;
-                                            InstituitionType instituitionType = null;
-
-                                            while ((line = reader.readLine()) != null && !line.startsWith("Instituition Participant - Name=")) {
-                                                if (line.startsWith("Instituition Participant - Email=")) {
-                                                    instituitionEmail = line.split("=")[1].replaceAll(";", "");
-                                                } else if (line.startsWith("Instituition Participant - Website=")) {
-                                                    instituitionWebsite = line.split("=")[1].replaceAll(";", "");
-                                                } else if (line.startsWith("Instituition Participant - Description=")) {
-                                                    instituitionDescription = line.split("=")[1].replaceAll(";", "");
-                                                } else if (line.startsWith("Instituition Type=")) {
-                                                    String instituitionTypeStr = line.split("=")[1].replaceAll(";", "");
-                                                    if (instituitionTypeStr.equalsIgnoreCase("UNIVERSITY")) {
-                                                        instituitionType = InstituitionType.UNIVERSITY;
-                                                    } else if (instituitionTypeStr.equalsIgnoreCase("COMPANY")) {
-                                                        instituitionType = InstituitionType.COMPANY;
-                                                    } else if (instituitionTypeStr.equalsIgnoreCase("NGO")) {
-                                                        instituitionType = InstituitionType.NGO;
-                                                    } else if (instituitionTypeStr.equalsIgnoreCase("OTHER")) {
-                                                        instituitionType = InstituitionType.OTHER;
-                                                    } else {
-                                                        throw new IllegalArgumentException("Tipo de instituição desconhecido: " + instituitionTypeStr);
-                                                    }
-                                                }
-                                            }
-
-                                            // Criar a instância de Instituition com as informações coletadas
-                                            instituition = new Instituition(instituitionName, instituitionEmail, instituitionWebsite, instituitionDescription, instituitionType);
-                                        } else if (line.startsWith("Instituition Participant-Contact - Street=")) {
-                                            String street = line.split("=")[1].replaceAll(";", "");
-                                            String city = null;
-                                            String state = null;
-                                            String zipcode = null;
-                                            String country = null;
-                                            String phone = null;
-
-                                            while ((line = reader.readLine()) != null && !line.startsWith("Instituition Participant-Contact - Street=")) {
-                                                if (line.startsWith("Instituition Participant-Contact - City=")) {
-                                                    city = line.split("=")[1].replaceAll(";", "");
-                                                } else if (line.startsWith("Instituition Participant-Contact - State=")) {
-                                                    state = line.split("=")[1].replaceAll(";", "");
-                                                } else if (line.startsWith("Instituition Participant-Contact - ZipCode=")) {
-                                                    zipcode = line.split("=")[1].replaceAll(";", "");
-                                                } else if (line.startsWith("Instituition Participant-Contact - Country=")) {
-                                                    country = line.split("=")[1].replaceAll(";", "");
-                                                } else if (line.startsWith("Instituition Participant-Contact - Phone=")) {
-                                                    phone = line.split("=")[1].replaceAll(";", "");
-                                                }
-                                            }
-
-                                            // Criar a instância de Contact com as informações coletadas
-                                            contact = new Contacto(street, city, state, zipcode, country, phone);
+                                            instituitionName = line.split("=")[1].replaceAll(";", "");
+                                        } else if (line.startsWith("Instituition Participant - Email=")) {
+                                            instituitionEmail = line.split("=")[1].replaceAll(";", "");
+                                        } else if (line.startsWith("Instituition Participant - Website=")) {
+                                            instituitionWebsite = line.split("=")[1].replaceAll(";", "");
+                                        } else if (line.startsWith("Instituition Participant - Description=")) {
+                                            instituitionDescription = line.split("=")[1].replaceAll(";", "");
+                                        } else if (line.startsWith("Instituition Type=")) {
+                                            instituitionType = line.split("=")[1].replaceAll(";", "");
+                                        } else if (line.startsWith("Instituition Participant - Contact - Street=")) {
+                                            instituitionStreet = line.split("=")[1].replaceAll(";", "");
+                                        } else if (line.startsWith("Instituition Participant - Contact - City=")) {
+                                            instituitionCity = line.split("=")[1].replaceAll(";", "");
+                                        } else if (line.startsWith("Instituition Participant - Contact - State=")) {
+                                            instituitionState = line.split("=")[1].replaceAll(";", "");
+                                        } else if (line.startsWith("Instituition Participant - Contact - ZipCode=")) {
+                                            instituitionZipcode = line.split("=")[1].replaceAll(";", "");
+                                        } else if (line.startsWith("Instituition Participant - Contact - Country=")) {
+                                            instituitionCountry = line.split("=")[1].replaceAll(";", "");
+                                        } else if (line.startsWith("Instituition Participant - Contact - Phone=")) {
+                                            instituitionPhone = line.split("=")[1].replaceAll(";", "");
+                                        } else if (line.startsWith("Participant Type=")) {
+                                            participantType = line.split("=")[1].replaceAll(";", "");
+                                        } else if (line.startsWith("Area de Especialização=")) {
+                                            areaEspecializacao = line.split("=")[1].replaceAll(";", "");
+                                        } else if (line.startsWith("VAT=")) {
+                                            vat = line.split("=")[1].replaceAll(";", "");
+                                        } else if (line.startsWith("WebSite=")) {
+                                            website = line.split("=")[1].replaceAll(";", "");
+                                        } else {
+                                            throw new IllegalArgumentException("Chave desconhecida: " + line.split("=")[0]);
                                         }
-                                    }
 
-                                    // Criar a instância de Participant com as informações coletadas
-                                    Participante participant = new Participante(nameParticipant, email, instituition, contact);
-                                    // Adicionar o participant ao projeto
-                                    projeto.addParticipant(participant);
-                                }
+                                        if (participantType.equalsIgnoreCase("Estudante")) {
+                                            participant = new Estudante(name, email, instituition, contact, Integer.parseInt(line.split("=")[1].replaceAll(";", "")));
+                                        } else if (participantType.equalsIgnoreCase("Facilitador")) {
+                                            participant = new Facilitador(name, email, instituition, contact, areaEspecializacao);
+                                        } else if (participantType.equalsIgnoreCase("Parceiro")) {
+                                            participant = new Parceiro(name, email, instituition, contact, vat, website);
+                                        } else {
+                                            throw new IllegalArgumentException("Tipo de participante desconhecido: " + participantType);
+                                        }
+
+                                        if (instituitionType.equalsIgnoreCase("Universitary")) {
+                                            type = InstituitionType.UNIVERSITY;
+                                        } else if (instituitionType.equalsIgnoreCase("Company")) {
+                                            type = InstituitionType.COMPANY;
+                                        } else if (instituitionType.equalsIgnoreCase("Ngo")) {
+                                            type = InstituitionType.NGO;
+                                        } else if (instituitionType.equalsIgnoreCase("Other")) {
+                                            type = InstituitionType.OTHER;
+                                        } else {
+                                            throw new IllegalArgumentException("Tipo de instituição desconhecido: " + instituitionType);
+                                        }
+
+                                        contact = new Contacto(street, city, state, zipcode, country, phone);
+
+                                        institutionContact = new Contacto(instituitionStreet, instituitionCity, instituitionState, instituitionZipcode, instituitionCountry, instituitionPhone);
+
+                                        instituition = new Instituicao(instituitionName, instituitionEmail, instituitionWebsite, instituitionDescription, type, institutionContact);
+
+                                        projeto.addParticipant(participant);
+                                    }
+                                } 
                             }
                         }
                         if (projeto != null) {
@@ -863,31 +902,26 @@ public class CBL {
                 }
             }
             line = reader.readLine();
-        }
-        reader.close();
-        System.out.println("CSV importado com sucesso!");
-        System.out.println("Número de edições: " + numEditions);
+            reader.close();
+            System.out.println("CSV importado com sucesso!");
+            System.out.println("Número de edições: " + numEditions);
 
-        for (Edicao e : this.editions) {
-            System.out.println("Edição: " + e.getName());
-            System.out.println("Status: " + e.getStatus());
-            System.out.println("Número de projetos: " + e.getNumberOfProjects());
-        }
-    }
-    catch (IOException e
-
-    
-        ) {
+            for (Edicao e : this.editions) {
+                System.out.println("Edição: " + e.getName());
+                System.out.println("Status: " + e.getStatus());
+                System.out.println("Número de projetos: " + e.getNumberOfProjects());
+            }
+        } catch (IOException e) {
             e.printStackTrace();
+        }
     }
-}
 
-/**
- * Método que retorna o número de edições
- *
- * @return Número de edições
- */
-public int getnumEdition() {
+    /**
+     * Método que retorna o número de edições
+     *
+     * @return Número de edições
+     */
+    public int getnumEdition() {
         return numEditions;
     }
 
@@ -1162,7 +1196,7 @@ public int getnumEdition() {
      * Metodo que retorna uma representação textual do objeto CBL
      */
     @Override
-        public String toString() {
+    public String toString() {
         String string;
         string = "numEditions = " + numEditions
                 + "\neditions: ";
