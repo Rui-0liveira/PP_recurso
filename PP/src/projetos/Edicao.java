@@ -361,10 +361,6 @@ public class Edicao implements Edition {
         return false;
     }
 
-    
-
-    
-
     /**
      * Metodo que aumenta tamanho do array de projetos
      */

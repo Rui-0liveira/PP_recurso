@@ -289,8 +289,8 @@ public class Projeto implements Project {
             numFacilitators++;
         }
         for (Participante p1 : participants) {
-            if(p1!=null){
-                if(p1.equals(p)) {
+            if (p1 != null) {
+                if (p1.equals(p)) {
                     throw new ParticipantAlreadyInProject("Participante já se encontra neste projeto");
                 }
             }
@@ -478,8 +478,10 @@ public class Projeto implements Project {
         String string = " name = " + name
                 + "\n description = " + description
                 + "\n tags =  ";
-        for (String tag : tags) {
-            string += tag + "  ";
+        if (tags != null) {
+            for (String tag : tags) {
+                string += tag + "  ";
+            }
         }
         string += "\n numberOfParticipants = " + numParticipants
                 + "\n numberOfStudents = " + numStudents
@@ -504,7 +506,7 @@ public class Projeto implements Project {
             string += "null";
         }
         for (int i = 0; i < numTasks; i++) {
-            if (tasks[i] != null) { // Verifica se tasks[i] é nulo antes de chamar toString()
+            if (tasks[i] != null) {
                 string += "\n{\n" + tasks[i].toString() + "\n}";
             }
         }

@@ -6,11 +6,13 @@ package projetos;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import ma02_resources.participants.Contact;
 import ma02_resources.participants.Facilitator;
 import ma02_resources.participants.Instituition;
@@ -132,7 +134,7 @@ public class CBL {
                                     task.put("numberOfSubmissions", t.getNumberOfSubmissions());
 
                                     JSONArray submissions = new JSONArray();
-                                    for (Submissao sub : (Submissao[])t.getSubmissions()) {
+                                    for (Submissao sub : (Submissao[]) t.getSubmissions()) {
                                         if (sub != null) {
                                             JSONObject submissao = new JSONObject();
                                             submissao.put("date", sub.getDate().toString());
@@ -225,76 +227,96 @@ public class CBL {
 
     /**
      * Metodo que guarda as informações do CBL num ficheiro CSV
+     *
+     * @throws java.io.IOException
      */
     public void gerarCSV() throws IOException {
         try {
             FileWriter file = new FileWriter("data.csv");
             BufferedWriter writer = new BufferedWriter(file);
 
-            writer.write("Edicao: ");
             writer.write("numEditions=" + this.numEditions);
             writer.newLine();
 
             for (Edicao e : this.editions) {
                 if (e != null) {
-                    writer.write("name= " + e.getName() + ";");
+                    writer.write("Edicao: ");
                     writer.newLine();
-                    writer.write("start= " + e.getStart().toString() + ";");
+                    writer.write("name=" + e.getName() + ";");
                     writer.newLine();
-                    writer.write("template= " + e.getProjectTemplate() + ";");
+                    writer.write("start=" + e.getStart().toString() + ";");
                     writer.newLine();
-                    writer.write("status= " + e.getStatus().toString() + ";");
+                    writer.write("template=" + e.getProjectTemplate() + ";");
                     writer.newLine();
-                    writer.write("numOfProjects= " + e.getNumberOfProjects() + ";");
+                    writer.write("status=" + e.getStatus().toString() + ";");
+                    writer.newLine();
+                    writer.write("numOfProjects=" + e.getNumberOfProjects() + ";");
                     writer.newLine();
 
                     for (Project p : e.getProjects()) {
                         if (p != null) {
                             writer.write("Projeto: ");
                             writer.newLine();
-                            writer.write("Nome= " + p.getName() + ";");
+                            writer.write("Nome=" + p.getName() + ";");
                             writer.newLine();
-                            writer.write("Descricao= " + p.getDescription() + ";");
+                            writer.write("Descricao=" + p.getDescription() + ";");
                             writer.newLine();
-                            writer.write("Tags= " + String.join(",", p.getTags()) + ";");
+                            writer.write("Tags=" + String.join(",", p.getTags()) + ";");
                             writer.newLine();
-                            writer.write("Numero de participantes= " + p.getNumberOfParticipants() + ";");
+                            writer.write("Numero de participantes=" + p.getNumberOfParticipants() + ";");
                             writer.newLine();
-                            writer.write("Numero de estudantes= " + p.getNumberOfStudents() + ";");
+                            writer.write("Numero de estudantes=" + p.getNumberOfStudents() + ";");
                             writer.newLine();
-                            writer.write("Numero de partners= " + p.getNumberOfPartners() + ";");
+                            writer.write("Numero de partners=" + p.getNumberOfPartners() + ";");
                             writer.newLine();
-                            writer.write("Numero de facilitadores= " + p.getNumberOfFacilitators() + ";");
+                            writer.write("Numero de facilitadores=" + p.getNumberOfFacilitators() + ";");
                             writer.newLine();
-                            writer.write("Numero de tarefas= " + p.getNumberOfTasks() + ";");
+                            writer.write("Numero de tarefas=" + p.getNumberOfTasks() + ";");
+                            writer.newLine();
+                            writer.write("Max Tasks=" + p.getMaximumNumberOfTasks() + ";");
+                            writer.newLine();
+                            writer.write("Max Participants=" + p.getMaximumNumberOfParticipants() + ";");
+                            writer.newLine();
+                            writer.write("Max Stundents=" + p.getMaximumNumberOfStudents() + ";");
+                            writer.newLine();
+                            writer.write("Max Partners=" + p.getMaximumNumberOfPartners() + ";");
+                            writer.newLine();
+                            writer.write("Max Facilitators=" + p.getMaximumNumberOfFacilitators() + ";");
+                            writer.newLine();
+                            writer.write("Project Completed=" + p.isCompleted() + ";");
                             writer.newLine();
 
                             for (Task t : p.getTasks()) {
                                 if (t != null) {
                                     writer.write("Tasks: ");
                                     writer.newLine();
-                                    writer.write("Titulo da Tarefa= " + t.getTitle() + ";");
+                                    writer.write("Titulo da Tarefa=" + t.getTitle() + ";");
                                     writer.newLine();
-                                    writer.write("Descriaoo da Tarefa= " + t.getDescription() + ";");
+                                    writer.write("Descriaoo da Tarefa=" + t.getDescription() + ";");
                                     writer.newLine();
-                                    writer.write("Data de Inicio da Tarefa= " + t.getStart().toString() + ";");
+                                    writer.write("Data de Inicio da Tarefa=" + t.getStart().toString() + ";");
                                     writer.newLine();
-                                    writer.write("Data de Termino da Tarefa= " + t.getEnd().toString() + ";");
+                                    writer.write("Data de Termino da Tarefa=" + t.getEnd().toString() + ";");
                                     writer.newLine();
-                                    writer.write("Duracao da Tarefa= " + t.getDuration() + ";");
+                                    writer.write("Duracao da Tarefa=" + t.getDuration() + ";");
                                     writer.newLine();
-                                    writer.write("Completada= " + ((Tarefas) t).isCompleted() + ";");
+                                    writer.write("Completada=" + ((Tarefas) t).isCompleted() + ";");
                                     writer.newLine();
-                                    writer.write("Numero de Submissoes= " + t.getNumberOfSubmissions());
+                                    writer.write("Numero de Submissoes=" + t.getNumberOfSubmissions());
                                     writer.newLine();
 
                                     for (Submission s : t.getSubmissions()) {
                                         if (s != null) {
                                             writer.write("Submissoes: ");
                                             writer.newLine();
-                                            writer.write("Nome do Estudante= " + s.getStudent().getName() + ";");
+                                            writer.write("Nome do Estudante=" + s.getStudent() + ";");
                                             writer.newLine();
-                                            writer.write("Texto da Submissao= " + s.getText() + ";");
+                                            writer.write("Texto da Submissao=" + s.getText() + ";");
+                                            writer.newLine();
+                                            writer.write("Avaliacao da submissao=" + ((Submissao) s).getAvaliacao() + ";");
+                                            writer.newLine();
+                                            writer.write("Data da Submissao=" + s.getDate() + ";");
+                                            writer.newLine();
                                         }
                                     }
                                 }
@@ -302,60 +324,59 @@ public class CBL {
 
                             for (Participant par : ((Projeto) p).getParticipants()) {
                                 if (par != null) {
-                                    writer.write("Participante: ");
+                                    writer.write("Participante:");
                                     writer.newLine();
-                                    writer.write("name Participant= " + par.getName() + ";");
+                                    writer.write("name Participant=" + par.getName() + ";");
                                     writer.newLine();
-                                    writer.write("email Participant= " + par.getEmail() + ";");
+                                    writer.write("email Participant=" + par.getEmail() + ";");
                                     writer.newLine();
                                     Contact contact = par.getContact();
                                     if (contact != null) {
-                                        writer.write("Contact Participant - Street= " + contact.getStreet() + ";");
+                                        writer.write("Contact Participant - Street=" + contact.getStreet() + ";");
                                         writer.newLine();
-                                        writer.write("Contact Participant - City= " + contact.getCity() + ";");
+                                        writer.write("Contact Participant - City=" + contact.getCity() + ";");
                                         writer.newLine();
-                                        writer.write("Contact Participant - State= " + contact.getState() + ";");
+                                        writer.write("Contact Participant - State=" + contact.getState() + ";");
                                         writer.newLine();
-                                        writer.write("Contact Participant - ZipCode= " + contact.getZipCode() + ";");
+                                        writer.write("Contact Participant - ZipCode=" + contact.getZipCode() + ";");
                                         writer.newLine();
-                                        writer.write("Contact Participant - Country= " + contact.getCountry() + ";");
+                                        writer.write("Contact Participant - Country=" + contact.getCountry() + ";");
                                         writer.newLine();
-                                        writer.write("Contact Participant - Phone= " + contact.getPhone() + ";");
+                                        writer.write("Contact Participant - Phone=" + contact.getPhone() + ";");
                                         writer.newLine();
                                     }
 
                                     // Detalhes da instituição (Instituition)
                                     Instituition instituition = par.getInstituition();
                                     if (instituition != null) {
-                                        writer.write("Instituition Participant - Name= " + instituition.getName() + ";");
+                                        writer.write("Instituition Participant - Name=" + instituition.getName() + ";");
                                         writer.newLine();
-                                        writer.write("Instituition Participant - Email= " + instituition.getEmail() + ";");
+                                        writer.write("Instituition Participant - Email=" + instituition.getEmail() + ";");
                                         writer.newLine();
-                                        writer.write("Instituition Participant - Website= " + instituition.getWebsite() + ";");
+                                        writer.write("Instituition Participant - Website=" + instituition.getWebsite() + ";");
                                         writer.newLine();
-                                        writer.write("Instituition Participant - Description= " + instituition.getDescription() + ";");
+                                        writer.write("Instituition Participant - Description=" + instituition.getDescription() + ";");
                                         writer.newLine();
-                                        writer.write("Instituition Type= " + instituition.getType() + ";");
+                                        writer.write("Instituition Type=" + instituition.getType() + ";");
                                         writer.newLine();
 
                                         // Detalhes do contato da instituição
                                         Contact institutionContact = instituition.getContact();
                                         if (institutionContact != null) {
-                                            writer.write("Instituition Participant - Contact - Street= " + institutionContact.getStreet() + ";");
+                                            writer.write("Instituition Participant - Contact - Street=" + institutionContact.getStreet() + ";");
                                             writer.newLine();
-                                            writer.write("Instituition Participant - Contact - City= " + institutionContact.getCity() + ";");
+                                            writer.write("Instituition Participant - Contact - City=" + institutionContact.getCity() + ";");
                                             writer.newLine();
-                                            writer.write("Instituition Participant - Contact - State= " + institutionContact.getState() + ";");
+                                            writer.write("Instituition Participant - Contact - State=" + institutionContact.getState() + ";");
                                             writer.newLine();
-                                            writer.write("Instituition Participant - Contact - ZipCode= " + institutionContact.getZipCode() + ";");
+                                            writer.write("Instituition Participant - Contact - ZipCode=" + institutionContact.getZipCode() + ";");
                                             writer.newLine();
-                                            writer.write("Instituition Participant - Contact - Country= " + institutionContact.getCountry() + ";");
+                                            writer.write("Instituition Participant - Contact - Country=" + institutionContact.getCountry() + ";");
                                             writer.newLine();
-                                            writer.write("Instituition Participant - Contact - Phone= " + institutionContact.getPhone() + ";");
+                                            writer.write("Instituition Participant - Contact - Phone=" + institutionContact.getPhone() + ";");
                                             writer.newLine();
                                         }
                                     }
-
                                 }
                             }
                         }
@@ -550,13 +571,13 @@ public class CBL {
                                                                 student = (Estudante) projetoObj.getParticipant(nomeEstudante);
                                                             }
                                                         }
-                                                    }  
-                                                    
+                                                    }
+
                                                     JSONObject avaliacao = (JSONObject) submissao.get("avaliacao");
                                                     Classificacao clas;
                                                     int auto = ((Long) avaliacao.get("autoavaliacao")).intValue();
                                                     int hetero = ((Long) avaliacao.get("heteroavaliacao")).intValue();
-                                                    Avaliacao av = new Avaliacao(auto,hetero);
+                                                    Avaliacao av = new Avaliacao(auto, hetero);
                                                     av.setClassificacao(hetero);
 
                                                     Submissao submissaoObj = new Submissao(LocalDateTime.parse(date), student, text);
@@ -584,32 +605,289 @@ public class CBL {
             e.printStackTrace();
         }
     }
-    
+
     /**
      * Metodo que le o fichiro CSV com as informações do CBL e guarda essas
      * informações no objeto CBL
-     */
-    private void lerCSV() throws IllegalNumberOfTasks, TaskAlreadyInProject, IllegalNumberOfParticipantType, ParticipantAlreadyInProject{
-         try {
-        BufferedReader reader = new BufferedReader(new FileReader("data.csv"));
-        
-        
-
-        reader.close();
-        System.out.println("Dados importados com sucesso!");
-
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-    }
-    
-
-    /**
-     * Método que retorna o número de edições
      *
-     * @return Número de edições
+     * @throws ma02_resources.project.exceptions.IllegalNumberOfTasks
+     * @throws ma02_resources.project.exceptions.TaskAlreadyInProject
+     * @throws java.io.IOException
      */
-    public int getnumEdition() {
+    public void lerCSV() throws IOException, IllegalNumberOfTasks, TaskAlreadyInProject {
+        try {
+            FileReader file = new FileReader("data.csv");
+            BufferedReader reader = new BufferedReader(file);
+            String line = reader.readLine();
+            int numEditions = 0;
+            while (line != null) {
+                if (line.startsWith("numEditions=")) {
+                    numEditions = Integer.parseInt(line.split("=")[1].replaceAll(";", ""));
+                } else if (line.startsWith("Edicao: ")) {
+                    String name = null;
+                    LocalDate start = null;
+                    String template = null;
+                    Status status = null;
+                    int numOfProjects = 0;
+                    Edicao edicao = null;
+                    Projeto projeto = null;
+                    while ((line = reader.readLine()) != null && !line.startsWith("Edicao: ")) {
+                        if (line.startsWith("name=")) {
+                            name = line.split("=")[1].replaceAll(";", "");
+                        } else if (line.startsWith("start=")) {
+                            start = LocalDate.parse(line.split("=")[1].trim().replaceAll(";", ""));
+                        } else if (line.startsWith("template=")) {
+                            template = line.split("=")[1].replaceAll(";", "");
+                        } else if (line.startsWith("status=")) {
+                            String statusValue = line.split("=")[1].trim();
+                            if (statusValue.equalsIgnoreCase("ACTIVE") || statusValue.equals("Active;")) {
+                                status = Status.ACTIVE;
+                            } else if (statusValue.equalsIgnoreCase("INACTIVE")) {
+                                status = Status.INACTIVE;
+                            } else if (statusValue.equalsIgnoreCase("CANCELED")) {
+                                status = Status.CANCELED;
+                            } else if (statusValue.equalsIgnoreCase("CLOSED")) {
+                                status = Status.CLOSED;
+                            } else {
+                                throw new IllegalArgumentException("Status inválido: " + statusValue);
+                            }
+                        } else if (line.startsWith("numOfProjects=")) {
+                            numOfProjects = Integer.parseInt(line.split("=")[1].replaceAll(";", ""));
+                            edicao = new Edicao(name, start, template);
+                            edicao.setStatus(status);
+                        } else if (line.startsWith("Projeto: ")) {
+                            if (projeto != null) {
+                                edicao.addProjectJS(projeto);
+                            }
+                            projeto = null;
+                            String nome = null;
+                            String descricao = null;
+                            String[] tags = null;
+                            int numTarefas = 0;
+                            int maxNumTarefas = 0;
+                            int maxNumParticipantes = 0;
+                            int maxNumEstudantes = 0;
+                            int maxNumPartners = 0;
+                            int maxNumFacilitadores = 0;
+                            int numParticipantes = 0;
+                            int numEstudantes = 0;
+                            int numPartners = 0;
+                            int numFacilitadores = 0;
+                            boolean completed = false;
+                            while ((line = reader.readLine()) != null && !line.startsWith("Projeto: ")) {
+                                if (line.startsWith("Nome=")) {
+                                    nome = line.split("=")[1].replaceAll(";", "");
+                                } else if (line.startsWith("Descricao=")) {
+                                    descricao = line.split("=")[1].replaceAll(";", "");
+                                } else if (line.startsWith("Tags=")) {
+                                    tags = line.split("=")[1].split(",");
+                                } else if (line.startsWith("Numero de participantes=")) {
+                                    numParticipantes = Integer.parseInt(line.split("=")[1].replaceAll(";", ""));
+                                } else if (line.startsWith("Numero de estudantes=")) {
+                                    numEstudantes = Integer.parseInt(line.split("=")[1].replaceAll(";", ""));
+                                } else if (line.startsWith("Numero de partners=")) {
+                                    numPartners = Integer.parseInt(line.split("=")[1].replaceAll(";", ""));
+                                } else if (line.startsWith("Numero de facilitadores=")) {
+                                    numFacilitadores = Integer.parseInt(line.split("=")[1].replaceAll(";", ""));
+                                } else if (line.startsWith("Numero de tarefas=")) {
+                                    numTarefas = Integer.parseInt(line.split("=")[1].replaceAll(";", ""));
+                                } else if (line.startsWith("Max Tasks=")) {
+                                    maxNumTarefas = Integer.parseInt(line.split("=")[1].replaceAll(";", ""));
+                                } else if (line.startsWith("Max Participants=")) {
+                                    maxNumParticipantes = Integer.parseInt(line.split("=")[1].replaceAll(";", ""));
+                                } else if (line.startsWith("Max Students=")) {
+                                    maxNumEstudantes = Integer.parseInt(line.split("=")[1].replaceAll(";", ""));
+                                } else if (line.startsWith("Max Partners=")) {
+                                    maxNumPartners = Integer.parseInt(line.split("=")[1].replaceAll(";", ""));
+                                } else if (line.startsWith("Max Facilitators=")) {
+                                    maxNumFacilitadores = Integer.parseInt(line.split("=")[1].replaceAll(";", ""));
+                                } else if (line.startsWith("Project Completed=")) {
+                                    completed = Boolean.parseBoolean(line.split("=")[1].replaceAll(";", ""));
+                                } else if (line.startsWith("Tasks: ")) {
+                                    projeto = new Projeto(nome, descricao, tags, maxNumEstudantes, maxNumPartners, maxNumFacilitadores);
+                                    projeto.setMaxTasks(maxNumTarefas);
+                                    projeto.setMaxParticipants(maxNumParticipantes);
+                                    projeto.setNumFacilitators(numFacilitadores);
+                                    projeto.setNumStudents(numEstudantes);
+                                    projeto.setNumPartners(numPartners);
+                                    projeto.setNumParticipants(numParticipantes);
+                                    projeto.setNumTasks(numTarefas);
+                                    projeto.setCompleted(completed);
+                                    String title = null;
+                                    String description = null;
+                                    LocalDate taskStart = null;
+                                    LocalDate taskEnd = null;
+                                    int duration = 0;
+                                    boolean completedTask = false;
+                                    Tarefas task = null;
+                                    while ((line = reader.readLine()) != null && !line.startsWith("Tasks: ")) {
+                                        // Resto do código para ler e criar as tarefas
+                                        if (line.startsWith("Titulo da Tarefa=")) {
+                                            title = line.split("=")[1].replaceAll(";", "");
+                                        } else if (line.startsWith("Descricao da Tarefa=")) {
+                                            description = line.split("=")[1].replaceAll(";", "");
+                                        } else if (line.startsWith("Data de Inicio da Tarefa=")) {
+                                            taskStart = LocalDate.parse(line.split("=")[1].trim().replaceAll(";", ""));
+                                        } else if (line.startsWith("Data de Termino da Tarefa=")) {
+                                            taskEnd = LocalDate.parse(line.split("=")[1].trim().replaceAll(";", ""));
+                                        } else if (line.startsWith("Duracao da Tarefa=")) {
+                                            duration = Integer.parseInt(line.split("=")[1].replaceAll(";", ""));
+                                        } else if (line.startsWith("Completada=")) {
+                                            completedTask = Boolean.parseBoolean(line.split("=")[1].replaceAll(";", ""));
+                                        } else if (line.startsWith("Numero de Submissoes=")) {
+                                            int numSubmissoes = Integer.parseInt(line.split("=")[1].replaceAll(";", ""));
+                                            task = new Tarefas(taskStart, duration, title, description);
+                                            task.setEnd(taskEnd);
+                                            task.setCompleted(completedTask);
+                                            for (int i = 0; i < numSubmissoes; i++) {
+                                                String nomeEstudante = null;
+                                                String text = null;
+                                                String date = null;
+                                                Estudante student = null;
+                                                while ((line = reader.readLine()) != null && !line.startsWith("Submissoes: ")) {
+                                                    if (line.startsWith("Nome do Estudante=")) {
+                                                        nomeEstudante = line.split("=")[1].replaceAll(";", "");
+                                                    } else if (line.startsWith("Texto da Submissao=")) {
+                                                        text = line.split("=")[1].replaceAll(";", "");
+                                                    } else if (line.startsWith("Data da Submissao=")) {
+                                                        date = line.split("=")[1].trim().replaceAll(";", "");
+                                                    }
+                                                }
+                                                for (int j = 0; j < numParticipantes; j++) {
+                                                    if (projeto.getParticipants()[j].getName().equals(nomeEstudante)) {
+                                                        student = (Estudante) projeto.getParticipants()[j];
+                                                        break;
+                                                    }
+                                                }
+                                                if (student != null) {
+                                                    Submissao submissao = new Submissao(LocalDateTime.parse(date), student, text);
+                                                    task.addSubmission(submissao);
+                                                } else {
+                                                    throw new IllegalArgumentException("Não existe nenhum participante com esse nome: " + nomeEstudante);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if (task != null) {
+                                        projeto.addTask(task);
+                                    }
+                                } else if (line.startsWith("Participante: ")) {
+                                    String nameParticipant = null;
+                                    String email = null;
+                                    Instituition instituition = null;
+                                    Contact contact = null;
+                                    int numero = 0;
+                                    String areaEspecializacao = null;
+                                    String vat = null;
+                                    String website = null;
+
+                                    while ((line = reader.readLine()) != null && !line.startsWith("Participante: ")) {
+                                        if (line.startsWith("name Participant=")) {
+                                            nameParticipant = line.split("=")[1].replaceAll(";", "");
+                                        } else if (line.startsWith("email Participant=")) {
+                                            email = line.split("=")[1].replaceAll(";", "");
+                                        } else if (line.startsWith("Instituition Participant - Name=")) {
+                                            String instituitionName = line.split("=")[1].replaceAll(";", "");
+                                            String instituitionEmail = null;
+                                            String instituitionWebsite = null;
+                                            String instituitionDescription = null;
+                                            InstituitionType instituitionType = null;
+
+                                            while ((line = reader.readLine()) != null && !line.startsWith("Instituition Participant - Name=")) {
+                                                if (line.startsWith("Instituition Participant - Email=")) {
+                                                    instituitionEmail = line.split("=")[1].replaceAll(";", "");
+                                                } else if (line.startsWith("Instituition Participant - Website=")) {
+                                                    instituitionWebsite = line.split("=")[1].replaceAll(";", "");
+                                                } else if (line.startsWith("Instituition Participant - Description=")) {
+                                                    instituitionDescription = line.split("=")[1].replaceAll(";", "");
+                                                } else if (line.startsWith("Instituition Type=")) {
+                                                    String instituitionTypeStr = line.split("=")[1].replaceAll(";", "");
+                                                    if (instituitionTypeStr.equalsIgnoreCase("UNIVERSITY")) {
+                                                        instituitionType = InstituitionType.UNIVERSITY;
+                                                    } else if (instituitionTypeStr.equalsIgnoreCase("COMPANY")) {
+                                                        instituitionType = InstituitionType.COMPANY;
+                                                    } else if (instituitionTypeStr.equalsIgnoreCase("NGO")) {
+                                                        instituitionType = InstituitionType.NGO;
+                                                    } else if (instituitionTypeStr.equalsIgnoreCase("OTHER")) {
+                                                        instituitionType = InstituitionType.OTHER;
+                                                    } else {
+                                                        throw new IllegalArgumentException("Tipo de instituição desconhecido: " + instituitionTypeStr);
+                                                    }
+                                                }
+                                            }
+
+                                            // Criar a instância de Instituition com as informações coletadas
+                                            instituition = new Instituition(instituitionName, instituitionEmail, instituitionWebsite, instituitionDescription, instituitionType);
+                                        } else if (line.startsWith("Instituition Participant-Contact - Street=")) {
+                                            String street = line.split("=")[1].replaceAll(";", "");
+                                            String city = null;
+                                            String state = null;
+                                            String zipcode = null;
+                                            String country = null;
+                                            String phone = null;
+
+                                            while ((line = reader.readLine()) != null && !line.startsWith("Instituition Participant-Contact - Street=")) {
+                                                if (line.startsWith("Instituition Participant-Contact - City=")) {
+                                                    city = line.split("=")[1].replaceAll(";", "");
+                                                } else if (line.startsWith("Instituition Participant-Contact - State=")) {
+                                                    state = line.split("=")[1].replaceAll(";", "");
+                                                } else if (line.startsWith("Instituition Participant-Contact - ZipCode=")) {
+                                                    zipcode = line.split("=")[1].replaceAll(";", "");
+                                                } else if (line.startsWith("Instituition Participant-Contact - Country=")) {
+                                                    country = line.split("=")[1].replaceAll(";", "");
+                                                } else if (line.startsWith("Instituition Participant-Contact - Phone=")) {
+                                                    phone = line.split("=")[1].replaceAll(";", "");
+                                                }
+                                            }
+
+                                            // Criar a instância de Contact com as informações coletadas
+                                            contact = new Contacto(street, city, state, zipcode, country, phone);
+                                        }
+                                    }
+
+                                    // Criar a instância de Participant com as informações coletadas
+                                    Participante participant = new Participante(nameParticipant, email, instituition, contact);
+                                    // Adicionar o participant ao projeto
+                                    projeto.addParticipant(participant);
+                                }
+                            }
+                        }
+                        if (projeto != null) {
+                            edicao.addProjectJS(projeto);
+                        }
+                    }
+
+                }
+                if (edicao != null) {
+                    addEdition(edicao);
+                }
+            }
+            line = reader.readLine();
+        }
+        reader.close();
+        System.out.println("CSV importado com sucesso!");
+        System.out.println("Número de edições: " + numEditions);
+
+        for (Edicao e : this.editions) {
+            System.out.println("Edição: " + e.getName());
+            System.out.println("Status: " + e.getStatus());
+            System.out.println("Número de projetos: " + e.getNumberOfProjects());
+        }
+    }
+    catch (IOException e
+
+    
+        ) {
+            e.printStackTrace();
+    }
+}
+
+/**
+ * Método que retorna o número de edições
+ *
+ * @return Número de edições
+ */
+public int getnumEdition() {
         return numEditions;
     }
 
@@ -884,7 +1162,7 @@ public class CBL {
      * Metodo que retorna uma representação textual do objeto CBL
      */
     @Override
-    public String toString() {
+        public String toString() {
         String string;
         string = "numEditions = " + numEditions
                 + "\neditions: ";
@@ -913,7 +1191,6 @@ public class CBL {
     /**
      * Metodo que imprime os 3 melhores alunos consuante as notas
      */
-    
     public void topTresAlunosMaiorMediaNotas() {
         Estudante[] temp = new Estudante[3];
         String[] nomes = new String[3];
@@ -977,15 +1254,15 @@ public class CBL {
                 }
             }
         }
-        
+
         // Imprime os três melhores estudantes com as maiores médias
         System.out.println("Os três melhores estudantes são:");
         for (int i = 0; i < 3; i++) {
-            if(nomes[i]!=null){
+            if (nomes[i] != null) {
                 System.out.println((i + 1) + ". " + nomes[i] + " - Média: " + medias[i]);
             }
         }
-        
+
     }
 
     /**
@@ -1021,7 +1298,7 @@ public class CBL {
         // Imprime as três edições com mais projetos
         System.out.println("As três edições com mais projetos são:");
         for (int i = 0; i < 3; i++) {
-            if(temp[i]!=null){
+            if (temp[i] != null) {
                 System.out.println((i + 1) + ". " + temp[i].getName() + " - Número de Projetos: " + projetos[i]);
             }
         }

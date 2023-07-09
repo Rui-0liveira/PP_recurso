@@ -76,8 +76,9 @@ public class Menus {
             System.out.println("11. Top Alunos");
             System.out.println("12. Top Edições");
             System.out.println("13. Exportar dados para JSON");
-            System.out.println("14. Carregar CBL");
+            System.out.println("14. Carregar JSON para CBL");
             System.out.println("15. Exportar dados para CSV");
+            System.out.println("16. Carregar CSV para CBL");
             System.out.println("0. Exit");
             System.out.print("Insira a opção ");
             try{
@@ -139,6 +140,9 @@ public class Menus {
                     break;
                 case 15:
                     cbl.gerarCSV();
+                    break;
+                case 16:
+                    cbl.lerCSV();
                     break;
                 case 0:
                     //cbl.gerarJSON(); 
