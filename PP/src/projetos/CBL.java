@@ -719,7 +719,7 @@ public class CBL {
                                     boolean completedTask = false;
                                     Tarefas task = null;
                                     while ((line = reader.readLine()) != null && !line.startsWith("Tasks: ")) {
-                                                                                
+                                        // Resto do código para ler e criar as tarefas
                                         if (line.startsWith("Titulo da Tarefa=")) {
                                             title = line.split("=")[1].replaceAll(";", "");
                                         } else if (line.startsWith("Descricao da Tarefa=")) {
@@ -738,11 +738,11 @@ public class CBL {
                                             task.setEnd(taskEnd);
                                             task.setCompleted(completedTask);
                                             for (int i = 0; i < numSubmissoes; i++) {
-                                                int numSubmissoes = Integer.parseInt(line.split("=")[1].replaceAll(";", ""));
+                                                int numSubmissao = Integer.parseInt(line.split("=")[1].replaceAll(";", ""));
                                                 task = new Tarefas(taskStart, duration, title, description);
                                                 task.setEnd(taskEnd);
                                                 task.setCompleted(completedTask);
-                                                for (int i = 0; i < numSubmissoes; i++) {
+                                                for (int j = 0; i < numSubmissao; j++) {
                                                     String nomeEstudante = null;
                                                     String text = null;
                                                     String date = null;
@@ -756,9 +756,9 @@ public class CBL {
                                                             date = line.split("=")[1].trim().replaceAll(";", "");
                                                         }
                                                     }
-                                                    for (int j = 0; j < numParticipantes; j++) {
-                                                        if (projeto.getParticipants()[j].getName().equals(nomeEstudante)) {
-                                                            student = (Estudante) projeto.getParticipants()[j];
+                                                    for (int k = 0; j < numParticipantes; k++) {
+                                                        if (projeto.getParticipants()[k].getName().equals(nomeEstudante)) {
+                                                            student = (Estudante) projeto.getParticipants()[k];
                                                             break;
                                                         }
                                                     }
@@ -777,7 +777,7 @@ public class CBL {
                                     
                                     }
                                 }else if(line.startsWith("Participante: ")){
-                                    String name = null;
+                                    String nameParticipant = null;
                                     String email = null;
                                     String street = null;
                                     String city = null;
@@ -857,11 +857,11 @@ public class CBL {
                                         }
 
                                         if (participantType.equalsIgnoreCase("Estudante")) {
-                                            participant = new Estudante(name, email, instituition, contact, Integer.parseInt(line.split("=")[1].replaceAll(";", "")));
+                                            participant = new Estudante(nameParticipant, email, instituition, contact, Integer.parseInt(line.split("=")[1].replaceAll(";", "")));
                                         } else if (participantType.equalsIgnoreCase("Facilitador")) {
-                                            participant = new Facilitador(name, email, instituition, contact, areaEspecializacao);
+                                            participant = new Facilitador(nameParticipant, email, instituition, contact, areaEspecializacao);
                                         } else if (participantType.equalsIgnoreCase("Parceiro")) {
-                                            participant = new Parceiro(name, email, instituition, contact, vat, website);
+                                            participant = new Parceiro(nameParticipant, email, instituition, contact, vat, website);
                                         } else {
                                             throw new IllegalArgumentException("Tipo de participante desconhecido: " + participantType);
                                         }
@@ -882,7 +882,7 @@ public class CBL {
 
                                         institutionContact = new Contacto(instituitionStreet, instituitionCity, instituitionState, instituitionZipcode, instituitionCountry, instituitionPhone);
 
-                                        instituition = new Instituicao(instituitionName, instituitionEmail, instituitionWebsite, instituitionDescription, type, institutionContact);
+                                        instituition = new Instituicao(instituitionName, instituitionEmail, type, institutionContact ,instituitionWebsite, instituitionDescription);
 
                                         projeto.addParticipant(participant);
                                     }
@@ -894,9 +894,10 @@ public class CBL {
                         }
                     }
                     if (edicao != null) {
-                        addEdition(edicao);
-                    }
+                    addEdition(edicao);
                 }
+                }
+                
             }
             line = reader.readLine();
             reader.close();
