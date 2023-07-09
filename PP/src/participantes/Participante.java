@@ -149,7 +149,4 @@ public abstract class Participante implements Participant{
         }
         return true;
     }
-    
-    
-    
 }

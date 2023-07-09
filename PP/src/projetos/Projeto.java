@@ -534,7 +534,6 @@ public class Projeto implements Project {
      * @return Média de task concluidas do projeto
      */
     public double getProjectProgress() {
-        //verificar se a task está completa baseado pelo tempo
         for (int i = 0; i < numTasks; i++) {
             if (this.getTasks()[i].getEnd().isBefore(java.time.LocalDate.now())) {
                 if (this.getTasks()[i] instanceof Tarefas) {

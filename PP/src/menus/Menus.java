@@ -23,15 +23,15 @@ import participantes.*;
 import projetos.*;
 
 /**
- *
- * @author Rui
+ * Nome: Rodrigo Bamdé Chantre Lopes
+ * Número: 8210191
+ * Turma: T4
+ * 
+ * Nome: Rui Alexande da Silva Oliveira
+ * Número: 8210322
+ * Turma: T3
  */
-/*
-    NOTAS
-    -ao criar task, a data de inicio da task não pode ser antes da do inicio do projeto
-    -Como fazer as notas, totalmete separada(prefiro esta), ou junta com o estudante
-    -Falta por as avaliação a dar e no menu !!!!!!!!!!!!!!!!!!!!!!!!!
-*/
+
 public class Menus {
     
     public boolean existeficheiro(String name){

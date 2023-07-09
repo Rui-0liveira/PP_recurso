@@ -67,7 +67,10 @@ public class Instituicao implements Instituition{
         this.site = site;
         this.description = description;
     }
-
+    
+    /**
+     * Método contrutor de Instituição
+     */
     public Instituicao() {
         
     }
@@ -185,18 +188,28 @@ public class Instituicao implements Instituition{
         return true;
     } 
 
+    /**
+     * Método que dá set ao nome
+     * @param name nome da instituição
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Método que dá set ao email
+     * @param email email da instituição
+     */
     public void setEmail(String email) {
         this.email = email;
     }
 
+    /**
+     * Método que dá set ao site
+     * @param site website da instituição
+     */
     public void setSite(String site) {
         this.site = site;
     }
-    
-    
 }
 

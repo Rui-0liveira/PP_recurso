@@ -345,8 +345,7 @@ public class CBL {
                                         writer.write("Contact Participant - Phone=" + contact.getPhone() + ";");
                                         writer.newLine();
                                     }
-
-                                    // Detalhes da instituição (Instituition)
+                                    
                                     Instituition instituition = par.getInstituition();
                                     if (instituition != null) {
                                         writer.write("Instituition Participant - Name=" + instituition.getName() + ";");
@@ -360,7 +359,6 @@ public class CBL {
                                         writer.write("Instituition Type=" + instituition.getType() + ";");
                                         writer.newLine();
 
-                                        // Detalhes do contato da instituição
                                         Contact institutionContact = instituition.getContact();
                                         if (institutionContact != null) {
                                             writer.write("Instituition Participant - Contact - Street=" + institutionContact.getStreet() + ";");
@@ -721,7 +719,7 @@ public class CBL {
                                     boolean completedTask = false;
                                     Tarefas task = null;
                                     while ((line = reader.readLine()) != null && !line.startsWith("Tasks: ")) {
-                                        // Resto do código para ler e criar as tarefas
+                                                                                
                                         if (line.startsWith("Titulo da Tarefa=")) {
                                             title = line.split("=")[1].replaceAll(";", "");
                                         } else if (line.startsWith("Descricao da Tarefa=")) {
@@ -895,10 +893,9 @@ public class CBL {
                             edicao.addProjectJS(projeto);
                         }
                     }
-
-                }
-                if (edicao != null) {
-                    addEdition(edicao);
+                    if (edicao != null) {
+                        addEdition(edicao);
+                    }
                 }
             }
             line = reader.readLine();
@@ -1136,7 +1133,6 @@ public class CBL {
      * @param text Texto da submissão
      */
     public void addSubmissao(String project, String task, String studentEmail, String text) {
-        //verificar se o student é participante no project
         Student student;
         for (Edicao e : editions) {
             if (e.projectExists(project)) {
@@ -1240,8 +1236,7 @@ public class CBL {
                                     if (s != null) {
                                         int nota = s.getAvaliacao().getHeteroAvaliacao();
                                         String nome = s.getStudent().getName();
-
-                                        // Procura se o estudante já está na lista dos três melhores
+                                       
                                         int index = -1;
                                         for (int i = 0; i < 3; i++) {
                                             if (nomes[i] != null && nomes[i].equals(nome)) {
@@ -1251,7 +1246,6 @@ public class CBL {
                                         }
 
                                         if (index == -1) {
-                                            // O estudante ainda não está na lista dos três melhores
                                             for (int i = 0; i < 3; i++) {
                                                 if (nomes[i] == null) {
                                                     nomes[i] = nome;
@@ -1261,7 +1255,6 @@ public class CBL {
                                                 }
                                             }
                                         } else {
-                                            // Atualiza a média do estudante na lista
                                             medias[index] = (medias[index] + nota) / 2.0;
                                         }
                                     }
@@ -1273,11 +1266,9 @@ public class CBL {
             }
         }
 
-        // Ordena os estudantes com base nas médias
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 2 - i; j++) {
                 if (medias[j] < medias[j + 1]) {
-                    // Troca as posições
                     double tempMedia = medias[j];
                     medias[j] = medias[j + 1];
                     medias[j + 1] = tempMedia;
@@ -1289,7 +1280,6 @@ public class CBL {
             }
         }
 
-        // Imprime os três melhores estudantes com as maiores médias
         System.out.println("Os três melhores estudantes são:");
         for (int i = 0; i < 3; i++) {
             if (nomes[i] != null) {
@@ -1309,17 +1299,12 @@ public class CBL {
         for (Edicao e : editions) {
             if (e != null) {
                 int numProjetos = e.getNumberOfProjects();
-
-                // Verifica se o número de projetos é maior do que os projetos armazenados
                 for (int i = 0; i < 3; i++) {
                     if (numProjetos > projetos[i]) {
-                        // Desloca os projetos anteriores
                         for (int j = 2; j > i; j--) {
                             projetos[j] = projetos[j - 1];
                             temp[j] = temp[j - 1];
                         }
-
-                        // Armazena a nova quantidade de projetos e a edição correspondente
                         projetos[i] = numProjetos;
                         temp[i] = e;
 
@@ -1328,8 +1313,6 @@ public class CBL {
                 }
             }
         }
-
-        // Imprime as três edições com mais projetos
         System.out.println("As três edições com mais projetos são:");
         for (int i = 0; i < 3; i++) {
             if (temp[i] != null) {
