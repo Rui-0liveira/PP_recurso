@@ -6,13 +6,11 @@ package projetos;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import ma02_resources.participants.Contact;
 import ma02_resources.participants.Facilitator;
 import ma02_resources.participants.Instituition;
@@ -719,7 +717,7 @@ public class CBL {
                                     boolean completedTask = false;
                                     Tarefas task = null;
                                     while ((line = reader.readLine()) != null && !line.startsWith("Tasks: ")) {
-                                        // Resto do código para ler e criar as tarefas
+                                        
                                         if (line.startsWith("Titulo da Tarefa=")) {
                                             title = line.split("=")[1].replaceAll(";", "");
                                         } else if (line.startsWith("Descricao da Tarefa=")) {
@@ -1123,8 +1121,7 @@ public class CBL {
         return "A Edição " + name + " está com um progresso de " + progress + "% e " + numSubmissions + " submissões";
     }
 
-    //adicionar submissão a projeto apenas por estudantes que pertencem aquele projeto
-    //chama task.submissao e verifica se o participante for aluno e estiver no projeto
+   
     /**
      * Metodo que adiciona uma submissão a uma tarefa de um projeto
      *
@@ -1139,9 +1136,9 @@ public class CBL {
             if (e.projectExists(project)) {
                 if (e.getProject(project).getParticipant(studentEmail) != null) {
                     student = (Student) e.getProject(project).getParticipant(studentEmail);
-                    //construir submissão
+              
                     Submissao s = new Submissao(LocalDateTime.now(), (Estudante) student, text);
-                    //enviar a submissão
+                
                     for (Task t : e.getProject(project).getTasks()) {
                         if (t.getTitle().equals(task)) {
                             t.addSubmission(s);

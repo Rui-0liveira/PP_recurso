@@ -78,7 +78,7 @@ public class Menus {
             System.out.println("13. Exportar dados para JSON");
             System.out.println("14. Carregar JSON para CBL");
             System.out.println("15. Exportar dados para CSV");
-            System.out.println("16. Carregar CSV para CBL");
+            System.out.println("16. Carregar CSV para CBL (Manutenção)");
             System.out.println("0. Exit");
             System.out.print("Insira a opção ");
             try{
@@ -145,10 +145,9 @@ public class Menus {
                     cbl.lerCSV();
                     break;
                 case 0:
-                    //cbl.gerarJSON(); 
+                    cbl.gerarJSON(); 
                     break;
                 default:
-                    //cbl.gerarJSON();
                     break;
             }
             System.out.println();
@@ -494,7 +493,6 @@ public class Menus {
         }
     }
     
-    //menu de um projeto (CRUD de Participante e task)
     public void menuProjeto(Edicao edition) throws IOException, ParseException, IllegalNumberOfParticipantType, ParticipantAlreadyInProject, IllegalNumberOfTasks, TaskAlreadyInProject{
         Projeto projeto;
         System.out.println("Insira o nome do projeto que deseja mexer");
